@@ -1,0 +1,6 @@
+/build/
+/public/
+/.eslintrc.js
+/README.md
+/tsconfig.json
+*.scss
