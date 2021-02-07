@@ -1,0 +1,15 @@
+{
+  "name": "gm-earnings",
+  "description": "Earnings site.",
+  "stack": "heroku-20",
+  "website": "https://gm-earnings.herokuapp.com/",
+  "repository": "https://github.com/mrzli/gm-earnings",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "mars/create-react-app"
+    }
+  ]
+}
