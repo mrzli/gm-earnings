@@ -64,7 +64,10 @@ export function EarningsDisplay(): React.ReactElement {
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: 'fit-content(50%) fit-content(50%)'
+        gridTemplateColumns: 'fit-content(50%) fit-content(50%)',
+        alignItems: 'center',
+        rowGap: 10,
+        columnGap: 10
       }}
     >
       <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
