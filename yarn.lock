@@ -4029,6 +4029,11 @@ csstype@^3.0.2:
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-3.0.6.tgz#865d0b5833d7d8d40f4e5b8a6d76aea3de4725ef"
   integrity sha512-+ZAmfyWMT7TiIlzdqJgjMb7S4f1beorDbWbsocyK4RaiqA5RTX3K14bnBWmmA9QEM0gRdsjyyrEmcyga8Zsxmw==
 
+currency.js@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/currency.js/-/currency.js-2.0.3.tgz#3f266c241074eabfa4a6a53c3f477fac17c781a7"
+  integrity sha512-3rtzulRMwUJHmH0EPKiO/taYEGWlLSG2rpBOaHhfaY1dPGqK595mjg4t4bksy7glHEPZry7l5xSpXECs1eFrWg==
+
 currently-unhandled@^0.4.1:
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/currently-unhandled/-/currently-unhandled-0.4.1.tgz#988df33feab191ef799a61369dd76c17adf957ea"
