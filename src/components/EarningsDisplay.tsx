@@ -5,24 +5,38 @@ import {
   InputAdornment,
   TextField
 } from '@material-ui/core';
-import { EarningsData, EarningsInputData } from './types/earnings-data';
 import {
-  DEFAULT_EARNINGS_DATA,
+  BusinessExpenseItem,
+  EarningsData,
+  EarningsInputData
+} from '../types/earnings-data';
+import {
   DEFAULT_EARNINGS_INPUT_DATA,
+  EMPTY_BUSINESS_EXPENSE_ITEM,
+  EMPTY_EARNINGS_DATA,
   VAT_MULTIPLIER
-} from './data/earnings-data';
+} from '../data/earnings-data';
 import {
   currencyToCents,
   formatAsMoney,
   isValidMoneyString,
   moneyStringToCurrency
-} from './utils/currency-utils';
+} from '../utils/currency-utils';
+import { ExpenseInputList } from './ExpenseInputList';
+import { BusinessExpenseInput } from './BusinessExpenseInput';
+import {
+  removeArrayItemAtIndex,
+  updateArrayItemAtIndex
+} from '../utils/array-utils';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
   SetWorkingHours = 'SetWorkingHours',
   SetHourlyRateAmount = 'SetHourlyRateAmount',
-  SetHourlyRateIsVat = 'SetHourlyRateIsVat'
+  SetHourlyRateIsVat = 'SetHourlyRateIsVat',
+  AddBusinessExpenseItem = 'AddBusinessExpenseItem',
+  RemoveBusinessExpenseItem = 'RemoveBusinessExpenseItem',
+  ChangeBusinessExpenseItem = 'ChangeBusinessExpenseItem'
 }
 
 interface ActionSetWorkingDays {
@@ -45,11 +59,32 @@ interface ActionSetHourlyRateIsVat {
   readonly payload: boolean;
 }
 
+interface ActionAddBusinessExpenseItem {
+  readonly type: InputDataActionType.AddBusinessExpenseItem;
+  readonly payload: undefined;
+}
+
+interface ActionRemoveBusinessExpenseItem {
+  readonly type: InputDataActionType.RemoveBusinessExpenseItem;
+  readonly payload: number;
+}
+
+interface ActionChangeBusinessExpenseItem {
+  readonly type: InputDataActionType.ChangeBusinessExpenseItem;
+  readonly payload: {
+    readonly item: BusinessExpenseItem;
+    readonly index: number;
+  };
+}
+
 type InputDataAction =
   | ActionSetWorkingDays
   | ActionSetWorkingHours
   | ActionSetHourlyRateAmount
-  | ActionSetHourlyRateIsVat;
+  | ActionSetHourlyRateIsVat
+  | ActionAddBusinessExpenseItem
+  | ActionRemoveBusinessExpenseItem
+  | ActionChangeBusinessExpenseItem;
 
 function earningsInputReducer(
   state: EarningsInputData,
@@ -70,10 +105,37 @@ function earningsInputReducer(
         ...state,
         hourlyRate: { ...state.hourlyRate, isVat: action.payload }
       };
+    case InputDataActionType.AddBusinessExpenseItem:
+      return {
+        ...state,
+        businessExpenseItems: [
+          ...state.businessExpenseItems,
+          EMPTY_BUSINESS_EXPENSE_ITEM
+        ]
+      };
+    case InputDataActionType.RemoveBusinessExpenseItem:
+      return {
+        ...state,
+        businessExpenseItems: removeArrayItemAtIndex(
+          state.businessExpenseItems,
+          action.payload
+        )
+      };
+    case InputDataActionType.ChangeBusinessExpenseItem:
+      return {
+        ...state,
+        businessExpenseItems: updateArrayItemAtIndex(
+          state.businessExpenseItems,
+          action.payload.index,
+          action.payload.item
+        )
+      };
     default:
       return state;
   }
 }
+
+const GRID_COLUMNS = 4;
 
 export function EarningsDisplay(): React.ReactElement {
   const [earningsInputState, earningsInputDispatch] = useReducer(
@@ -81,7 +143,7 @@ export function EarningsDisplay(): React.ReactElement {
     DEFAULT_EARNINGS_INPUT_DATA
   );
 
-  const [earnings, setEarnings] = useState<EarningsData>(DEFAULT_EARNINGS_DATA);
+  const [earnings, setEarnings] = useState<EarningsData>(EMPTY_EARNINGS_DATA);
 
   useEffect(() => {
     setEarnings(getEarningsData(earningsInputState));
@@ -91,14 +153,16 @@ export function EarningsDisplay(): React.ReactElement {
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(4, fit-content(25%))',
+        gridTemplateColumns: `repeat(${GRID_COLUMNS}, fit-content(${
+          100 / GRID_COLUMNS
+        }%))`,
         alignItems: 'center',
         rowGap: 10,
         columnGap: 10
       }}
     >
       <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
-        Broj radnih dana:
+        Number of Working Days:
       </div>
       <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
         <TextField
@@ -119,7 +183,7 @@ export function EarningsDisplay(): React.ReactElement {
         />
       </div>
       <div style={{ gridRowStart: 2, gridColumnStart: 1 }}>
-        Broj radnih sati u danu:
+        Number of Working Hours in a Day:
       </div>
       <div style={{ gridRowStart: 2, gridColumnStart: 2 }}>
         <TextField
@@ -139,7 +203,7 @@ export function EarningsDisplay(): React.ReactElement {
           }}
         />
       </div>
-      <div style={{ gridRowStart: 3, gridColumnStart: 1 }}>Satnica:</div>
+      <div style={{ gridRowStart: 3, gridColumnStart: 1 }}>Hourly Rate:</div>
       <div style={{ gridRowStart: 3, gridColumnStart: 2 }}>
         <TextField
           fullWidth={true}
@@ -169,10 +233,10 @@ export function EarningsDisplay(): React.ReactElement {
               }}
             />
           }
-          label={'PDV'}
+          label={'VAT'}
         />
       </div>
-      <div style={{ gridRowStart: 4, gridColumnStart: 1 }}>Ukupan iznos:</div>
+      <div style={{ gridRowStart: 4, gridColumnStart: 1 }}>Total Earnings:</div>
       <div
         style={{
           gridRowStart: 4,
@@ -182,7 +246,7 @@ export function EarningsDisplay(): React.ReactElement {
         {formatAsMoney(earnings.totalEarnings)}
       </div>
       <div style={{ gridRowStart: 5, gridColumnStart: 1 }}>
-        Ukupan iznos s PDV-om:
+        Total Earnings with VAT:
       </div>
       <div
         style={{
@@ -191,6 +255,41 @@ export function EarningsDisplay(): React.ReactElement {
         }}
       >
         {formatAsMoney(earnings.totalEarningsWithVat)}
+      </div>
+      <div
+        style={{
+          gridRowStart: 6,
+          gridColumnStart: 1,
+          gridColumnEnd: `span ${GRID_COLUMNS}`
+        }}
+      >
+        <ExpenseInputList<BusinessExpenseItem>
+          title={'Business Expenses:'}
+          items={earningsInputState.businessExpenseItems}
+          itemRenderer={(item, index) => (
+            <BusinessExpenseInput
+              item={item}
+              onItemChanged={(updatedItem) => {
+                earningsInputDispatch({
+                  type: InputDataActionType.ChangeBusinessExpenseItem,
+                  payload: { item: updatedItem, index: index }
+                });
+              }}
+            />
+          )}
+          onAddItem={() => {
+            earningsInputDispatch({
+              type: InputDataActionType.AddBusinessExpenseItem,
+              payload: undefined
+            });
+          }}
+          onRemoveItem={(indexToRemove) => {
+            earningsInputDispatch({
+              type: InputDataActionType.RemoveBusinessExpenseItem,
+              payload: indexToRemove
+            });
+          }}
+        />
       </div>
     </div>
   );
@@ -207,7 +306,9 @@ function getEarningsData(input: EarningsInputData): EarningsData {
   const totalEarnings = moneyStringToCurrency(input.hourlyRate.amount)
     .multiply(input.workingHours)
     .multiply(input.workingDays);
-  const totalEarningsWithVat = totalEarnings.multiply(VAT_MULTIPLIER);
+  const totalEarningsWithVat = input.hourlyRate.isVat
+    ? totalEarnings.multiply(VAT_MULTIPLIER)
+    : totalEarnings;
 
   return {
     totalEarnings: currencyToCents(totalEarnings),

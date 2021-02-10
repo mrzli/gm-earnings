@@ -1,5 +1,5 @@
 import React from 'react';
-import { EarningsDisplay } from './EarningsDisplay';
+import { EarningsDisplay } from './components/EarningsDisplay';
 
 export function App(): React.ReactElement {
   return (
