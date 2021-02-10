@@ -1,7 +1,6 @@
 import React from 'react';
-import { InputAdornment, TextField } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { isNameValid } from '../utils/generic-utils';
-import { isValidMoneyString } from '../utils/currency-utils';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { InputListItemProps } from '../types/generic/generic-types';
 import { VatCheckbox } from './generic/VatCheckbox';
