@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, List, ListItem } from '@material-ui/core';
-import { InputListItemProps } from '../types/generic/generic-types';
+import { InputListItemProps } from '../../types/generic/generic-types';
 import {
   removeArrayItemAtIndex,
   updateArrayItemAtIndex
-} from '../utils/array-utils';
+} from '../../utils/array-utils';
 
 interface InputListProps<TItem> {
   readonly title: string;

@@ -1,10 +1,5 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import {
-  Checkbox,
-  FormControlLabel,
-  InputAdornment,
-  TextField
-} from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { EarningsData } from '../types/earnings-data';
 import {
   DEFAULT_EARNINGS_INPUT_DATA,
@@ -18,10 +13,12 @@ import {
   isValidMoneyString,
   moneyStringToCurrency
 } from '../utils/currency-utils';
-import { InputList } from './InputList';
+import { InputList } from './generic/InputList';
 import { BusinessExpenseInput } from './BusinessExpenseInput';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { EarningsInputData } from '../types/earnings-input-data';
+import { VatCheckbox } from './generic/VatCheckbox';
+import { MoneyInput } from './generic/MoneyInput';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
@@ -162,35 +159,25 @@ export function EarningsDisplay(): React.ReactElement {
       </div>
       <div style={{ gridRowStart: 3, gridColumnStart: 1 }}>Hourly Rate:</div>
       <div style={{ gridRowStart: 3, gridColumnStart: 2 }}>
-        <TextField
-          fullWidth={true}
-          error={!isValidMoneyString(earningsInputState.hourlyRate.amount)}
+        <MoneyInput
           value={earningsInputState.hourlyRate.amount}
-          onChange={(event) => {
+          onValueChanged={(value) => {
             earningsInputDispatch({
               type: InputDataActionType.SetHourlyRateAmount,
-              payload: event.target.value
+              payload: value
             });
-          }}
-          InputProps={{
-            endAdornment: <InputAdornment position={'start'}>kn</InputAdornment>
           }}
         />
       </div>
       <div style={{ gridRowStart: 3, gridColumnStart: 3 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={earningsInputState.hourlyRate.isVat}
-              onChange={(event, checked) => {
-                earningsInputDispatch({
-                  type: InputDataActionType.SetHourlyRateIsVat,
-                  payload: checked
-                });
-              }}
-            />
-          }
-          label={'VAT'}
+        <VatCheckbox
+          value={earningsInputState.hourlyRate.isVat}
+          onValueChanged={(value) => {
+            earningsInputDispatch({
+              type: InputDataActionType.SetHourlyRateIsVat,
+              payload: value
+            });
+          }}
         />
       </div>
       <div style={{ gridRowStart: 4, gridColumnStart: 1 }}>Total Earnings:</div>

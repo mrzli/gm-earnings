@@ -1,14 +1,11 @@
 import React from 'react';
-import {
-  Checkbox,
-  FormControlLabel,
-  InputAdornment,
-  TextField
-} from '@material-ui/core';
+import { InputAdornment, TextField } from '@material-ui/core';
 import { isNameValid } from '../utils/generic-utils';
 import { isValidMoneyString } from '../utils/currency-utils';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { InputListItemProps } from '../types/generic/generic-types';
+import { VatCheckbox } from './generic/VatCheckbox';
+import { MoneyInput } from './generic/MoneyInput';
 
 export function BusinessExpenseInput({
   item,
@@ -36,35 +33,25 @@ export function BusinessExpenseInput({
         />
       </div>
       <div style={{ gridColumnStart: 2 }}>
-        <TextField
-          fullWidth={true}
-          error={!isValidMoneyString(item.amount.amount)}
+        <MoneyInput
           value={item.amount.amount}
-          onChange={(event) => {
+          onValueChanged={(value) => {
             onItemChanged({
               ...item,
-              amount: { ...item.amount, amount: event.target.value }
+              amount: { ...item.amount, amount: value }
             });
-          }}
-          InputProps={{
-            endAdornment: <InputAdornment position={'start'}>kn</InputAdornment>
           }}
         />
       </div>
       <div style={{ gridColumnStart: 3 }}>
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={item.amount.isVat}
-              onChange={(event, checked) => {
-                onItemChanged({
-                  ...item,
-                  amount: { ...item.amount, isVat: checked }
-                });
-              }}
-            />
-          }
-          label={'VAT'}
+        <VatCheckbox
+          value={item.amount.isVat}
+          onValueChanged={(value) => {
+            onItemChanged({
+              ...item,
+              amount: { ...item.amount, isVat: value }
+            });
+          }}
         />
       </div>
     </div>

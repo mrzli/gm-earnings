@@ -3,11 +3,12 @@ import { InputAmountWithVat } from '../types/input-amount-with-vat';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { EarningsInputData } from '../types/earnings-input-data';
 import { ExpenseInterval } from '../types/expense-interval';
+import { ZERO_AMOUNT } from './general-data';
 
 export const VAT_MULTIPLIER = '1.25';
 
 export const EMPTY_INPUT_AMOUNT_WITH_VAT: InputAmountWithVat = {
-  amount: '0.00',
+  amount: ZERO_AMOUNT,
   isVat: true
 };
 
