@@ -1,26 +1,26 @@
 import React from 'react';
 import { InputAdornment, TextField } from '@material-ui/core';
-import { isValidMoneyString } from '../../utils/validation-utils';
+import { isValidPercentString } from '../../utils/validation-utils';
 
-interface MoneyInputProps {
+interface PercentInputProps {
   readonly value: string;
   readonly onValueChanged: (value: string) => void;
 }
 
-export function MoneyInput({
+export function PercentInput({
   value,
   onValueChanged
-}: MoneyInputProps): React.ReactElement {
+}: PercentInputProps): React.ReactElement {
   return (
     <TextField
       fullWidth={true}
-      error={!isValidMoneyString(value)}
+      error={!isValidPercentString(value)}
       value={value}
       onChange={(event) => {
         onValueChanged(event.target.value);
       }}
       InputProps={{
-        endAdornment: <InputAdornment position={'end'}>kn</InputAdornment>
+        endAdornment: <InputAdornment position={'end'}>%</InputAdornment>
       }}
     />
   );

@@ -32,8 +32,8 @@ export const DEFAULT_EARNINGS_INPUT_DATA: EarningsInputData = {
 };
 
 export const EMPTY_EARNINGS_DATA: EarningsData = {
-  totalEarnings: 0,
-  totalEarningsWithVat: 0
+  totalEarnings: ZERO_AMOUNT,
+  totalEarningsWithVat: ZERO_AMOUNT
 };
 
 export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {

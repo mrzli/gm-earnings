@@ -3,8 +3,7 @@ import { TextField } from '@material-ui/core';
 import { isNameValid } from '../utils/generic-utils';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { InputListItemProps } from '../types/generic/generic-types';
-import { VatCheckbox } from './generic/VatCheckbox';
-import { MoneyInput } from './generic/MoneyInput';
+import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
 
 export function BusinessExpenseInput({
   item,
@@ -31,28 +30,14 @@ export function BusinessExpenseInput({
           }}
         />
       </div>
-      <div style={{ gridColumnStart: 2 }}>
-        <MoneyInput
-          value={item.amount.amount}
-          onValueChanged={(value) => {
-            onItemChanged({
-              ...item,
-              amount: { ...item.amount, amount: value }
-            });
-          }}
-        />
-      </div>
-      <div style={{ gridColumnStart: 3 }}>
-        <VatCheckbox
-          value={item.amount.isVat}
-          onValueChanged={(value) => {
-            onItemChanged({
-              ...item,
-              amount: { ...item.amount, isVat: value }
-            });
-          }}
-        />
-      </div>
+      <MoneyInputWithVatInGrid
+        value={item.amount}
+        onValueChanged={(value) => {
+          onItemChanged({ ...item, amount: value });
+        }}
+        row={1}
+        column={2}
+      />
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { TextField } from '@material-ui/core';
 import { EarningsData } from '../types/earnings-data';
 import {
   DEFAULT_EARNINGS_INPUT_DATA,
@@ -8,23 +7,27 @@ import {
   VAT_MULTIPLIER
 } from '../data/earnings-data';
 import {
-  currencyToCents,
-  formatAsMoney,
-  isValidMoneyString,
+  currencyToMoneyString,
   moneyStringToCurrency
 } from '../utils/currency-utils';
 import { InputList } from './generic/InputList';
 import { BusinessExpenseInput } from './BusinessExpenseInput';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { EarningsInputData } from '../types/earnings-input-data';
-import { VatCheckbox } from './generic/VatCheckbox';
-import { MoneyInput } from './generic/MoneyInput';
+import {
+  isInNumericRange,
+  isValidMoneyString
+} from '../utils/validation-utils';
+import { IntegerInput } from './generic/IntegerInput';
+import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
+import { InputAmountWithVat } from '../types/input-amount-with-vat';
+import { LabelledMoneyDisplayInGrid } from './generic/LabelledMoneyDisplayInGrid';
+import { LabelInGrid } from './generic/LabelInGrid';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
   SetWorkingHours = 'SetWorkingHours',
-  SetHourlyRateAmount = 'SetHourlyRateAmount',
-  SetHourlyRateIsVat = 'SetHourlyRateIsVat',
+  SetHourlyRate = 'SetHourlyRate',
   SetBusinessExpenseItems = 'SetBusinessExpenseItems'
 }
 
@@ -38,14 +41,9 @@ interface ActionSetWorkingHours {
   readonly payload: number;
 }
 
-interface ActionSetHourlyRateAmount {
-  readonly type: InputDataActionType.SetHourlyRateAmount;
-  readonly payload: string;
-}
-
-interface ActionSetHourlyRateIsVat {
-  readonly type: InputDataActionType.SetHourlyRateIsVat;
-  readonly payload: boolean;
+interface ActionSetHourlyRate {
+  readonly type: InputDataActionType.SetHourlyRate;
+  readonly payload: InputAmountWithVat;
 }
 
 interface ActionSetBusinessExpenseItems {
@@ -56,8 +54,7 @@ interface ActionSetBusinessExpenseItems {
 type InputDataAction =
   | ActionSetWorkingDays
   | ActionSetWorkingHours
-  | ActionSetHourlyRateAmount
-  | ActionSetHourlyRateIsVat
+  | ActionSetHourlyRate
   | ActionSetBusinessExpenseItems;
 
 function earningsInputReducer(
@@ -69,21 +66,10 @@ function earningsInputReducer(
       return { ...state, workingDays: action.payload };
     case InputDataActionType.SetWorkingHours:
       return { ...state, workingHours: action.payload };
-    case InputDataActionType.SetHourlyRateAmount:
-      return {
-        ...state,
-        hourlyRate: { ...state.hourlyRate, amount: action.payload }
-      };
-    case InputDataActionType.SetHourlyRateIsVat:
-      return {
-        ...state,
-        hourlyRate: { ...state.hourlyRate, isVat: action.payload }
-      };
+    case InputDataActionType.SetHourlyRate:
+      return { ...state, hourlyRate: action.payload };
     case InputDataActionType.SetBusinessExpenseItems:
-      return {
-        ...state,
-        businessExpenseItems: action.payload
-      };
+      return { ...state, businessExpenseItems: action.payload };
     default:
       return state;
   }
@@ -115,91 +101,62 @@ export function EarningsDisplay(): React.ReactElement {
         columnGap: 10
       }}
     >
-      <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
-        Number of Working Days:
-      </div>
+      <LabelInGrid text={'Number of Working Days:'} row={1} column={1} />
       <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
-        <TextField
-          type={'number'}
-          fullWidth={true}
-          error={!isValidWorkingDays(earningsInputState.workingDays)}
+        <IntegerInput
           value={earningsInputState.workingDays}
-          inputProps={{
-            min: 0,
-            max: 365
-          }}
-          onChange={(event) => {
+          onValueChanged={(value) => {
             earningsInputDispatch({
               type: InputDataActionType.SetWorkingDays,
-              payload: Number.parseInt(event.target.value)
+              payload: value
             });
           }}
+          minValue={0}
+          maxValue={365}
         />
       </div>
-      <div style={{ gridRowStart: 2, gridColumnStart: 1 }}>
-        Number of Working Hours in a Day:
-      </div>
+      <LabelInGrid
+        text={'Number of Working Hours in a Day:'}
+        row={2}
+        column={1}
+      />
       <div style={{ gridRowStart: 2, gridColumnStart: 2 }}>
-        <TextField
-          type={'number'}
-          fullWidth={true}
-          error={!isValidWorkingHours(earningsInputState.workingHours)}
+        <IntegerInput
           value={earningsInputState.workingHours}
-          inputProps={{
-            min: 0,
-            max: 24
-          }}
-          onChange={(event) => {
+          onValueChanged={(value) => {
             earningsInputDispatch({
               type: InputDataActionType.SetWorkingHours,
-              payload: Number.parseInt(event.target.value)
-            });
-          }}
-        />
-      </div>
-      <div style={{ gridRowStart: 3, gridColumnStart: 1 }}>Hourly Rate:</div>
-      <div style={{ gridRowStart: 3, gridColumnStart: 2 }}>
-        <MoneyInput
-          value={earningsInputState.hourlyRate.amount}
-          onValueChanged={(value) => {
-            earningsInputDispatch({
-              type: InputDataActionType.SetHourlyRateAmount,
               payload: value
             });
           }}
+          minValue={0}
+          maxValue={24}
         />
       </div>
-      <div style={{ gridRowStart: 3, gridColumnStart: 3 }}>
-        <VatCheckbox
-          value={earningsInputState.hourlyRate.isVat}
-          onValueChanged={(value) => {
-            earningsInputDispatch({
-              type: InputDataActionType.SetHourlyRateIsVat,
-              payload: value
-            });
-          }}
-        />
-      </div>
-      <div style={{ gridRowStart: 4, gridColumnStart: 1 }}>Total Earnings:</div>
-      <div
-        style={{
-          gridRowStart: 4,
-          gridColumnStart: 2
+      <LabelInGrid text={'Hourly Rate:'} row={3} column={1} />
+      <MoneyInputWithVatInGrid
+        value={earningsInputState.hourlyRate}
+        onValueChanged={(value) => {
+          earningsInputDispatch({
+            type: InputDataActionType.SetHourlyRate,
+            payload: value
+          });
         }}
-      >
-        {formatAsMoney(earnings.totalEarnings)}
-      </div>
-      <div style={{ gridRowStart: 5, gridColumnStart: 1 }}>
-        Total Earnings with VAT:
-      </div>
-      <div
-        style={{
-          gridRowStart: 5,
-          gridColumnStart: 2
-        }}
-      >
-        {formatAsMoney(earnings.totalEarningsWithVat)}
-      </div>
+        row={3}
+        column={2}
+      />
+      <LabelledMoneyDisplayInGrid
+        label={'Total Earnings:'}
+        value={earnings.totalEarnings}
+        row={4}
+        column={1}
+      />
+      <LabelledMoneyDisplayInGrid
+        label={'Total Earnings with VAT:'}
+        value={earnings.totalEarningsWithVat}
+        row={5}
+        column={1}
+      />
       <div
         style={{
           gridRowStart: 6,
@@ -226,10 +183,7 @@ export function EarningsDisplay(): React.ReactElement {
 
 function getEarningsData(input: EarningsInputData): EarningsData {
   if (!isEarningsInputValid(input)) {
-    return {
-      totalEarnings: 0,
-      totalEarningsWithVat: 0
-    };
+    return EMPTY_EARNINGS_DATA;
   }
 
   const totalEarnings = moneyStringToCurrency(input.hourlyRate.amount)
@@ -240,23 +194,15 @@ function getEarningsData(input: EarningsInputData): EarningsData {
     : totalEarnings;
 
   return {
-    totalEarnings: currencyToCents(totalEarnings),
-    totalEarningsWithVat: currencyToCents(totalEarningsWithVat)
+    totalEarnings: currencyToMoneyString(totalEarnings),
+    totalEarningsWithVat: currencyToMoneyString(totalEarningsWithVat)
   };
 }
 
 function isEarningsInputValid(earningsInput: EarningsInputData): boolean {
   return (
-    isValidWorkingDays(earningsInput.workingDays) &&
-    isValidWorkingHours(earningsInput.workingHours) &&
+    isInNumericRange(earningsInput.workingDays, 0, 365) &&
+    isInNumericRange(earningsInput.workingHours, 0, 24) &&
     isValidMoneyString(earningsInput.hourlyRate.amount)
   );
-}
-
-function isValidWorkingDays(workingDays: number): boolean {
-  return workingDays >= 1 && workingDays <= 365;
-}
-
-function isValidWorkingHours(workingHours: number): boolean {
-  return workingHours >= 1 && workingHours <= 24;
 }

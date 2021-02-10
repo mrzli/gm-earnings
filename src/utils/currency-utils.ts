@@ -9,8 +9,8 @@ import Currency from 'currency.js';
 //   //maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
 // });
 
-export function formatAsMoney(cents: number): string {
-  return centsToCurrency(cents).format();
+export function formatAsMoney(moneyString: string): string {
+  return moneyStringToCurrency(moneyString).format();
 }
 
 export function moneyStringToCents(moneyString: string): number {
@@ -19,10 +19,6 @@ export function moneyStringToCents(moneyString: string): number {
 
 export function centsToMoneyString(cents: number): string {
   return currencyToMoneyString(centsToCurrency(cents));
-}
-
-export function isValidMoneyString(moneyString: string): boolean {
-  return /^(?:0|[1-9]\d*)\.\d{2}$/.test(moneyString);
 }
 
 export function moneyStringToCurrency(moneyString: string): Currency {
