@@ -8,16 +8,12 @@ import {
 import { isNameValid } from '../utils/generic-utils';
 import { isValidMoneyString } from '../utils/currency-utils';
 import { BusinessExpenseItem } from '../types/business-expense-item';
-
-interface BusinessExpenseInputProps {
-  readonly item: BusinessExpenseItem;
-  readonly onItemChanged: (item: BusinessExpenseItem) => void;
-}
+import { InputListItemProps } from '../types/generic/generic-types';
 
 export function BusinessExpenseInput({
   item,
   onItemChanged
-}: BusinessExpenseInputProps): React.ReactElement {
+}: InputListItemProps<BusinessExpenseItem>): React.ReactElement {
   return (
     <div
       style={{

@@ -18,12 +18,8 @@ import {
   isValidMoneyString,
   moneyStringToCurrency
 } from '../utils/currency-utils';
-import { ExpenseInputList } from './ExpenseInputList';
+import { InputList } from './InputList';
 import { BusinessExpenseInput } from './BusinessExpenseInput';
-import {
-  removeArrayItemAtIndex,
-  updateArrayItemAtIndex
-} from '../utils/array-utils';
 import { BusinessExpenseItem } from '../types/business-expense-item';
 import { EarningsInputData } from '../types/earnings-input-data';
 
@@ -32,9 +28,7 @@ enum InputDataActionType {
   SetWorkingHours = 'SetWorkingHours',
   SetHourlyRateAmount = 'SetHourlyRateAmount',
   SetHourlyRateIsVat = 'SetHourlyRateIsVat',
-  AddBusinessExpenseItem = 'AddBusinessExpenseItem',
-  RemoveBusinessExpenseItem = 'RemoveBusinessExpenseItem',
-  ChangeBusinessExpenseItem = 'ChangeBusinessExpenseItem'
+  SetBusinessExpenseItems = 'SetBusinessExpenseItems'
 }
 
 interface ActionSetWorkingDays {
@@ -57,22 +51,9 @@ interface ActionSetHourlyRateIsVat {
   readonly payload: boolean;
 }
 
-interface ActionAddBusinessExpenseItem {
-  readonly type: InputDataActionType.AddBusinessExpenseItem;
-  readonly payload: undefined;
-}
-
-interface ActionRemoveBusinessExpenseItem {
-  readonly type: InputDataActionType.RemoveBusinessExpenseItem;
-  readonly payload: number;
-}
-
-interface ActionChangeBusinessExpenseItem {
-  readonly type: InputDataActionType.ChangeBusinessExpenseItem;
-  readonly payload: {
-    readonly item: BusinessExpenseItem;
-    readonly index: number;
-  };
+interface ActionSetBusinessExpenseItems {
+  readonly type: InputDataActionType.SetBusinessExpenseItems;
+  readonly payload: readonly BusinessExpenseItem[];
 }
 
 type InputDataAction =
@@ -80,9 +61,7 @@ type InputDataAction =
   | ActionSetWorkingHours
   | ActionSetHourlyRateAmount
   | ActionSetHourlyRateIsVat
-  | ActionAddBusinessExpenseItem
-  | ActionRemoveBusinessExpenseItem
-  | ActionChangeBusinessExpenseItem;
+  | ActionSetBusinessExpenseItems;
 
 function earningsInputReducer(
   state: EarningsInputData,
@@ -103,30 +82,10 @@ function earningsInputReducer(
         ...state,
         hourlyRate: { ...state.hourlyRate, isVat: action.payload }
       };
-    case InputDataActionType.AddBusinessExpenseItem:
+    case InputDataActionType.SetBusinessExpenseItems:
       return {
         ...state,
-        businessExpenseItems: [
-          ...state.businessExpenseItems,
-          EMPTY_BUSINESS_EXPENSE_ITEM
-        ]
-      };
-    case InputDataActionType.RemoveBusinessExpenseItem:
-      return {
-        ...state,
-        businessExpenseItems: removeArrayItemAtIndex(
-          state.businessExpenseItems,
-          action.payload
-        )
-      };
-    case InputDataActionType.ChangeBusinessExpenseItem:
-      return {
-        ...state,
-        businessExpenseItems: updateArrayItemAtIndex(
-          state.businessExpenseItems,
-          action.payload.index,
-          action.payload.item
-        )
+        businessExpenseItems: action.payload
       };
     default:
       return state;
@@ -261,30 +220,15 @@ export function EarningsDisplay(): React.ReactElement {
           gridColumnEnd: `span ${GRID_COLUMNS}`
         }}
       >
-        <ExpenseInputList<BusinessExpenseItem>
+        <InputList<BusinessExpenseItem>
           title={'Business Expenses:'}
           items={earningsInputState.businessExpenseItems}
-          itemRenderer={(item, index) => (
-            <BusinessExpenseInput
-              item={item}
-              onItemChanged={(updatedItem) => {
-                earningsInputDispatch({
-                  type: InputDataActionType.ChangeBusinessExpenseItem,
-                  payload: { item: updatedItem, index: index }
-                });
-              }}
-            />
-          )}
-          onAddItem={() => {
+          ItemComponent={BusinessExpenseInput}
+          emptyItem={EMPTY_BUSINESS_EXPENSE_ITEM}
+          onValueChanged={(value) => {
             earningsInputDispatch({
-              type: InputDataActionType.AddBusinessExpenseItem,
-              payload: undefined
-            });
-          }}
-          onRemoveItem={(indexToRemove) => {
-            earningsInputDispatch({
-              type: InputDataActionType.RemoveBusinessExpenseItem,
-              payload: indexToRemove
+              type: InputDataActionType.SetBusinessExpenseItems,
+              payload: value
             });
           }}
         />
