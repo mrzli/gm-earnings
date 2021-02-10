@@ -5,11 +5,7 @@ import {
   InputAdornment,
   TextField
 } from '@material-ui/core';
-import {
-  BusinessExpenseItem,
-  EarningsData,
-  EarningsInputData
-} from '../types/earnings-data';
+import { EarningsData } from '../types/earnings-data';
 import {
   DEFAULT_EARNINGS_INPUT_DATA,
   EMPTY_BUSINESS_EXPENSE_ITEM,
@@ -28,6 +24,8 @@ import {
   removeArrayItemAtIndex,
   updateArrayItemAtIndex
 } from '../utils/array-utils';
+import { BusinessExpenseItem } from '../types/business-expense-item';
+import { EarningsInputData } from '../types/earnings-input-data';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',

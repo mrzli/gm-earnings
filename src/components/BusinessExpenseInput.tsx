@@ -1,5 +1,4 @@
 import React from 'react';
-import { BusinessExpenseItem } from '../types/earnings-data';
 import {
   Checkbox,
   FormControlLabel,
@@ -8,6 +7,7 @@ import {
 } from '@material-ui/core';
 import { isNameValid } from '../utils/generic-utils';
 import { isValidMoneyString } from '../utils/currency-utils';
+import { BusinessExpenseItem } from '../types/business-expense-item';
 
 interface BusinessExpenseInputProps {
   readonly item: BusinessExpenseItem;

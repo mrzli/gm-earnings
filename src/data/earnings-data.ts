@@ -1,9 +1,8 @@
-import {
-  BusinessExpenseItem,
-  EarningsData,
-  EarningsInputData,
-  InputAmountWithVat
-} from '../types/earnings-data';
+import { EarningsData } from '../types/earnings-data';
+import { InputAmountWithVat } from '../types/input-amount-with-vat';
+import { BusinessExpenseItem } from '../types/business-expense-item';
+import { EarningsInputData } from '../types/earnings-input-data';
+import { ExpenseInterval } from '../types/expense-interval';
 
 export const VAT_MULTIPLIER = '1.25';
 
@@ -38,5 +37,7 @@ export const EMPTY_EARNINGS_DATA: EarningsData = {
 
 export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {
   name: '',
-  amount: EMPTY_INPUT_AMOUNT_WITH_VAT
+  amount: EMPTY_INPUT_AMOUNT_WITH_VAT,
+  interval: ExpenseInterval.Daily,
+  timesPerInterval: 1
 };
