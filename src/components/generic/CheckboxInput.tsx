@@ -1,15 +1,17 @@
 import React from 'react';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 
-interface VatCheckboxProps {
+interface CheckboxInputProps {
+  readonly label: string;
   readonly value: boolean;
   readonly onValueChanged: (value: boolean) => void;
 }
 
-export function VatCheckbox({
+export function CheckboxInput({
+  label,
   value,
   onValueChanged
-}: VatCheckboxProps): React.ReactElement {
+}: CheckboxInputProps): React.ReactElement {
   return (
     <FormControlLabel
       control={
@@ -20,7 +22,7 @@ export function VatCheckbox({
           }}
         />
       }
-      label={'VAT'}
+      label={label}
     />
   );
 }

@@ -23,6 +23,7 @@ import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
 import { InputAmountWithVat } from '../types/input-amount-with-vat';
 import { LabelledMoneyDisplayInGrid } from './generic/LabelledMoneyDisplayInGrid';
 import { LabelInGrid } from './generic/LabelInGrid';
+import { GridLayout } from './generic/GridLayout';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
@@ -90,17 +91,7 @@ export function EarningsDisplay(): React.ReactElement {
   }, [earningsInputState]);
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: `repeat(${GRID_COLUMNS}, fit-content(${
-          100 / GRID_COLUMNS
-        }%))`,
-        alignItems: 'center',
-        rowGap: 10,
-        columnGap: 10
-      }}
-    >
+    <GridLayout columns={GRID_COLUMNS}>
       <LabelInGrid text={'Number of Working Days:'} row={1} column={1} />
       <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
         <IntegerInput
@@ -177,7 +168,7 @@ export function EarningsDisplay(): React.ReactElement {
           }}
         />
       </div>
-    </div>
+    </GridLayout>
   );
 }
 

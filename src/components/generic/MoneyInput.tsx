@@ -5,11 +5,13 @@ import { isValidMoneyString } from '../../utils/validation-utils';
 interface MoneyInputProps {
   readonly value: string;
   readonly onValueChanged: (value: string) => void;
+  readonly disabled?: boolean;
 }
 
 export function MoneyInput({
   value,
-  onValueChanged
+  onValueChanged,
+  disabled
 }: MoneyInputProps): React.ReactElement {
   return (
     <TextField
@@ -22,6 +24,7 @@ export function MoneyInput({
       InputProps={{
         endAdornment: <InputAdornment position={'end'}>kn</InputAdornment>
       }}
+      disabled={disabled}
     />
   );
 }
