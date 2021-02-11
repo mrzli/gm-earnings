@@ -4,16 +4,12 @@ import { MoneyInput } from '../generic/MoneyInput';
 import { PercentInput } from '../generic/PercentInput';
 import { CheckboxInput } from '../generic/CheckboxInput';
 import { ZERO_AMOUNT } from '../../data/general-data';
-
-interface TaxBracketInputProps {
-  readonly value: TaxBracketItem;
-  readonly onValueChanged: (value: TaxBracketItem) => void;
-}
+import { InputListItemProps } from '../../types/generic/generic-types';
 
 export function TaxBracketInput({
-  value,
-  onValueChanged
-}: TaxBracketInputProps): React.ReactElement {
+  item,
+  onItemChanged
+}: InputListItemProps<TaxBracketItem>): React.ReactElement {
   return (
     <div
       style={{
@@ -26,21 +22,21 @@ export function TaxBracketInput({
     >
       <div style={{ gridColumnStart: 1 }}>
         <MoneyInput
-          value={value.amountRange}
+          value={item.amountRange}
           onValueChanged={(updatedValue) => {
-            onValueChanged({ ...value, amountRange: updatedValue });
+            onItemChanged({ ...item, amountRange: updatedValue });
           }}
-          disabled={value.isInfinite}
+          disabled={item.isInfinite}
         />
       </div>
       <div style={{ gridColumnStart: 2 }}>
         <CheckboxInput
           label={'Infinite Range'}
-          value={value.isInfinite}
+          value={item.isInfinite}
           onValueChanged={(updatedValue) => {
-            onValueChanged({
-              ...value,
-              amountRange: updatedValue ? ZERO_AMOUNT : value.amountRange,
+            onItemChanged({
+              ...item,
+              amountRange: updatedValue ? ZERO_AMOUNT : item.amountRange,
               isInfinite: updatedValue
             });
           }}
@@ -48,9 +44,9 @@ export function TaxBracketInput({
       </div>
       <div style={{ gridColumnStart: 3 }}>
         <PercentInput
-          value={value.taxRatePercent}
+          value={item.taxRatePercent}
           onValueChanged={(updatedValue) => {
-            onValueChanged({ ...value, taxRatePercent: updatedValue });
+            onItemChanged({ ...item, taxRatePercent: updatedValue });
           }}
         />
       </div>

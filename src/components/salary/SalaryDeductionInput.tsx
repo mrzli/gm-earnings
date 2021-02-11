@@ -3,6 +3,10 @@ import { SalaryDeductionData } from '../../types/salary/salary-deduction-data';
 import { GridLayout } from '../generic/GridLayout';
 import { PercentInput } from '../generic/PercentInput';
 import { MoneyInput } from '../generic/MoneyInput';
+import { InputList } from '../generic/InputList';
+import { TaxBracketItem } from '../../types/salary/tax-bracket-item';
+import { TaxBracketInput } from './TaxBracketInput';
+import { EMPTY_TAX_BRACKET_ITEM } from '../../data/salary-data';
 
 interface SalaryDeductionInputProps {
   readonly value: SalaryDeductionData;
@@ -51,6 +55,26 @@ export function SalaryDeductionInput({
             onValueChanged({
               ...value,
               taxDeduction: updatedValue
+            });
+          }}
+        />
+      </div>
+      <div
+        style={{
+          gridRowStart: 4,
+          gridColumnStart: 1,
+          gridColumnEnd: 'span 2'
+        }}
+      >
+        <InputList<TaxBracketItem>
+          title={'Tax Brackets:'}
+          items={value.taxBrackets}
+          ItemComponent={TaxBracketInput}
+          emptyItem={EMPTY_TAX_BRACKET_ITEM}
+          onValueChanged={(updatedValue) => {
+            onValueChanged({
+              ...value,
+              taxBrackets: updatedValue
             });
           }}
         />
