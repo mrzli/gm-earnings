@@ -5,7 +5,7 @@ import { EarningsInputData } from '../types/earnings-input-data';
 import { ExpenseInterval } from '../types/expense-interval';
 import { ZERO_AMOUNT } from './general-data';
 
-export const VAT_MULTIPLIER = '1.25';
+export const VAT_PERCENT = '0.25';
 
 export const EMPTY_INPUT_AMOUNT_WITH_VAT: InputAmountWithVat = {
   amount: ZERO_AMOUNT,
@@ -33,7 +33,7 @@ export const DEFAULT_EARNINGS_INPUT_DATA: EarningsInputData = {
 
 export const EMPTY_EARNINGS_DATA: EarningsData = {
   totalEarnings: ZERO_AMOUNT,
-  totalEarningsWithVat: ZERO_AMOUNT
+  totalVat: ZERO_AMOUNT
 };
 
 export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {

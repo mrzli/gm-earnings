@@ -1,4 +1,4 @@
 export interface EarningsData {
   readonly totalEarnings: string;
-  readonly totalEarningsWithVat: string;
+  readonly totalVat: string;
 }

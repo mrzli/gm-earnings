@@ -4,7 +4,7 @@ import {
   DEFAULT_EARNINGS_INPUT_DATA,
   EMPTY_BUSINESS_EXPENSE_ITEM,
   EMPTY_EARNINGS_DATA,
-  VAT_MULTIPLIER
+  VAT_PERCENT
 } from '../data/earnings-data';
 import {
   currencyToMoneyString,
@@ -24,6 +24,8 @@ import { InputAmountWithVat } from '../types/input-amount-with-vat';
 import { LabelledMoneyDisplayInGrid } from './generic/LabelledMoneyDisplayInGrid';
 import { LabelInGrid } from './generic/LabelInGrid';
 import { GridLayout } from './generic/GridLayout';
+import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
+import { ZERO_AMOUNT } from '../data/general-data';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
@@ -143,8 +145,8 @@ export function EarningsDisplay(): React.ReactElement {
         column={1}
       />
       <LabelledMoneyDisplayInGrid
-        label={'Total Earnings with VAT:'}
-        value={earnings.totalEarningsWithVat}
+        label={'Total VAT:'}
+        value={earnings.totalVat}
         row={5}
         column={1}
       />
@@ -168,6 +170,27 @@ export function EarningsDisplay(): React.ReactElement {
           }}
         />
       </div>
+      <LabelledMoneyDisplayInGrid
+        label={'Earnings After Business Expenses:'}
+        value={ZERO_AMOUNT}
+        row={7}
+        column={1}
+      />
+      <LabelledMoneyDisplayInGrid
+        label={'VAT After Expenses:'}
+        value={ZERO_AMOUNT}
+        row={8}
+        column={1}
+      />
+      <div
+        style={{
+          gridRowStart: 9,
+          gridColumnStart: 1,
+          gridColumnEnd: `span ${GRID_COLUMNS}`
+        }}
+      >
+        <SalaryBreakdownInput />
+      </div>
     </GridLayout>
   );
 }
@@ -180,13 +203,13 @@ function getEarningsData(input: EarningsInputData): EarningsData {
   const totalEarnings = moneyStringToCurrency(input.hourlyRate.amount)
     .multiply(input.workingHours)
     .multiply(input.workingDays);
-  const totalEarningsWithVat = input.hourlyRate.isVat
-    ? totalEarnings.multiply(VAT_MULTIPLIER)
+  const totalVat = input.hourlyRate.isVat
+    ? totalEarnings.multiply(VAT_PERCENT)
     : totalEarnings;
 
   return {
     totalEarnings: currencyToMoneyString(totalEarnings),
-    totalEarningsWithVat: currencyToMoneyString(totalEarningsWithVat)
+    totalVat: currencyToMoneyString(totalVat)
   };
 }
 
