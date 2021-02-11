@@ -40,6 +40,7 @@ export function InputList<TItem>({
               />
               <div>
                 <Button
+                  style={{ marginLeft: 10 }}
                   variant={'contained'}
                   color={'secondary'}
                   onClick={() => {
