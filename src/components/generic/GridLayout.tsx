@@ -1,21 +1,19 @@
 import React from 'react';
 
 interface GridLayoutProps {
-  readonly columns: number;
+  readonly columnsTemplate: string;
   readonly children: React.ReactNode;
 }
 
 export function GridLayout({
-  columns,
+  columnsTemplate,
   children
 }: GridLayoutProps): React.ReactElement {
   return (
     <div
       style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${columns}, fit-content(${
-          100 / columns
-        }%))`,
+        gridTemplateColumns: columnsTemplate,
         alignItems: 'center',
         rowGap: 10,
         columnGap: 10

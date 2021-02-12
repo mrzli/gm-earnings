@@ -11,7 +11,7 @@ export function SalaryBreakdownYearly({
   data
 }: SalaryBreakdownYearlyProps): React.ReactElement {
   return (
-    <GridLayout columns={2}>
+    <GridLayout columnsTemplate={'240px 200px'}>
       <LabelledMoneyDisplayInGrid
         label={'Health Insurance:'}
         value={data.healthInsurance}

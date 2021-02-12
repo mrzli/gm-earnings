@@ -1,31 +1,21 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { EarningsData } from '../types/earnings-data';
+import { EarningsData } from '../../types/earnings-data';
 import {
   DEFAULT_EARNINGS_INPUT_DATA,
-  EMPTY_BUSINESS_EXPENSE_ITEM,
-  EMPTY_EARNINGS_DATA,
-  VAT_PERCENT
-} from '../data/earnings-data';
-import {
-  currencyToMoneyString,
-  moneyStringToCurrency
-} from '../utils/currency-utils';
-import { InputList } from './generic/InputList';
-import { BusinessExpenseInput } from './BusinessExpenseInput';
-import { BusinessExpenseItem } from '../types/business-expense-item';
-import { EarningsInputData } from '../types/earnings-input-data';
-import {
-  isInNumericRange,
-  isValidMoneyString
-} from '../utils/validation-utils';
-import { IntegerInput } from './generic/IntegerInput';
-import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
-import { InputAmountWithVat } from '../types/input-amount-with-vat';
-import { LabelledMoneyDisplayInGrid } from './generic/LabelledMoneyDisplayInGrid';
-import { LabelInGrid } from './generic/LabelInGrid';
-import { GridLayout } from './generic/GridLayout';
-import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
-import { ZERO_AMOUNT } from '../data/general-data';
+  EMPTY_EARNINGS_DATA
+} from '../../data/earnings-data';
+import { BusinessExpenseItem } from '../../types/business-expense-item';
+import { EarningsInputData } from '../../types/earnings-input-data';
+import { IntegerInput } from '../generic/IntegerInput';
+import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
+import { InputAmountWithVat } from '../../types/input-amount-with-vat';
+import { LabelledMoneyDisplayInGrid } from '../generic/LabelledMoneyDisplayInGrid';
+import { LabelInGrid } from '../generic/LabelInGrid';
+import { GridLayout } from '../generic/GridLayout';
+import { SalaryBreakdownInput } from '../salary/SalaryBreakdownInput';
+import { ZERO_AMOUNT } from '../../data/general-data';
+import { getEarningsData } from './earnings-calculations';
+import { BusinessExpensesInput } from './BusinessExpensesInput';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
@@ -78,8 +68,6 @@ function earningsInputReducer(
   }
 }
 
-const GRID_COLUMNS = 4;
-
 export function EarningsDisplay(): React.ReactElement {
   const [earningsInputState, earningsInputDispatch] = useReducer(
     earningsInputReducer,
@@ -93,7 +81,7 @@ export function EarningsDisplay(): React.ReactElement {
   }, [earningsInputState]);
 
   return (
-    <GridLayout columns={GRID_COLUMNS}>
+    <GridLayout columnsTemplate={'240px 200px auto 1fr'}>
       <LabelInGrid text={'Number of Working Days:'} row={1} column={1} />
       <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
         <IntegerInput
@@ -139,7 +127,7 @@ export function EarningsDisplay(): React.ReactElement {
         column={2}
       />
       <LabelledMoneyDisplayInGrid
-        label={'Total Earnings:'}
+        label={'Total Earnings (without VAT):'}
         value={earnings.totalEarnings}
         row={4}
         column={1}
@@ -154,14 +142,11 @@ export function EarningsDisplay(): React.ReactElement {
         style={{
           gridRowStart: 6,
           gridColumnStart: 1,
-          gridColumnEnd: `span ${GRID_COLUMNS}`
+          gridColumnEnd: 'span 4'
         }}
       >
-        <InputList<BusinessExpenseItem>
-          title={'Business Expenses:'}
-          items={earningsInputState.businessExpenseItems}
-          ItemComponent={BusinessExpenseInput}
-          emptyItem={EMPTY_BUSINESS_EXPENSE_ITEM}
+        <BusinessExpensesInput
+          value={earningsInputState.businessExpenseItems}
           onValueChanged={(value) => {
             earningsInputDispatch({
               type: InputDataActionType.SetBusinessExpenseItems,
@@ -171,52 +156,26 @@ export function EarningsDisplay(): React.ReactElement {
         />
       </div>
       <LabelledMoneyDisplayInGrid
-        label={'Earnings After Business Expenses:'}
+        label={'Earnings After Business Expenses (without VAT):'}
         value={ZERO_AMOUNT}
-        row={7}
+        row={9}
         column={1}
       />
       <LabelledMoneyDisplayInGrid
         label={'VAT After Expenses:'}
         value={ZERO_AMOUNT}
-        row={8}
+        row={10}
         column={1}
       />
       <div
         style={{
-          gridRowStart: 9,
+          gridRowStart: 11,
           gridColumnStart: 1,
-          gridColumnEnd: `span ${GRID_COLUMNS}`
+          gridColumnEnd: 'span 4'
         }}
       >
         <SalaryBreakdownInput />
       </div>
     </GridLayout>
-  );
-}
-
-function getEarningsData(input: EarningsInputData): EarningsData {
-  if (!isEarningsInputValid(input)) {
-    return EMPTY_EARNINGS_DATA;
-  }
-
-  const totalEarnings = moneyStringToCurrency(input.hourlyRate.amount)
-    .multiply(input.workingHours)
-    .multiply(input.workingDays);
-  const totalVat = input.hourlyRate.isVat
-    ? totalEarnings.multiply(VAT_PERCENT)
-    : totalEarnings;
-
-  return {
-    totalEarnings: currencyToMoneyString(totalEarnings),
-    totalVat: currencyToMoneyString(totalVat)
-  };
-}
-
-function isEarningsInputValid(earningsInput: EarningsInputData): boolean {
-  return (
-    isInNumericRange(earningsInput.workingDays, 0, 365) &&
-    isInNumericRange(earningsInput.workingHours, 0, 24) &&
-    isValidMoneyString(earningsInput.hourlyRate.amount)
   );
 }

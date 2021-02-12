@@ -1,30 +1,23 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import { isNameValid } from '../utils/generic-utils';
-import { BusinessExpenseItem } from '../types/business-expense-item';
-import { InputListItemProps } from '../types/generic/generic-types';
-import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
-import { IntegerInput } from './generic/IntegerInput';
+import { isNameValid } from '../../utils/generic-utils';
+import { BusinessExpenseItem } from '../../types/business-expense-item';
+import { InputListItemProps } from '../../types/generic/generic-types';
+import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
+import { IntegerInput } from '../generic/IntegerInput';
 import {
   EXPENSE_INTERVAL_VALUE_DISPLAY_PAIRS,
   ExpenseInterval
-} from '../types/expense-interval';
-import { SingleSelectInput } from './generic/SingleSelectInput';
+} from '../../types/expense-interval';
+import { SingleSelectInput } from '../generic/SingleSelectInput';
+import { GridLayout } from '../generic/GridLayout';
 
 export function BusinessExpenseInput({
   item,
   onItemChanged
 }: InputListItemProps<BusinessExpenseItem>): React.ReactElement {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '120px 120px auto 120px 120px',
-        alignItems: 'center',
-        rowGap: 10,
-        columnGap: 10
-      }}
-    >
+    <GridLayout columnsTemplate={'120px 120px auto 120px 120px'}>
       <div style={{ gridColumnStart: 1 }}>
         <TextField
           fullWidth={true}
@@ -66,6 +59,6 @@ export function BusinessExpenseInput({
           maxValue={1000}
         />
       </div>
-    </div>
+    </GridLayout>
   );
 }

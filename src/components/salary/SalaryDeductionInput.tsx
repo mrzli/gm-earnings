@@ -18,7 +18,7 @@ export function SalaryDeductionInput({
   onValueChanged
 }: SalaryDeductionInputProps): React.ReactElement {
   return (
-    <GridLayout columns={2}>
+    <GridLayout columnsTemplate={'240px 200px'}>
       <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
         Retirement Payments 1st Pillar Percent:
       </div>
