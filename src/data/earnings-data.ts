@@ -1,39 +1,29 @@
-import { EarningsData } from '../types/earnings-data';
-import { InputAmountWithVat } from '../types/input-amount-with-vat';
 import { BusinessExpenseItem } from '../types/business-expense-item';
-import { EarningsInputData } from '../types/earnings-input-data';
 import { ExpenseInterval } from '../types/expense-interval';
-import { ZERO_AMOUNT } from './general-data';
+import { EMPTY_INPUT_AMOUNT_WITH_VAT, ZERO_AMOUNT } from './general-data';
+import { EarningsSectionInputData } from '../types/earnings/earnings-section-input-data';
+import { EarningsSectionOutputData } from '../types/earnings/earnings-section-output-data';
+import { EarningsDisplayData } from '../types/earnings/earnings-display-data';
 
-export const VAT_PERCENT = '0.25';
-
-export const EMPTY_INPUT_AMOUNT_WITH_VAT: InputAmountWithVat = {
-  amount: ZERO_AMOUNT,
-  isVat: true
-};
-
-export const EMPTY_EARNINGS_INPUT_DATA: EarningsInputData = {
-  workingDays: 0,
-  workingHours: 0,
-  hourlyRate: EMPTY_INPUT_AMOUNT_WITH_VAT,
-  businessExpenseItems: [],
-  personalExpenseItems: []
-};
-
-export const DEFAULT_EARNINGS_INPUT_DATA: EarningsInputData = {
+export const DEFAULT_EARNINGS_SECTION_INPUT_DATA: EarningsSectionInputData = {
   workingDays: 230,
   workingHours: 8,
   hourlyRate: {
     amount: '250.00',
     isVat: true
-  },
-  businessExpenseItems: [],
-  personalExpenseItems: []
+  }
 };
 
-export const EMPTY_EARNINGS_DATA: EarningsData = {
+export const EMPTY_EARNINGS_SECTION_OUTPUT_DATA: EarningsSectionOutputData = {
+  isValid: false,
   totalEarnings: ZERO_AMOUNT,
   totalVat: ZERO_AMOUNT
+};
+
+export const DEFAULT_EARNINGS_DISPLAY_DATA: EarningsDisplayData = {
+  earningsSectionOutputData: EMPTY_EARNINGS_SECTION_OUTPUT_DATA,
+  businessExpenseItems: [],
+  personalExpenseItems: []
 };
 
 export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {

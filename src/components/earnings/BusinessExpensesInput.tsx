@@ -3,7 +3,7 @@ import { InputList } from '../generic/InputList';
 import { BusinessExpenseItem } from '../../types/business-expense-item';
 import { BusinessExpenseInput } from './BusinessExpenseInput';
 import { EMPTY_BUSINESS_EXPENSE_ITEM } from '../../data/earnings-data';
-import { LabelledMoneyDisplayInGrid } from '../generic/LabelledMoneyDisplayInGrid';
+import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 import { ZERO_AMOUNT } from '../../data/general-data';
 import { GridLayout } from '../generic/GridLayout';
 
@@ -35,13 +35,13 @@ export function BusinessExpensesInput({
           }}
         />
       </div>
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'Total Business Expenses (without VAT):'}
         value={ZERO_AMOUNT}
         row={2}
         column={1}
       />
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'Total Business Expenses VAT:'}
         value={ZERO_AMOUNT}
         row={3}

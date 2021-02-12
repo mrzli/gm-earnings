@@ -1,4 +1,4 @@
-import { InputAmountWithVat } from './input-amount-with-vat';
+import { InputAmountWithVat } from './generic/input-amount-with-vat';
 import { ExpenseInterval } from './expense-interval';
 
 export interface BusinessExpenseItem {

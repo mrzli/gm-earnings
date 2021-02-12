@@ -1,7 +1,7 @@
 import React from 'react';
 import { SalaryBreakdownYearlyData } from '../../types/salary/salary-breakdown-yearly-data';
 import { GridLayout } from '../generic/GridLayout';
-import { LabelledMoneyDisplayInGrid } from '../generic/LabelledMoneyDisplayInGrid';
+import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 
 interface SalaryBreakdownYearlyProps {
   readonly data: SalaryBreakdownYearlyData;
@@ -12,31 +12,26 @@ export function SalaryBreakdownYearly({
 }: SalaryBreakdownYearlyProps): React.ReactElement {
   return (
     <GridLayout columnsTemplate={'240px 200px'}>
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'Health Insurance:'}
         value={data.healthInsurance}
         row={1}
         column={1}
       />
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'Retirement Payments:'}
         value={data.retirementPayments}
         row={2}
         column={1}
       />
-      <LabelledMoneyDisplayInGrid
-        label={'Tax:'}
-        value={data.tax}
-        row={3}
-        column={1}
-      />
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid label={'Tax:'} value={data.tax} row={3} column={1} />
+      <MoneyDisplayInGrid
         label={'Gross 2 Salary:'}
         value={data.gross2Salary}
         row={4}
         column={1}
       />
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'Net Salary:'}
         value={data.netSalary}
         row={5}

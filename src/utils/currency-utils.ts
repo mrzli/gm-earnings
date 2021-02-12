@@ -24,8 +24,8 @@ export function centsToMoneyString(cents: number): string {
 export function moneyStringToCurrency(moneyString: string): Currency {
   return Currency(moneyString, {
     symbol: 'kn',
-    pattern: '# !',
-    negativePattern: '-# !',
+    pattern: '#', //'# !',
+    negativePattern: '-#', //'-# !',
     errorOnInvalid: true
   });
 }
@@ -37,8 +37,8 @@ export function currencyToMoneyString(currency: Currency): string {
 export function centsToCurrency(cents: number): Currency {
   return Currency(cents, {
     symbol: 'kn',
-    pattern: '# !',
-    negativePattern: '-# !',
+    pattern: '#', //'# !',
+    negativePattern: '-#', //'-# !',
     fromCents: true,
     errorOnInvalid: true
   });

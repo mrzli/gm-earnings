@@ -1,68 +1,44 @@
-import React, { useEffect, useReducer, useState } from 'react';
-import { EarningsData } from '../types/earnings-data';
+import React, { useReducer } from 'react';
 import {
-  DEFAULT_EARNINGS_INPUT_DATA,
-  EMPTY_EARNINGS_DATA
+  DEFAULT_EARNINGS_DISPLAY_DATA,
+  DEFAULT_EARNINGS_SECTION_INPUT_DATA
 } from '../data/earnings-data';
 import { BusinessExpenseItem } from '../types/business-expense-item';
-import { EarningsInputData } from '../types/earnings-input-data';
-import { IntegerInput } from './generic/IntegerInput';
-import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
-import { InputAmountWithVat } from '../types/input-amount-with-vat';
-import { LabelledMoneyDisplayInGrid } from './generic/LabelledMoneyDisplayInGrid';
-import { LabelInGrid } from './generic/LabelInGrid';
-import { GridLayout } from './generic/GridLayout';
+import { MoneyDisplayInGrid } from './generic/MoneyDisplayInGrid';
 import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
 import { ZERO_AMOUNT } from '../data/general-data';
-import { getEarningsData } from './earnings/earnings-calculations';
 import { BusinessExpensesInput } from './earnings/BusinessExpensesInput';
 import { EarningsSection } from './earnings/EarningsSection';
+import { EarningsSectionOutputData } from '../types/earnings/earnings-section-output-data';
+import { EarningsDisplayData } from '../types/earnings/earnings-display-data';
 
-enum InputDataActionType {
-  SetWorkingDays = 'SetWorkingDays',
-  SetWorkingHours = 'SetWorkingHours',
-  SetHourlyRate = 'SetHourlyRate',
+enum EarningsDisplayDataActionType {
+  SetEarningsSectionOutputData = 'SetEarningsSectionOutputData',
   SetBusinessExpenseItems = 'SetBusinessExpenseItems'
 }
 
-interface ActionSetWorkingDays {
-  readonly type: InputDataActionType.SetWorkingDays;
-  readonly payload: number;
-}
-
-interface ActionSetWorkingHours {
-  readonly type: InputDataActionType.SetWorkingHours;
-  readonly payload: number;
-}
-
-interface ActionSetHourlyRate {
-  readonly type: InputDataActionType.SetHourlyRate;
-  readonly payload: InputAmountWithVat;
+interface ActionSetEarningsSectionOutputData {
+  readonly type: EarningsDisplayDataActionType.SetEarningsSectionOutputData;
+  readonly payload: EarningsSectionOutputData;
 }
 
 interface ActionSetBusinessExpenseItems {
-  readonly type: InputDataActionType.SetBusinessExpenseItems;
+  readonly type: EarningsDisplayDataActionType.SetBusinessExpenseItems;
   readonly payload: readonly BusinessExpenseItem[];
 }
 
-type InputDataAction =
-  | ActionSetWorkingDays
-  | ActionSetWorkingHours
-  | ActionSetHourlyRate
+type EarningsDisplayDataAction =
+  | ActionSetEarningsSectionOutputData
   | ActionSetBusinessExpenseItems;
 
-function earningsInputReducer(
-  state: EarningsInputData,
-  action: InputDataAction
-): EarningsInputData {
+function earningsDisplayReducer(
+  state: EarningsDisplayData,
+  action: EarningsDisplayDataAction
+): EarningsDisplayData {
   switch (action.type) {
-    case InputDataActionType.SetWorkingDays:
-      return { ...state, workingDays: action.payload };
-    case InputDataActionType.SetWorkingHours:
-      return { ...state, workingHours: action.payload };
-    case InputDataActionType.SetHourlyRate:
-      return { ...state, hourlyRate: action.payload };
-    case InputDataActionType.SetBusinessExpenseItems:
+    case EarningsDisplayDataActionType.SetEarningsSectionOutputData:
+      return { ...state, earningsSectionOutputData: action.payload };
+    case EarningsDisplayDataActionType.SetBusinessExpenseItems:
       return { ...state, businessExpenseItems: action.payload };
     default:
       return state;
@@ -70,115 +46,44 @@ function earningsInputReducer(
 }
 
 export function EarningsDisplay(): React.ReactElement {
-  const [earningsInputState, earningsInputDispatch] = useReducer(
-    earningsInputReducer,
-    DEFAULT_EARNINGS_INPUT_DATA
+  const [inputState, inputDispatch] = useReducer(
+    earningsDisplayReducer,
+    DEFAULT_EARNINGS_DISPLAY_DATA
   );
 
-  const [earnings, setEarnings] = useState<EarningsData>(EMPTY_EARNINGS_DATA);
-
-  useEffect(() => {
-    setEarnings(getEarningsData(earningsInputState));
-  }, [earningsInputState]);
-
   return (
-    <GridLayout columnsTemplate={'240px 200px auto 1fr'}>
-      <EarningsSection />
-      <LabelInGrid text={'Number of Working Days:'} row={1} column={1} />
-      <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
-        <IntegerInput
-          label={'Number of Working Days'}
-          value={earningsInputState.workingDays}
-          onValueChanged={(value) => {
-            earningsInputDispatch({
-              type: InputDataActionType.SetWorkingDays,
-              payload: value
-            });
-          }}
-          minValue={0}
-          maxValue={365}
-        />
-      </div>
-      <LabelInGrid
-        text={'Number of Working Hours in a Day:'}
-        row={2}
-        column={1}
+    <div>
+      <EarningsSection
+        defaultInputData={DEFAULT_EARNINGS_SECTION_INPUT_DATA}
+        onOutputDataChanged={(output) => {
+          inputDispatch({
+            type: EarningsDisplayDataActionType.SetEarningsSectionOutputData,
+            payload: output
+          });
+        }}
       />
-      <div style={{ gridRowStart: 2, gridColumnStart: 2 }}>
-        <IntegerInput
-          value={earningsInputState.workingHours}
-          onValueChanged={(value) => {
-            earningsInputDispatch({
-              type: InputDataActionType.SetWorkingHours,
-              payload: value
-            });
-          }}
-          minValue={0}
-          maxValue={24}
-        />
-      </div>
-      <LabelInGrid text={'Hourly Rate:'} row={3} column={1} />
-      <MoneyInputWithVatInGrid
-        value={earningsInputState.hourlyRate}
+      <BusinessExpensesInput
+        value={inputState.businessExpenseItems}
         onValueChanged={(value) => {
-          earningsInputDispatch({
-            type: InputDataActionType.SetHourlyRate,
+          inputDispatch({
+            type: EarningsDisplayDataActionType.SetBusinessExpenseItems,
             payload: value
           });
         }}
-        row={3}
-        column={2}
       />
-      <LabelledMoneyDisplayInGrid
-        label={'Total Earnings (without VAT):'}
-        value={earnings.totalEarnings}
-        row={4}
-        column={1}
-      />
-      <LabelledMoneyDisplayInGrid
-        label={'Total VAT:'}
-        value={earnings.totalVat}
-        row={5}
-        column={1}
-      />
-      <div
-        style={{
-          gridRowStart: 6,
-          gridColumnStart: 1,
-          gridColumnEnd: 'span 4'
-        }}
-      >
-        <BusinessExpensesInput
-          value={earningsInputState.businessExpenseItems}
-          onValueChanged={(value) => {
-            earningsInputDispatch({
-              type: InputDataActionType.SetBusinessExpenseItems,
-              payload: value
-            });
-          }}
-        />
-      </div>
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'Earnings After Business Expenses (without VAT):'}
         value={ZERO_AMOUNT}
         row={9}
         column={1}
       />
-      <LabelledMoneyDisplayInGrid
+      <MoneyDisplayInGrid
         label={'VAT After Expenses:'}
         value={ZERO_AMOUNT}
         row={10}
         column={1}
       />
-      <div
-        style={{
-          gridRowStart: 11,
-          gridColumnStart: 1,
-          gridColumnEnd: 'span 4'
-        }}
-      >
-        <SalaryBreakdownInput />
-      </div>
-    </GridLayout>
+      <SalaryBreakdownInput />
+    </div>
   );
 }
