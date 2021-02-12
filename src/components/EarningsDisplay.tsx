@@ -1,21 +1,22 @@
 import React, { useEffect, useReducer, useState } from 'react';
-import { EarningsData } from '../../types/earnings-data';
+import { EarningsData } from '../types/earnings-data';
 import {
   DEFAULT_EARNINGS_INPUT_DATA,
   EMPTY_EARNINGS_DATA
-} from '../../data/earnings-data';
-import { BusinessExpenseItem } from '../../types/business-expense-item';
-import { EarningsInputData } from '../../types/earnings-input-data';
-import { IntegerInput } from '../generic/IntegerInput';
-import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
-import { InputAmountWithVat } from '../../types/input-amount-with-vat';
-import { LabelledMoneyDisplayInGrid } from '../generic/LabelledMoneyDisplayInGrid';
-import { LabelInGrid } from '../generic/LabelInGrid';
-import { GridLayout } from '../generic/GridLayout';
-import { SalaryBreakdownInput } from '../salary/SalaryBreakdownInput';
-import { ZERO_AMOUNT } from '../../data/general-data';
-import { getEarningsData } from './earnings-calculations';
-import { BusinessExpensesInput } from './BusinessExpensesInput';
+} from '../data/earnings-data';
+import { BusinessExpenseItem } from '../types/business-expense-item';
+import { EarningsInputData } from '../types/earnings-input-data';
+import { IntegerInput } from './generic/IntegerInput';
+import { MoneyInputWithVatInGrid } from './generic/MoneyInputWithVatInGrid';
+import { InputAmountWithVat } from '../types/input-amount-with-vat';
+import { LabelledMoneyDisplayInGrid } from './generic/LabelledMoneyDisplayInGrid';
+import { LabelInGrid } from './generic/LabelInGrid';
+import { GridLayout } from './generic/GridLayout';
+import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
+import { ZERO_AMOUNT } from '../data/general-data';
+import { getEarningsData } from './earnings/earnings-calculations';
+import { BusinessExpensesInput } from './earnings/BusinessExpensesInput';
+import { EarningsSection } from './earnings/EarningsSection';
 
 enum InputDataActionType {
   SetWorkingDays = 'SetWorkingDays',
@@ -82,9 +83,11 @@ export function EarningsDisplay(): React.ReactElement {
 
   return (
     <GridLayout columnsTemplate={'240px 200px auto 1fr'}>
+      <EarningsSection />
       <LabelInGrid text={'Number of Working Days:'} row={1} column={1} />
       <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
         <IntegerInput
+          label={'Number of Working Days'}
           value={earningsInputState.workingDays}
           onValueChanged={(value) => {
             earningsInputDispatch({

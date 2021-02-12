@@ -3,6 +3,7 @@ import { TextField } from '@material-ui/core';
 import { isInNumericRange } from '../../utils/validation-utils';
 
 interface IntegerInputProps {
+  readonly label?: string;
   readonly value: number;
   readonly onValueChanged: (value: number) => void;
   readonly minValue: number;
@@ -10,6 +11,7 @@ interface IntegerInputProps {
 }
 
 export function IntegerInput({
+  label,
   value,
   onValueChanged,
   minValue,
@@ -19,6 +21,8 @@ export function IntegerInput({
     <TextField
       type={'number'}
       fullWidth={true}
+      label={label}
+      variant={'outlined'}
       error={!isInNumericRange(value, minValue, maxValue)}
       value={value}
       inputProps={{
