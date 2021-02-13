@@ -10,13 +10,15 @@ import { EarningsSectionOutputData } from '../../types/earnings/earnings-section
 import { VAT_PERCENT } from '../../data/general-data';
 import {
   currencyToMoneyString,
-  moneyStringToCurrency
+  moneyStringToCurrency,
+  ZERO_MONEY
 } from '../../utils/currency-utils';
 import {
   isInNumericRange,
   isValidMoneyString
 } from '../../utils/validation-utils';
 import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from '../../data/earnings-data';
+import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
@@ -31,12 +33,12 @@ enum EarningsSectionInputActionType {
 
 interface ActionSetWorkingDays {
   readonly type: EarningsSectionInputActionType.SetWorkingDays;
-  readonly payload: number;
+  readonly payload: number | undefined;
 }
 
 interface ActionSetWorkingHours {
   readonly type: EarningsSectionInputActionType.SetWorkingHours;
-  readonly payload: number;
+  readonly payload: number | undefined;
 }
 
 interface ActionSetHourlyRate {
@@ -78,11 +80,15 @@ export function EarningsSection({
     EMPTY_EARNINGS_SECTION_OUTPUT_DATA
   );
 
-  useEffect(() => {
-    const newOutputData = getOutputData(inputState);
-    setOutputData(newOutputData);
-    onOutputDataChanged(newOutputData);
-  }, [onOutputDataChanged, setOutputData, inputState]);
+  useEffect(
+    () => {
+      const newOutputData = getOutputData(inputState);
+      setOutputData(newOutputData);
+      onOutputDataChanged(newOutputData);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputState]
+  );
 
   return (
     <SectionContainer
@@ -130,19 +136,19 @@ export function EarningsSection({
           row={1}
           column={3}
         />
+        <MoneyDisplayInGrid
+          label={'Total Earnings (w/o VAT):'}
+          value={outputData.totalEarnings}
+          row={2}
+          column={1}
+        />
+        <MoneyDisplayInGrid
+          label={'Total VAT:'}
+          value={outputData.totalVat}
+          row={2}
+          column={2}
+        />
       </GridLayout>
-      <MoneyDisplayInGrid
-        label={'Total Earnings (w/o VAT):'}
-        value={outputData.totalEarnings}
-        row={2}
-        column={1}
-      />
-      <MoneyDisplayInGrid
-        label={'Total VAT:'}
-        value={outputData.totalVat}
-        row={2}
-        column={1}
-      />
     </SectionContainer>
   );
 }
@@ -159,7 +165,7 @@ function getOutputData(
     .multiply(input.workingDays);
   const totalVat = input.hourlyRate.isVat
     ? totalEarnings.multiply(VAT_PERCENT)
-    : totalEarnings;
+    : ZERO_MONEY;
 
   return {
     isValid: true,
@@ -168,9 +174,13 @@ function getOutputData(
   };
 }
 
-function isInputValid(earningsInput: EarningsSectionInputData): boolean {
+function isInputValid(
+  earningsInput: EarningsSectionInputData
+): earningsInput is NonNullableReadonlyObject<EarningsSectionInputData> {
   return (
+    earningsInput.workingDays !== undefined &&
     isInNumericRange(earningsInput.workingDays, 0, 365) &&
+    earningsInput.workingHours !== undefined &&
     isInNumericRange(earningsInput.workingHours, 0, 24) &&
     isValidMoneyString(earningsInput.hourlyRate.amount)
   );

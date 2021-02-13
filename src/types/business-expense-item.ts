@@ -5,5 +5,5 @@ export interface BusinessExpenseItem {
   readonly name: string;
   readonly amount: InputAmountWithVat;
   readonly interval: ExpenseInterval;
-  readonly timesPerInterval: number;
+  readonly timesPerInterval: number | undefined;
 }

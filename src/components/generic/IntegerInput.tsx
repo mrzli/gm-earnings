@@ -4,8 +4,8 @@ import { isInNumericRange } from '../../utils/validation-utils';
 
 interface IntegerInputProps {
   readonly label?: string;
-  readonly value: number;
-  readonly onValueChanged: (value: number) => void;
+  readonly value: number | undefined;
+  readonly onValueChanged: (value: number | undefined) => void;
   readonly minValue: number;
   readonly maxValue: number;
 }
@@ -23,14 +23,24 @@ export function IntegerInput({
       fullWidth={true}
       label={label}
       variant={'outlined'}
-      error={!isInNumericRange(value, minValue, maxValue)}
-      value={value}
+      error={
+        value === undefined || !isInNumericRange(value, minValue, maxValue)
+      }
+      value={value ?? ''}
       inputProps={{
         min: minValue,
         max: maxValue
       }}
+      InputLabelProps={{
+        shrink: true
+      }}
       onChange={(event) => {
-        onValueChanged(Number.parseInt(event.target.value));
+        const updatedValue = event.target.value;
+        if (/^0|[1-9][0-9]*$/.test(updatedValue)) {
+          onValueChanged(Number.parseInt(updatedValue));
+        } else {
+          onValueChanged(undefined);
+        }
       }}
     />
   );
