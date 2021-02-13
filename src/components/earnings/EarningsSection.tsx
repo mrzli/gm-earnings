@@ -20,6 +20,7 @@ import {
 import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from '../../data/earnings-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import { useUpdateOutputData } from '../../utils/hooks';
+import { Divider } from '@material-ui/core';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
@@ -127,16 +128,23 @@ export function EarningsSection({
           row={1}
           column={3}
         />
+        <Divider
+          style={{
+            gridRowStart: 2,
+            gridColumnStart: 1,
+            gridColumnEnd: 'span 4'
+          }}
+        />
         <MoneyDisplayInGrid
           label={'Total Earnings (w/o VAT):'}
           value={outputData.totalEarnings}
-          row={2}
+          row={3}
           column={1}
         />
         <MoneyDisplayInGrid
           label={'Total VAT:'}
           value={outputData.totalVat}
-          row={2}
+          row={3}
           column={2}
         />
       </GridLayout>

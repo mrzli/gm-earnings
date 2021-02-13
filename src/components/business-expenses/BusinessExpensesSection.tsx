@@ -85,7 +85,7 @@ export function BusinessExpensesSection({
         />
         <MoneyDisplayInGrid
           label={'Monthly B. E. (w/o VAT)'}
-          value={outputData.totalBusinessExpensesVat}
+          value={outputData.monthlyBusinessExpenses}
           row={2}
           column={3}
         />
