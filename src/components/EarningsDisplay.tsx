@@ -1,20 +1,19 @@
 import React, { useReducer } from 'react';
-import {
-  DEFAULT_EARNINGS_DISPLAY_DATA,
-  DEFAULT_EARNINGS_SECTION_INPUT_DATA
-} from '../data/earnings-data';
-import { BusinessExpenseItem } from '../types/business-expense-item';
+import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
 import { MoneyDisplayInGrid } from './generic/MoneyDisplayInGrid';
 import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
 import { ZERO_AMOUNT } from '../data/general-data';
-import { BusinessExpensesSection } from './earnings/BusinessExpensesSection';
+import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
 import { EarningsSectionOutputData } from '../types/earnings/earnings-section-output-data';
 import { EarningsDisplayData } from '../types/earnings/earnings-display-data';
+import { BusinessExpensesSectionOutputData } from '../types/business-expenses/business-expenses-section-output-data';
+import { DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA } from '../data/business-expenses-data';
+import { DEFAULT_EARNINGS_DISPLAY_DATA } from '../data/earnings-display-data';
 
 enum EarningsDisplayDataActionType {
   SetEarningsSectionOutputData = 'SetEarningsSectionOutputData',
-  SetBusinessExpenseItems = 'SetBusinessExpenseItems'
+  SetBusinessExpensesSectionOutputData = 'SetBusinessExpensesSectionOutputData'
 }
 
 interface ActionSetEarningsSectionOutputData {
@@ -22,14 +21,14 @@ interface ActionSetEarningsSectionOutputData {
   readonly payload: EarningsSectionOutputData;
 }
 
-interface ActionSetBusinessExpenseItems {
-  readonly type: EarningsDisplayDataActionType.SetBusinessExpenseItems;
-  readonly payload: readonly BusinessExpenseItem[];
+interface ActionSetBusinessExpensesSectionOutputData {
+  readonly type: EarningsDisplayDataActionType.SetBusinessExpensesSectionOutputData;
+  readonly payload: BusinessExpensesSectionOutputData;
 }
 
 type EarningsDisplayDataAction =
   | ActionSetEarningsSectionOutputData
-  | ActionSetBusinessExpenseItems;
+  | ActionSetBusinessExpensesSectionOutputData;
 
 function earningsDisplayReducer(
   state: EarningsDisplayData,
@@ -38,8 +37,8 @@ function earningsDisplayReducer(
   switch (action.type) {
     case EarningsDisplayDataActionType.SetEarningsSectionOutputData:
       return { ...state, earningsSectionOutputData: action.payload };
-    case EarningsDisplayDataActionType.SetBusinessExpenseItems:
-      return { ...state, businessExpenseItems: action.payload };
+    case EarningsDisplayDataActionType.SetBusinessExpensesSectionOutputData:
+      return { ...state, businessExpensesSectionOutputData: action.payload };
     default:
       return state;
   }
@@ -63,10 +62,11 @@ export function EarningsDisplay(): React.ReactElement {
         }}
       />
       <BusinessExpensesSection
-        value={inputState.businessExpenseItems}
-        onValueChanged={(value) => {
+        defaultInputData={DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA}
+        onOutputDataChanged={(value) => {
           inputDispatch({
-            type: EarningsDisplayDataActionType.SetBusinessExpenseItems,
+            type:
+              EarningsDisplayDataActionType.SetBusinessExpensesSectionOutputData,
             payload: value
           });
         }}

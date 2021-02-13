@@ -23,34 +23,36 @@ export function InputList<TItem>({
 }: InputListProps<TItem>): React.ReactElement {
   return (
     <div>
-      <List>
-        {items.map((item, index) => {
-          return (
-            <ListItem key={index}>
-              <ItemComponent
-                item={item}
-                onItemChanged={(updatedItem) => {
-                  onValueChanged(
-                    updateArrayItemAtIndex(items, index, updatedItem)
-                  );
-                }}
-              />
-              <div>
-                <Button
-                  style={{ marginLeft: 10 }}
-                  variant={'contained'}
-                  color={'secondary'}
-                  onClick={() => {
-                    onValueChanged(removeArrayItemAtIndex(items, index));
+      {items.length > 0 && (
+        <List>
+          {items.map((item, index) => {
+            return (
+              <ListItem key={index}>
+                <ItemComponent
+                  item={item}
+                  onItemChanged={(updatedItem) => {
+                    onValueChanged(
+                      updateArrayItemAtIndex(items, index, updatedItem)
+                    );
                   }}
-                >
-                  Remove
-                </Button>
-              </div>
-            </ListItem>
-          );
-        })}
-      </List>
+                />
+                <div>
+                  <Button
+                    style={{ marginLeft: 10 }}
+                    variant={'contained'}
+                    color={'secondary'}
+                    onClick={() => {
+                      onValueChanged(removeArrayItemAtIndex(items, index));
+                    }}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              </ListItem>
+            );
+          })}
+        </List>
+      )}
       <Button
         variant={'contained'}
         color={'primary'}

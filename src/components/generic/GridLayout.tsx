@@ -15,7 +15,7 @@ export function GridLayout({
         display: 'grid',
         gridTemplateColumns: columnsTemplate,
         alignItems: 'center',
-        rowGap: 10,
+        rowGap: 16,
         columnGap: 10
       }}
     >

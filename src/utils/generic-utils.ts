@@ -1,7 +1,3 @@
-export function isTextValid(value: string): boolean {
-  return value.length >= 1 && value.length <= 100;
-}
-
 export function isNullOrUndefined<T>(
   value: T | null | undefined
 ): value is null | undefined {

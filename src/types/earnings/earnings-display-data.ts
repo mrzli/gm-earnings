@@ -1,9 +1,7 @@
 import { EarningsSectionOutputData } from './earnings-section-output-data';
-import { BusinessExpenseItem } from '../business-expense-item';
-import { PersonalExpenseItem } from '../personal-expense-item';
+import { BusinessExpensesSectionOutputData } from '../business-expenses/business-expenses-section-output-data';
 
 export interface EarningsDisplayData {
   readonly earningsSectionOutputData: EarningsSectionOutputData;
-  readonly businessExpenseItems: readonly BusinessExpenseItem[];
-  readonly personalExpenseItems: readonly PersonalExpenseItem[];
+  readonly businessExpensesSectionOutputData: BusinessExpensesSectionOutputData;
 }

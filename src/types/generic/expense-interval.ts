@@ -1,5 +1,5 @@
-import { mapGetOrThrow } from '../utils/generic-utils';
-import { Tuple } from './generic/generic-types';
+import { mapGetOrThrow } from '../../utils/generic-utils';
+import { Tuple } from './generic-types';
 
 export enum ExpenseInterval {
   Daily = 'Daily',

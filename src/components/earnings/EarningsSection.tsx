@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useReducer } from 'react';
 import { SectionContainer } from '../generic/SectionContainer';
 import { InputAmountWithVat } from '../../types/generic/input-amount-with-vat';
 import { EarningsSectionInputData } from '../../types/earnings/earnings-section-input-data';
@@ -19,6 +19,7 @@ import {
 } from '../../utils/validation-utils';
 import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from '../../data/earnings-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
+import { useUpdateOutputData } from '../../utils/hooks';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
@@ -71,37 +72,27 @@ export function EarningsSection({
   defaultInputData,
   onOutputDataChanged
 }: EarningsSectionProps): React.ReactElement {
-  const [inputState, inputStateDispatch] = useReducer(
+  const [inputData, inputDataDispatch] = useReducer(
     earningsSectionInputReducer,
     defaultInputData
   );
 
-  const [outputData, setOutputData] = useState(
-    EMPTY_EARNINGS_SECTION_OUTPUT_DATA
-  );
-
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(inputState);
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputState]
+  const outputData = useUpdateOutputData(
+    inputData,
+    EMPTY_EARNINGS_SECTION_OUTPUT_DATA,
+    getOutputData,
+    onOutputDataChanged
   );
 
   return (
-    <SectionContainer
-      header={'Earnings'}
-      isDataValid={isInputValid(inputState)}
-    >
+    <SectionContainer header={'Earnings'} isDataValid={outputData.isValid}>
       <GridLayout columnsTemplate={'200px 200px 200px auto'}>
         <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
           <IntegerInput
             label={'Number of Working Days'}
-            value={inputState.workingDays}
+            value={inputData.workingDays}
             onValueChanged={(value) => {
-              inputStateDispatch({
+              inputDataDispatch({
                 type: EarningsSectionInputActionType.SetWorkingDays,
                 payload: value
               });
@@ -113,9 +104,9 @@ export function EarningsSection({
         <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
           <IntegerInput
             label={'Working Hours per Day'}
-            value={inputState.workingHours}
+            value={inputData.workingHours}
             onValueChanged={(value) => {
-              inputStateDispatch({
+              inputDataDispatch({
                 type: EarningsSectionInputActionType.SetWorkingHours,
                 payload: value
               });
@@ -126,9 +117,9 @@ export function EarningsSection({
         </div>
         <MoneyInputWithVatInGrid
           label={'Hourly Rate'}
-          value={inputState.hourlyRate}
+          value={inputData.hourlyRate}
           onValueChanged={(value) => {
-            inputStateDispatch({
+            inputDataDispatch({
               type: EarningsSectionInputActionType.SetHourlyRate,
               payload: value
             });
@@ -175,13 +166,13 @@ function getOutputData(
 }
 
 function isInputValid(
-  earningsInput: EarningsSectionInputData
-): earningsInput is NonNullableReadonlyObject<EarningsSectionInputData> {
+  input: EarningsSectionInputData
+): input is NonNullableReadonlyObject<EarningsSectionInputData> {
   return (
-    earningsInput.workingDays !== undefined &&
-    isInNumericRange(earningsInput.workingDays, 0, 365) &&
-    earningsInput.workingHours !== undefined &&
-    isInNumericRange(earningsInput.workingHours, 0, 24) &&
-    isValidMoneyString(earningsInput.hourlyRate.amount)
+    input.workingDays !== undefined &&
+    isInNumericRange(input.workingDays, 0, 365) &&
+    input.workingHours !== undefined &&
+    isInNumericRange(input.workingHours, 0, 24) &&
+    isValidMoneyString(input.hourlyRate.amount)
   );
 }
