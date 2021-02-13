@@ -3,7 +3,7 @@ import { TextField } from '@material-ui/core';
 import { isInNumericRange } from '../../utils/validation-utils';
 
 interface IntegerInputProps {
-  readonly label?: string;
+  readonly label: string;
   readonly value: number | undefined;
   readonly onValueChanged: (value: number | undefined) => void;
   readonly minValue: number;

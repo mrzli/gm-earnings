@@ -30,5 +30,5 @@ export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {
   name: '',
   amount: EMPTY_INPUT_AMOUNT_WITH_VAT,
   interval: ExpenseInterval.Daily,
-  timesPerInterval: 1
+  quantity: 1
 };

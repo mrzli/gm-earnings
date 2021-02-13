@@ -1,6 +1,5 @@
 import React from 'react';
 import { formatAsMoney } from '../../utils/currency-utils';
-import { isValidMoneyString } from '../../utils/validation-utils';
 import { InputAdornment, TextField } from '@material-ui/core';
 
 interface MoneyDisplayInGridProps {

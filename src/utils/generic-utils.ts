@@ -1,4 +1,4 @@
-export function isNameValid(value: string): boolean {
+export function isTextValid(value: string): boolean {
   return value.length >= 1 && value.length <= 100;
 }
 

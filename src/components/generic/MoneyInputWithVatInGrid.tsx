@@ -4,7 +4,7 @@ import { MoneyInput } from './MoneyInput';
 import { CheckboxInput } from './CheckboxInput';
 
 interface MoneyInputWithVatInGridProps {
-  readonly label?: string;
+  readonly label: string;
   readonly value: InputAmountWithVat;
   readonly onValueChanged: (value: InputAmountWithVat) => void;
   readonly row: number;

@@ -22,6 +22,7 @@ export function TaxBracketInput({
     >
       <div style={{ gridColumnStart: 1 }}>
         <MoneyInput
+          label={'Amount Range'}
           value={item.amountRange}
           onValueChanged={(updatedValue) => {
             onItemChanged({ ...item, amountRange: updatedValue });
@@ -44,6 +45,7 @@ export function TaxBracketInput({
       </div>
       <div style={{ gridColumnStart: 3 }}>
         <PercentInput
+          label={'Tax'}
           value={item.taxRatePercent}
           onValueChanged={(updatedValue) => {
             onItemChanged({ ...item, taxRatePercent: updatedValue });

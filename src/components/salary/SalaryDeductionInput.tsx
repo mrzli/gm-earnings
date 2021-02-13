@@ -20,10 +20,8 @@ export function SalaryDeductionInput({
   return (
     <GridLayout columnsTemplate={'240px 200px'}>
       <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
-        Retirement Payments 1st Pillar Percent:
-      </div>
-      <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
         <PercentInput
+          label={'Retirement 1st Pillar'}
           value={value.retirementPaymentsPillar1Percent}
           onValueChanged={(updatedValue) => {
             onValueChanged({
@@ -34,10 +32,8 @@ export function SalaryDeductionInput({
         />
       </div>
       <div style={{ gridRowStart: 2, gridColumnStart: 1 }}>
-        Retirement Payments 2st Pillar Percent:
-      </div>
-      <div style={{ gridRowStart: 2, gridColumnStart: 2 }}>
         <PercentInput
+          label={'Retirement 2nd Pillar'}
           value={value.retirementPaymentsPillar2Percent}
           onValueChanged={(updatedValue) => {
             onValueChanged({
@@ -47,9 +43,9 @@ export function SalaryDeductionInput({
           }}
         />
       </div>
-      <div style={{ gridRowStart: 3, gridColumnStart: 1 }}>Tax Deduction:</div>
-      <div style={{ gridRowStart: 3, gridColumnStart: 2 }}>
+      <div style={{ gridRowStart: 3, gridColumnStart: 1 }}>
         <MoneyInput
+          label={'Tax Deduction'}
           value={value.taxDeduction}
           onValueChanged={(updatedValue) => {
             onValueChanged({
@@ -67,7 +63,6 @@ export function SalaryDeductionInput({
         }}
       >
         <InputList<TaxBracketItem>
-          title={'Tax Brackets:'}
           items={value.taxBrackets}
           ItemComponent={TaxBracketInput}
           emptyItem={EMPTY_TAX_BRACKET_ITEM}
@@ -79,9 +74,9 @@ export function SalaryDeductionInput({
           }}
         />
       </div>
-      <div style={{ gridRowStart: 5, gridColumnStart: 1 }}>Surtax Percent:</div>
-      <div style={{ gridRowStart: 5, gridColumnStart: 2 }}>
+      <div style={{ gridRowStart: 5, gridColumnStart: 1 }}>
         <PercentInput
+          label={'Surtax'}
           value={value.surtaxPercent}
           onValueChanged={(updatedValue) => {
             onValueChanged({
@@ -92,10 +87,8 @@ export function SalaryDeductionInput({
         />
       </div>
       <div style={{ gridRowStart: 6, gridColumnStart: 1 }}>
-        Health Insurance Percent:
-      </div>
-      <div style={{ gridRowStart: 6, gridColumnStart: 2 }}>
         <PercentInput
+          label={'Health Insurance'}
           value={value.healthInsurancePercent}
           onValueChanged={(updatedValue) => {
             onValueChanged({

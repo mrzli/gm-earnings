@@ -1,6 +1,4 @@
 import React from 'react';
-import { TextField } from '@material-ui/core';
-import { isNameValid } from '../../utils/generic-utils';
 import { BusinessExpenseItem } from '../../types/business-expense-item';
 import { InputListItemProps } from '../../types/generic/generic-types';
 import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
@@ -11,6 +9,7 @@ import {
 } from '../../types/expense-interval';
 import { SingleSelectInput } from '../generic/SingleSelectInput';
 import { GridLayout } from '../generic/GridLayout';
+import { TextInput } from '../generic/TextInput';
 
 export function BusinessExpenseInput({
   item,
@@ -19,17 +18,16 @@ export function BusinessExpenseInput({
   return (
     <GridLayout columnsTemplate={'120px 120px auto 120px 120px'}>
       <div style={{ gridColumnStart: 1 }}>
-        <TextField
-          fullWidth={true}
-          placeholder={'Name'}
-          error={!isNameValid(item.name)}
+        <TextInput
+          label={'Name'}
           value={item.name}
-          onChange={(event) => {
-            onItemChanged({ ...item, name: event.target.value });
+          onValueChanged={(value) => {
+            onItemChanged({ ...item, name: value });
           }}
         />
       </div>
       <MoneyInputWithVatInGrid
+        label={'Amount'}
         value={item.amount}
         onValueChanged={(value) => {
           onItemChanged({ ...item, amount: value });
@@ -39,6 +37,7 @@ export function BusinessExpenseInput({
       />
       <div style={{ gridColumnStart: 4 }}>
         <SingleSelectInput<ExpenseInterval>
+          label={'Interval'}
           options={EXPENSE_INTERVAL_VALUE_DISPLAY_PAIRS}
           value={item.interval}
           onValueChanged={(value) => {
@@ -51,9 +50,10 @@ export function BusinessExpenseInput({
       </div>
       <div style={{ gridColumnStart: 5 }}>
         <IntegerInput
-          value={item.timesPerInterval}
+          label={'Quantity'}
+          value={item.quantity}
           onValueChanged={(value) => {
-            onItemChanged({ ...item, timesPerInterval: value });
+            onItemChanged({ ...item, quantity: value });
           }}
           minValue={1}
           maxValue={1000}

@@ -13,7 +13,7 @@ export function SectionContainer({
   children
 }: SectionContainerProps): React.ReactElement {
   return (
-    <Paper variant={'outlined'} style={{ padding: 10 }}>
+    <Paper variant={'outlined'} style={{ margin: 5, padding: 10 }}>
       <Typography style={{ marginBottom: 10 }} variant={'subtitle1'}>
         {header}
         {isDataValid ? undefined : (

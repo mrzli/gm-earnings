@@ -7,7 +7,7 @@ import { BusinessExpenseItem } from '../types/business-expense-item';
 import { MoneyDisplayInGrid } from './generic/MoneyDisplayInGrid';
 import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
 import { ZERO_AMOUNT } from '../data/general-data';
-import { BusinessExpensesInput } from './earnings/BusinessExpensesInput';
+import { BusinessExpensesSection } from './earnings/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
 import { EarningsSectionOutputData } from '../types/earnings/earnings-section-output-data';
 import { EarningsDisplayData } from '../types/earnings/earnings-display-data';
@@ -62,7 +62,7 @@ export function EarningsDisplay(): React.ReactElement {
           });
         }}
       />
-      <BusinessExpensesInput
+      <BusinessExpensesSection
         value={inputState.businessExpenseItems}
         onValueChanged={(value) => {
           inputDispatch({

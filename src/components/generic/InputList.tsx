@@ -7,7 +7,6 @@ import {
 } from '../../utils/array-utils';
 
 interface InputListProps<TItem> {
-  readonly title: string;
   readonly items: readonly TItem[];
   readonly ItemComponent: (
     props: InputListItemProps<TItem>
@@ -17,7 +16,6 @@ interface InputListProps<TItem> {
 }
 
 export function InputList<TItem>({
-  title,
   items,
   ItemComponent,
   emptyItem,
@@ -25,7 +23,6 @@ export function InputList<TItem>({
 }: InputListProps<TItem>): React.ReactElement {
   return (
     <div>
-      <div>{title}</div>
       <List>
         {items.map((item, index) => {
           return (
