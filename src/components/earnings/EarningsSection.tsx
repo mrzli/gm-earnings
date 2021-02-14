@@ -1,6 +1,5 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { SectionContainer } from '../generic/SectionContainer';
-import { InputAmountWithVat } from '../../types/generic/input-amount-with-vat';
 import { EarningsSectionInputData } from '../../types/earnings/earnings-section-input-data';
 import { GridLayout } from '../generic/GridLayout';
 import { IntegerInput } from '../generic/IntegerInput';
@@ -19,67 +18,21 @@ import {
 } from '../../utils/validation-utils';
 import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from '../../data/earnings-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
-import { useUpdateOutputData } from '../../utils/hooks';
-import { Divider } from '@material-ui/core';
+import { useInputOutputData } from '../../utils/hooks';
+import { DividerInGrid } from '../generic/DividerInGrid';
+import { GridItem } from '../generic/GridItem';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
   readonly onOutputDataChanged: (data: EarningsSectionOutputData) => void;
 }
 
-enum EarningsSectionInputActionType {
-  SetWorkingDays = 'SetWorkingDays',
-  SetWorkingHours = 'SetWorkingHours',
-  SetHourlyRate = 'SetHourlyRate'
-}
-
-interface ActionSetWorkingDays {
-  readonly type: EarningsSectionInputActionType.SetWorkingDays;
-  readonly payload: number | undefined;
-}
-
-interface ActionSetWorkingHours {
-  readonly type: EarningsSectionInputActionType.SetWorkingHours;
-  readonly payload: number | undefined;
-}
-
-interface ActionSetHourlyRate {
-  readonly type: EarningsSectionInputActionType.SetHourlyRate;
-  readonly payload: InputAmountWithVat;
-}
-
-type EarningsSectionInputAction =
-  | ActionSetWorkingDays
-  | ActionSetWorkingHours
-  | ActionSetHourlyRate;
-
-function earningsSectionInputReducer(
-  state: EarningsSectionInputData,
-  action: EarningsSectionInputAction
-): EarningsSectionInputData {
-  switch (action.type) {
-    case EarningsSectionInputActionType.SetWorkingDays:
-      return { ...state, workingDays: action.payload };
-    case EarningsSectionInputActionType.SetWorkingHours:
-      return { ...state, workingHours: action.payload };
-    case EarningsSectionInputActionType.SetHourlyRate:
-      return { ...state, hourlyRate: action.payload };
-    default:
-      return state;
-  }
-}
-
 export function EarningsSection({
   defaultInputData,
   onOutputDataChanged
 }: EarningsSectionProps): React.ReactElement {
-  const [inputData, inputDataDispatch] = useReducer(
-    earningsSectionInputReducer,
-    defaultInputData
-  );
-
-  const outputData = useUpdateOutputData(
-    inputData,
+  const { inputData, setInputData, outputData } = useInputOutputData(
+    defaultInputData,
     EMPTY_EARNINGS_SECTION_OUTPUT_DATA,
     getOutputData,
     onOutputDataChanged
@@ -88,53 +41,47 @@ export function EarningsSection({
   return (
     <SectionContainer header={'Earnings'} isDataValid={outputData.isValid}>
       <GridLayout columnsTemplate={'200px 200px 200px auto'}>
-        <div style={{ gridRowStart: 1, gridColumnStart: 1 }}>
+        <GridItem row={1} column={1}>
           <IntegerInput
             label={'Number of Working Days'}
             value={inputData.workingDays}
             onValueChanged={(value) => {
-              inputDataDispatch({
-                type: EarningsSectionInputActionType.SetWorkingDays,
-                payload: value
-              });
+              setInputData((s) => ({
+                ...s,
+                workingDays: value
+              }));
             }}
             minValue={0}
             maxValue={365}
           />
-        </div>
-        <div style={{ gridRowStart: 1, gridColumnStart: 2 }}>
+        </GridItem>
+        <GridItem row={1} column={2}>
           <IntegerInput
             label={'Working Hours per Day'}
             value={inputData.workingHours}
             onValueChanged={(value) => {
-              inputDataDispatch({
-                type: EarningsSectionInputActionType.SetWorkingHours,
-                payload: value
-              });
+              setInputData((s) => ({
+                ...s,
+                workingHours: value
+              }));
             }}
             minValue={0}
             maxValue={24}
           />
-        </div>
+        </GridItem>
         <MoneyInputWithVatInGrid
           label={'Hourly Rate'}
           value={inputData.hourlyRate}
           onValueChanged={(value) => {
-            inputDataDispatch({
-              type: EarningsSectionInputActionType.SetHourlyRate,
-              payload: value
-            });
+            setInputData((s) => ({
+              ...s,
+              hourlyRate: value
+            }));
           }}
           row={1}
           column={3}
         />
-        <Divider
-          style={{
-            gridRowStart: 2,
-            gridColumnStart: 1,
-            gridColumnEnd: 'span 4'
-          }}
-        />
+        <DividerInGrid row={2} span={4} />
         <MoneyDisplayInGrid
           label={'Total Earnings (w/o VAT):'}
           value={outputData.totalEarnings}

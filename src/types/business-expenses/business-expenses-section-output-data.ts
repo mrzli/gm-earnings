@@ -3,4 +3,5 @@ export interface BusinessExpensesSectionOutputData {
   readonly totalBusinessExpenses: string;
   readonly totalBusinessExpensesVat: string;
   readonly monthlyBusinessExpenses: string;
+  readonly numOutgoingTransactionsPerYear: number;
 }

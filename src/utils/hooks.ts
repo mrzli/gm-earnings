@@ -1,11 +1,18 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
-export function useUpdateOutputData<TInputData, TOutputData>(
-  inputData: TInputData,
+export interface InputOutputDataResult<TInputData, TOutputData> {
+  readonly inputData: TInputData;
+  readonly setInputData: Dispatch<SetStateAction<TInputData>>;
+  readonly outputData: TOutputData;
+}
+
+export function useInputOutputData<TInputData, TOutputData>(
+  defaultInputData: TInputData,
   defaultOutputData: TOutputData,
   outputDataConverter: (inputData: TInputData) => TOutputData,
   onOutputDataChanged: (outputData: TOutputData) => void
-): TOutputData {
+): InputOutputDataResult<TInputData, TOutputData> {
+  const [inputData, setInputData] = useState(defaultInputData);
   const [outputData, setOutputData] = useState(defaultOutputData);
 
   useEffect(
@@ -18,5 +25,9 @@ export function useUpdateOutputData<TInputData, TOutputData>(
     [inputData]
   );
 
-  return outputData;
+  return {
+    inputData,
+    setInputData,
+    outputData
+  };
 }

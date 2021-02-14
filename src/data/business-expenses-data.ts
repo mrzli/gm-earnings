@@ -11,6 +11,8 @@ import {
   currencyToMoneyString,
   moneyStringToCurrency
 } from '../utils/currency-utils';
+import { BankExpensesSectionInputData } from '../types/business-expenses/bank-expenses-section-input-data';
+import { BankExpensesSectionOutputData } from '../types/business-expenses/bank-expenses-section-output-data';
 
 export const DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA: BusinessExpensesSectionInputData = {
   items: [
@@ -95,7 +97,8 @@ export const EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA: BusinessExpensesSectio
   isValid: false,
   totalBusinessExpenses: ZERO_AMOUNT,
   totalBusinessExpensesVat: ZERO_AMOUNT,
-  monthlyBusinessExpenses: ZERO_AMOUNT
+  monthlyBusinessExpenses: ZERO_AMOUNT,
+  numOutgoingTransactionsPerYear: 0
 };
 
 export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {
@@ -103,4 +106,17 @@ export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {
   amount: EMPTY_INPUT_AMOUNT_WITH_VAT,
   interval: ExpenseInterval.Daily,
   quantity: 1
+};
+
+export const DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA: BankExpensesSectionInputData = {
+  bankMonthlyFee: '60.00',
+  incomingTransactionFee: '1.00',
+  numIncomingTransactionsPerYear: 12,
+  outgoingTransactionFee: '2.80',
+  numOutgoingTransactionsPerYear: 0
+};
+
+export const EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA: BankExpensesSectionOutputData = {
+  isValid: false,
+  totalBankExpenses: ZERO_AMOUNT
 };

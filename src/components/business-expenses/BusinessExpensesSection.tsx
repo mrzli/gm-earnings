@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Currency from 'currency.js';
 import { InputList } from '../generic/InputList';
 import { BusinessExpenseItem } from '../../types/business-expenses/business-expense-item';
@@ -13,7 +13,7 @@ import {
   EMPTY_BUSINESS_EXPENSE_ITEM,
   EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA
 } from '../../data/business-expenses-data';
-import { useUpdateOutputData } from '../../utils/hooks';
+import { useInputOutputData } from '../../utils/hooks';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
   isInNumericRange,
@@ -26,6 +26,8 @@ import {
   moneyStringToCurrency,
   ZERO_MONEY
 } from '../../utils/currency-utils';
+import { DividerInGrid } from '../generic/DividerInGrid';
+import { GridItem } from '../generic/GridItem';
 
 interface BusinessExpensesSectionProps {
   readonly defaultInputData: BusinessExpensesSectionInputData;
@@ -38,10 +40,8 @@ export function BusinessExpensesSection({
   defaultInputData,
   onOutputDataChanged
 }: BusinessExpensesSectionProps): React.ReactElement {
-  const [inputData, setInputData] = useState(defaultInputData);
-
-  const outputData = useUpdateOutputData(
-    inputData,
+  const { inputData, setInputData, outputData } = useInputOutputData(
+    defaultInputData,
     EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA,
     getOutputData,
     onOutputDataChanged
@@ -53,40 +53,36 @@ export function BusinessExpensesSection({
       isDataValid={outputData.isValid}
     >
       <GridLayout columnsTemplate={'200px 200px 200px 1fr'}>
-        <div
-          style={{
-            gridRowStart: 1,
-            gridColumnStart: 1,
-            gridColumnEnd: 'span 4'
-          }}
-        >
+        <GridItem row={1} column={1} span={4}>
           <InputList<BusinessExpenseItem>
             items={inputData.items}
             ItemComponent={BusinessExpenseEntry}
             emptyItem={EMPTY_BUSINESS_EXPENSE_ITEM}
             onValueChanged={(updatedValue) => {
-              setInputData((s) => {
-                return { ...s, items: updatedValue };
-              });
+              setInputData((s) => ({
+                ...s,
+                items: updatedValue
+              }));
             }}
           />
-        </div>
+        </GridItem>
+        <DividerInGrid row={2} span={4} />
         <MoneyDisplayInGrid
           label={'Total B. E. (w/o VAT)'}
           value={outputData.totalBusinessExpenses}
-          row={2}
+          row={3}
           column={1}
         />
         <MoneyDisplayInGrid
           label={'Total B. E. VAT'}
           value={outputData.totalBusinessExpensesVat}
-          row={2}
+          row={3}
           column={2}
         />
         <MoneyDisplayInGrid
           label={'Monthly B. E. (w/o VAT)'}
           value={outputData.monthlyBusinessExpenses}
-          row={2}
+          row={3}
           column={3}
         />
       </GridLayout>
@@ -94,9 +90,10 @@ export function BusinessExpensesSection({
   );
 }
 
-interface ExpensesAndVat {
+interface ExpenseCollatedData {
   readonly expenses: Currency;
   readonly vat: Currency;
+  readonly numOutgoingTransactionsPerYear: number;
 }
 
 function getOutputData(
@@ -106,11 +103,15 @@ function getOutputData(
     return EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA;
   }
 
-  const totalBusinessExpenses = input.items.reduce<ExpensesAndVat>(
+  const collatedData = input.items.reduce<ExpenseCollatedData>(
     (acc, item) => {
-      const currentItemExpenses = moneyStringToCurrency(item.amount.amount)
-        .multiply(item.quantity as number)
-        .multiply(getYearlyMultiplierForInterval(item.interval));
+      const yearlyQuantity =
+        (item.quantity as number) *
+        getYearlyMultiplierForInterval(item.interval);
+
+      const currentItemExpenses = moneyStringToCurrency(
+        item.amount.amount
+      ).multiply(yearlyQuantity);
 
       const currentItemVat = item.amount.isVat
         ? currentItemExpenses.multiply(VAT_PERCENT)
@@ -118,21 +119,22 @@ function getOutputData(
 
       return {
         expenses: acc.expenses.add(currentItemExpenses),
-        vat: acc.vat.add(currentItemVat)
+        vat: acc.vat.add(currentItemVat),
+        numOutgoingTransactionsPerYear:
+          acc.numOutgoingTransactionsPerYear + yearlyQuantity
       };
     },
-    { expenses: ZERO_MONEY, vat: ZERO_MONEY }
+    { expenses: ZERO_MONEY, vat: ZERO_MONEY, numOutgoingTransactionsPerYear: 0 }
   );
 
-  const monthlyBusinessExpenses = totalBusinessExpenses.expenses.divide(12);
+  const monthlyBusinessExpenses = collatedData.expenses.divide(12);
 
   return {
     isValid: true,
-    totalBusinessExpenses: currencyToMoneyString(
-      totalBusinessExpenses.expenses
-    ),
-    totalBusinessExpensesVat: currencyToMoneyString(totalBusinessExpenses.vat),
-    monthlyBusinessExpenses: currencyToMoneyString(monthlyBusinessExpenses)
+    totalBusinessExpenses: currencyToMoneyString(collatedData.expenses),
+    totalBusinessExpensesVat: currencyToMoneyString(collatedData.vat),
+    monthlyBusinessExpenses: currencyToMoneyString(monthlyBusinessExpenses),
+    numOutgoingTransactionsPerYear: collatedData.numOutgoingTransactionsPerYear
   };
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { InputAmountWithVat } from '../../types/generic/input-amount-with-vat';
 import { MoneyInput } from './MoneyInput';
 import { CheckboxInput } from './CheckboxInput';
+import { GridItem } from './GridItem';
 
 interface MoneyInputWithVatInGridProps {
   readonly label: string;
@@ -20,7 +21,7 @@ export function MoneyInputWithVatInGrid({
 }: MoneyInputWithVatInGridProps): React.ReactElement {
   return (
     <>
-      <div style={{ gridRowStart: row, gridColumnStart: column }}>
+      <GridItem row={row} column={column}>
         <MoneyInput
           label={label}
           value={value.amount}
@@ -28,8 +29,8 @@ export function MoneyInputWithVatInGrid({
             onValueChanged({ ...value, amount });
           }}
         />
-      </div>
-      <div style={{ gridRowStart: row, gridColumnStart: column + 1 }}>
+      </GridItem>
+      <GridItem row={row} column={column + 1}>
         <CheckboxInput
           label={'VAT'}
           value={value.isVat}
@@ -37,7 +38,7 @@ export function MoneyInputWithVatInGrid({
             onValueChanged({ ...value, isVat });
           }}
         />
-      </div>
+      </GridItem>
     </>
   );
 }
