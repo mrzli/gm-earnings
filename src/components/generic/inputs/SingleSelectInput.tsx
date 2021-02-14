@@ -1,6 +1,7 @@
 import React from 'react';
-import { MenuItem, Select } from '@material-ui/core';
+import { Select } from '@material-ui/core';
 import { Tuple } from '../../../types/generic/generic-types';
+import { optionsToSelectMenuItems } from '../../../utils/ui-utils';
 
 interface SingleSelectInputProps<TItem extends string> {
   readonly label: string;
@@ -29,13 +30,7 @@ export function SingleSelectInput<TItem extends string>({
         }
       }}
     >
-      {options.map((pair) => {
-        return (
-          <MenuItem key={pair[0]} value={pair[0]}>
-            {pair[1]}
-          </MenuItem>
-        );
-      })}
+      {optionsToSelectMenuItems(options)}
     </Select>
   );
 }
