@@ -1,9 +1,9 @@
 import React from 'react';
-import { SectionContainer } from '../generic/SectionContainer';
-import { GridLayout } from '../generic/GridLayout';
+import { SectionContainer } from '../generic/layout/SectionContainer';
+import { GridLayout } from '../generic/layout/GridLayout';
 import { BusinessResultsData } from '../../types/business-results/business-results-data';
-import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
-import { DividerInGrid } from '../generic/DividerInGrid';
+import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
+import { DividerInGrid } from '../generic/layout/DividerInGrid';
 
 interface BusinessResultsSectionProps {
   readonly data: BusinessResultsData;

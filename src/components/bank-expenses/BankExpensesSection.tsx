@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BankExpensesSectionInputData } from '../../types/bank-expenses/bank-expenses-section-input-data';
-import { SectionContainer } from '../generic/SectionContainer';
+import { SectionContainer } from '../generic/layout/SectionContainer';
 import {
   currencyToMoneyString,
   moneyStringToCurrency
@@ -11,13 +11,13 @@ import {
   isValidMoneyString
 } from '../../utils/validation-utils';
 import { BankExpensesSectionOutputData } from '../../types/bank-expenses/bank-expenses-section-output-data';
-import { GridLayout } from '../generic/GridLayout';
-import { MoneyInput } from '../generic/MoneyInput';
-import { IntegerInput } from '../generic/IntegerInput';
-import { TextDisplayInGrid } from '../generic/TextDisplayInGrid';
-import { DividerInGrid } from '../generic/DividerInGrid';
-import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
-import { GridItem } from '../generic/GridItem';
+import { GridLayout } from '../generic/layout/GridLayout';
+import { MoneyInput } from '../generic/inputs/MoneyInput';
+import { IntegerInput } from '../generic/inputs/IntegerInput';
+import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
+import { DividerInGrid } from '../generic/layout/DividerInGrid';
+import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
+import { GridItem } from '../generic/layout/GridItem';
 import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/bank-expenses-data';
 import { MONTHS_PER_YEAR } from '../../data/general-data';
 

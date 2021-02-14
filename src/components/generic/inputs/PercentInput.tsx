@@ -1,6 +1,6 @@
 import React from 'react';
 import { InputAdornment, TextField } from '@material-ui/core';
-import { isValidPercentString } from '../../utils/validation-utils';
+import { isValidPercentString } from '../../../utils/validation-utils';
 
 interface PercentInputProps {
   readonly label: string;

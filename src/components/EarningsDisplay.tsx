@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
-import { MoneyDisplayInGrid } from './generic/MoneyDisplayInGrid';
+import { MoneyDisplayInGrid } from './generic/displays/MoneyDisplayInGrid';
 import { ZERO_AMOUNT } from '../data/general-data';
 import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';

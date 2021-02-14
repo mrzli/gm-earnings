@@ -1,7 +1,7 @@
 import React from 'react';
-import { formatAsMoney } from '../../utils/currency-utils';
+import { formatAsMoney } from '../../../utils/currency-utils';
 import { InputAdornment, TextField } from '@material-ui/core';
-import { GridItem } from './GridItem';
+import { GridItem } from '../layout/GridItem';
 
 interface AdornedDisplayInGridProps {
   readonly label: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import { isInNumericRange } from '../../utils/validation-utils';
+import { isInNumericRange } from '../../../utils/validation-utils';
 
 interface IntegerInputProps {
   readonly label: string;

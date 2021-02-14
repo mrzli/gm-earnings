@@ -1,6 +1,6 @@
 import React from 'react';
 import { InputAdornment, TextField } from '@material-ui/core';
-import { isValidMoneyString } from '../../utils/validation-utils';
+import { isValidMoneyString } from '../../../utils/validation-utils';
 
 interface MoneyInputProps {
   readonly label: string;

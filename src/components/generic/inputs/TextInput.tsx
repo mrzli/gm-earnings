@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import { isValidText } from '../../utils/validation-utils';
+import { isValidText } from '../../../utils/validation-utils';
 
 interface TextInputProps {
   readonly label: string;

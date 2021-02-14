@@ -1,16 +1,16 @@
 import React from 'react';
 import { BusinessExpenseItem } from '../../types/business-expenses/business-expense-item';
 import { InputListItemProps } from '../../types/generic/generic-types';
-import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
-import { IntegerInput } from '../generic/IntegerInput';
+import { MoneyInputWithVatInGrid } from '../generic/inputs/MoneyInputWithVatInGrid';
+import { IntegerInput } from '../generic/inputs/IntegerInput';
 import {
   EXPENSE_INTERVAL_VALUE_DISPLAY_PAIRS,
   ExpenseInterval
 } from '../../types/generic/expense-interval';
-import { SingleSelectInput } from '../generic/SingleSelectInput';
-import { GridLayout } from '../generic/GridLayout';
-import { TextInput } from '../generic/TextInput';
-import { GridItem } from '../generic/GridItem';
+import { SingleSelectInput } from '../generic/inputs/SingleSelectInput';
+import { GridLayout } from '../generic/layout/GridLayout';
+import { TextInput } from '../generic/inputs/TextInput';
+import { GridItem } from '../generic/layout/GridItem';
 
 export function BusinessExpenseEntry({
   item,

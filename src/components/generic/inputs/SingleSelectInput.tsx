@@ -1,6 +1,6 @@
 import React from 'react';
 import { MenuItem, Select } from '@material-ui/core';
-import { Tuple } from '../../types/generic/generic-types';
+import { Tuple } from '../../../types/generic/generic-types';
 
 interface SingleSelectInputProps<TItem extends string> {
   readonly label: string;

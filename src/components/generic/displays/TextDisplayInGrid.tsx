@@ -1,6 +1,6 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import { GridItem } from './GridItem';
+import { GridItem } from '../layout/GridItem';
 
 interface TextDisplayInGridProps {
   readonly label: string;

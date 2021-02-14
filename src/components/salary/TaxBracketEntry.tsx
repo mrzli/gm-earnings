@@ -1,12 +1,12 @@
 import React from 'react';
 import { TaxBracketItem } from '../../types/salary/tax-bracket-item';
-import { MoneyInput } from '../generic/MoneyInput';
-import { PercentInput } from '../generic/PercentInput';
-import { CheckboxInput } from '../generic/CheckboxInput';
+import { MoneyInput } from '../generic/inputs/MoneyInput';
+import { PercentInput } from '../generic/inputs/PercentInput';
+import { CheckboxInput } from '../generic/inputs/CheckboxInput';
 import { ZERO_AMOUNT } from '../../data/general-data';
 import { InputListItemProps } from '../../types/generic/generic-types';
-import { GridLayout } from '../generic/GridLayout';
-import { GridItem } from '../generic/GridItem';
+import { GridLayout } from '../generic/layout/GridLayout';
+import { GridItem } from '../generic/layout/GridItem';
 
 export function TaxBracketEntry({
   item,

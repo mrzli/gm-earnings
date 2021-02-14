@@ -1,11 +1,11 @@
 import React from 'react';
 import Currency from 'currency.js';
-import { SectionContainer } from '../generic/SectionContainer';
-import { GridLayout } from '../generic/GridLayout';
+import { SectionContainer } from '../generic/layout/SectionContainer';
+import { GridLayout } from '../generic/layout/GridLayout';
 import { SalarySectionInputData } from '../../types/salary/salary-section-input-data';
 import { SalarySectionOutputData } from '../../types/salary/salary-section-output-data';
-import { PercentInput } from '../generic/PercentInput';
-import { GridItem } from '../generic/GridItem';
+import { PercentInput } from '../generic/inputs/PercentInput';
+import { GridItem } from '../generic/layout/GridItem';
 import { useInputOutputData } from '../../utils/hooks';
 import {
   currencyToMoneyString,
@@ -28,16 +28,16 @@ import {
   EMPTY_TAX_BRACKET_ITEM
 } from '../../data/salary-data';
 import { SalaryCalculationParameters } from '../../types/salary/salary-calculation-parameters';
-import { MoneyInput } from '../generic/MoneyInput';
-import { InputList } from '../generic/InputList';
+import { MoneyInput } from '../generic/inputs/MoneyInput';
+import { EntryList } from '../generic/layout/EntryList';
 import { TaxBracketItem } from '../../types/salary/tax-bracket-item';
 import { TaxBracketEntry } from './TaxBracketEntry';
-import { DividerInGrid } from '../generic/DividerInGrid';
-import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
+import { DividerInGrid } from '../generic/layout/DividerInGrid';
+import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
 import { formatAsPercent } from '../../utils/generic-utils';
-import { PercentDisplayInGrid } from '../generic/PercentDisplayInGrid';
-import { IntegerInput } from '../generic/IntegerInput';
-import { TextDisplayInGrid } from '../generic/TextDisplayInGrid';
+import { PercentDisplayInGrid } from '../generic/displays/PercentDisplayInGrid';
+import { IntegerInput } from '../generic/inputs/IntegerInput';
+import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
 
 interface SalarySectionProps {
   readonly defaultInputData: SalarySectionInputData;
@@ -102,7 +102,7 @@ export function SalarySection({
           />
         </GridItem>
         <GridItem row={2} column={1} span={6}>
-          <InputList<TaxBracketItem>
+          <EntryList<TaxBracketItem>
             items={inputData.calculationParameters.taxBrackets}
             ItemComponent={TaxBracketEntry}
             emptyItem={EMPTY_TAX_BRACKET_ITEM}

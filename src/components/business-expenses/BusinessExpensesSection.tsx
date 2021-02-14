@@ -1,9 +1,9 @@
 import React from 'react';
 import Currency from 'currency.js';
-import { InputList } from '../generic/InputList';
+import { EntryList } from '../generic/layout/EntryList';
 import { BusinessExpenseItem } from '../../types/business-expenses/business-expense-item';
 import { BusinessExpenseEntry } from './BusinessExpenseEntry';
-import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
+import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
 import {
   DAYS_PER_YEAR,
   MONTHS_PER_YEAR,
@@ -11,8 +11,8 @@ import {
   VAT_PERCENT,
   WEEKS_PER_YEAR
 } from '../../data/general-data';
-import { GridLayout } from '../generic/GridLayout';
-import { SectionContainer } from '../generic/SectionContainer';
+import { GridLayout } from '../generic/layout/GridLayout';
+import { SectionContainer } from '../generic/layout/SectionContainer';
 import { BusinessExpensesSectionInputData } from '../../types/business-expenses/business-expenses-section-input-data';
 import { BusinessExpensesSectionOutputData } from '../../types/business-expenses/business-expenses-section-output-data';
 import {
@@ -32,9 +32,9 @@ import {
   moneyStringToCurrency,
   ZERO_MONEY
 } from '../../utils/currency-utils';
-import { DividerInGrid } from '../generic/DividerInGrid';
-import { GridItem } from '../generic/GridItem';
-import { TextDisplayInGrid } from '../generic/TextDisplayInGrid';
+import { DividerInGrid } from '../generic/layout/DividerInGrid';
+import { GridItem } from '../generic/layout/GridItem';
+import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
 
 interface BusinessExpensesSectionProps {
   readonly defaultInputData: BusinessExpensesSectionInputData;
@@ -61,7 +61,7 @@ export function BusinessExpensesSection({
     >
       <GridLayout columnsTemplate={'repeat(4, 200px) 1fr'}>
         <GridItem row={1} column={1} span={5}>
-          <InputList<BusinessExpenseItem>
+          <EntryList<BusinessExpenseItem>
             items={inputData.items}
             ItemComponent={BusinessExpenseEntry}
             emptyItem={EMPTY_BUSINESS_EXPENSE_ITEM}

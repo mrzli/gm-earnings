@@ -1,10 +1,10 @@
 import React from 'react';
-import { SectionContainer } from '../generic/SectionContainer';
+import { SectionContainer } from '../generic/layout/SectionContainer';
 import { EarningsSectionInputData } from '../../types/earnings/earnings-section-input-data';
-import { GridLayout } from '../generic/GridLayout';
-import { IntegerInput } from '../generic/IntegerInput';
-import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
-import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
+import { GridLayout } from '../generic/layout/GridLayout';
+import { IntegerInput } from '../generic/inputs/IntegerInput';
+import { MoneyInputWithVatInGrid } from '../generic/inputs/MoneyInputWithVatInGrid';
+import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
 import { EarningsSectionOutputData } from '../../types/earnings/earnings-section-output-data';
 import {
   PERCENT_TO_FRACTION_MULTIPLIER,
@@ -22,8 +22,8 @@ import {
 import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from '../../data/earnings-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import { useInputOutputData } from '../../utils/hooks';
-import { DividerInGrid } from '../generic/DividerInGrid';
-import { GridItem } from '../generic/GridItem';
+import { DividerInGrid } from '../generic/layout/DividerInGrid';
+import { GridItem } from '../generic/layout/GridItem';
 import { stateValueChange } from '../../utils/generic-utils';
 
 interface EarningsSectionProps {

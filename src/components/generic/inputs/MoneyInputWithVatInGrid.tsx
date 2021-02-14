@@ -1,8 +1,8 @@
 import React from 'react';
-import { InputAmountWithVat } from '../../types/generic/input-amount-with-vat';
+import { InputAmountWithVat } from '../../../types/generic/input-amount-with-vat';
 import { MoneyInput } from './MoneyInput';
 import { CheckboxInput } from './CheckboxInput';
-import { GridItem } from './GridItem';
+import { GridItem } from '../layout/GridItem';
 
 interface MoneyInputWithVatInGridProps {
   readonly label: string;
