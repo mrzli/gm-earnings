@@ -60,10 +60,5 @@
   "engines": {
     "node": "15.6.0",
     "yarn": "1.22.10"
-  },
-  "husky": {
-    "hooks": {
-      "pre-push": "yarn lint && yarn test:nowatch"
-    }
   }
 }
