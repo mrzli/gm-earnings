@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function isNullOrUndefined<T>(
   value: T | null | undefined
 ): value is null | undefined {
