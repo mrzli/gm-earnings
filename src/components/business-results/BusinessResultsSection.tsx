@@ -40,8 +40,8 @@ export function BusinessResultsSection({
           column={2}
         />
         <MoneyDisplayInGrid
-          label={'Salary Expenses'}
-          value={data.salaryExpenses}
+          label={'Gross 2 Salary Expenses'}
+          value={data.gross2SalaryExpenses}
           row={2}
           column={3}
         />

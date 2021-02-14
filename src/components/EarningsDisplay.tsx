@@ -86,7 +86,7 @@ function getBusinessResultsData(
   const totalBusinessExpenses = moneyStringToCurrency(
     state.businessExpenses.totalBusinessExpenses
   )
-    .add(state.salary.yearlyData.totalSalaryExpenses)
+    .add(state.salary.yearlyData.gross2Salary)
     .add(state.bankExpenses.totalBankExpenses);
 
   const businessNetEarnings = moneyStringToCurrency(
@@ -102,7 +102,7 @@ function getBusinessResultsData(
     totalVat: state.earnings.totalVat,
     genericBusinessExpenses: state.businessExpenses.totalBusinessExpenses,
     businessExpensesVat: state.businessExpenses.totalBusinessExpensesVat,
-    salaryExpenses: state.salary.yearlyData.totalSalaryExpenses,
+    gross2SalaryExpenses: state.salary.yearlyData.gross2Salary,
     bankExpenses: state.bankExpenses.totalBankExpenses,
     totalBusinessExpenses: currencyToMoneyString(totalBusinessExpenses),
     businessNetEarnings: currencyToMoneyString(businessNetEarnings),
