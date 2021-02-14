@@ -36,6 +36,7 @@
     "lint": "eslint --ext .ts,.tsx,.js .",
     "prettier": "prettier --write .",
     "prettier:check": "prettier --check .",
+    "postinstall": "husky install",
     "eject": "react-scripts eject"
   },
   "browserslist": {
