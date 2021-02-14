@@ -17,7 +17,7 @@ export function BusinessExpenseEntry({
   onItemChanged
 }: InputListItemProps<BusinessExpenseItem>): React.ReactElement {
   return (
-    <GridLayout columnsTemplate={'320px 120px auto 120px 120px'}>
+    <GridLayout columnsTemplate={'320px 200px auto 120px 120px'}>
       <GridItem row={1} column={1}>
         <TextInput
           label={'Name'}

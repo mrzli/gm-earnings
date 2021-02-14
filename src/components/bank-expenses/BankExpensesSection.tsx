@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BankExpensesSectionInputData } from '../../types/bank-expenses/bank-expenses-section-input-data';
 import { SectionContainer } from '../generic/SectionContainer';
-import { useInputOutputData } from '../../utils/hooks';
 import {
   currencyToMoneyString,
   moneyStringToCurrency
@@ -24,8 +23,8 @@ import { MONTHS_PER_YEAR } from '../../data/general-data';
 
 interface BankExpensesSectionProps {
   readonly defaultInputData: BankExpensesSectionInputData;
-  readonly numOutgoingTransactionsPerYear: number;
   readonly onOutputDataChanged: (data: BankExpensesSectionOutputData) => void;
+  readonly numOutgoingTransactionsPerYear: number;
 }
 
 export function BankExpensesSection({
@@ -33,19 +32,22 @@ export function BankExpensesSection({
   numOutgoingTransactionsPerYear,
   onOutputDataChanged
 }: BankExpensesSectionProps): React.ReactElement {
-  const { inputData, setInputData, outputData } = useInputOutputData(
-    defaultInputData,
-    EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA,
-    getOutputData,
-    onOutputDataChanged
+  const [inputData, setInputData] = useState(defaultInputData);
+  const [outputData, setOutputData] = useState(
+    EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA
   );
 
   useEffect(
     () => {
-      setInputData((s) => ({ ...s, numOutgoingTransactionsPerYear }));
+      const newOutputData = getOutputData(
+        inputData,
+        numOutgoingTransactionsPerYear
+      );
+      setOutputData(newOutputData);
+      onOutputDataChanged(newOutputData);
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [numOutgoingTransactionsPerYear]
+    [inputData, numOutgoingTransactionsPerYear]
   );
 
   return (
@@ -94,7 +96,7 @@ export function BankExpensesSection({
         </GridItem>
         <TextDisplayInGrid
           label={'Out. Trans. per Year'}
-          value={inputData.numOutgoingTransactionsPerYear.toString()}
+          value={numOutgoingTransactionsPerYear.toString()}
           row={1}
           column={5}
         />
@@ -117,9 +119,10 @@ export function BankExpensesSection({
 }
 
 function getOutputData(
-  input: BankExpensesSectionInputData
+  input: BankExpensesSectionInputData,
+  numOutgoingTransactionsPerYear: number
 ): BankExpensesSectionOutputData {
-  if (!isInputValid(input)) {
+  if (!isInputValid(input, numOutgoingTransactionsPerYear)) {
     return EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA;
   }
 
@@ -128,7 +131,7 @@ function getOutputData(
   ).multiply(input.numIncomingTransactionsPerYear);
   const outgoingTransactionExpenses = moneyStringToCurrency(
     input.outgoingTransactionFee
-  ).multiply(input.numOutgoingTransactionsPerYear);
+  ).multiply(numOutgoingTransactionsPerYear);
   const bankFeeExpenses = moneyStringToCurrency(input.bankMonthlyFee).multiply(
     MONTHS_PER_YEAR
   );
@@ -147,7 +150,8 @@ function getOutputData(
 }
 
 function isInputValid(
-  input: BankExpensesSectionInputData
+  input: BankExpensesSectionInputData,
+  numOutgoingTransactionsPerYear: number
 ): input is NonNullableReadonlyObject<BankExpensesSectionInputData> {
   return (
     isValidMoneyString(input.bankMonthlyFee) &&
@@ -155,6 +159,6 @@ function isInputValid(
     input.numIncomingTransactionsPerYear !== undefined &&
     isInNumericRange(input.numIncomingTransactionsPerYear, 0, 1000) &&
     isValidMoneyString(input.outgoingTransactionFee) &&
-    isInNumericRange(input.numOutgoingTransactionsPerYear, 0, 100000)
+    isInNumericRange(numOutgoingTransactionsPerYear, 0, 100000)
   );
 }

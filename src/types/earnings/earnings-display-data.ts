@@ -4,8 +4,8 @@ import { BankExpensesSectionOutputData } from '../bank-expenses/bank-expenses-se
 import { SalarySectionOutputData } from '../salary/salary-section-output-data';
 
 export interface EarningsDisplayData {
-  readonly earningsSectionOutputData: EarningsSectionOutputData;
-  readonly businessExpensesSectionOutputData: BusinessExpensesSectionOutputData;
-  readonly bankExpensesSectionOutputData: BankExpensesSectionOutputData;
-  readonly salarySectionOutputData: SalarySectionOutputData;
+  readonly earnings: EarningsSectionOutputData;
+  readonly businessExpenses: BusinessExpensesSectionOutputData;
+  readonly bankExpenses: BankExpensesSectionOutputData;
+  readonly salary: SalarySectionOutputData;
 }

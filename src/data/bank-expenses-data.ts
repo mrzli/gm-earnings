@@ -6,9 +6,9 @@ export const DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA: BankExpensesSectionInputD
   bankMonthlyFee: '60.00',
   incomingTransactionFee: '1.00',
   numIncomingTransactionsPerYear: 12,
-  outgoingTransactionFee: '2.80',
-  numOutgoingTransactionsPerYear: 0
+  outgoingTransactionFee: '2.80'
 };
+
 export const EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA: BankExpensesSectionOutputData = {
   isValid: false,
   totalBankExpenses: ZERO_AMOUNT,

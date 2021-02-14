@@ -8,3 +8,6 @@ export interface InputListItemProps<TItem> {
 export type NonNullableReadonlyObject<T> = {
   readonly [K in keyof T]-?: NonNullable<T[K]>;
 };
+
+export type ReadonlyPick<T, K extends keyof T> = Readonly<Pick<T, K>>;
+export type ReadonlyOmit<T, K extends keyof T> = Readonly<Omit<T, K>>;

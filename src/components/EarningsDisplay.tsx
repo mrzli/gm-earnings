@@ -10,53 +10,60 @@ import { BankExpensesSection } from './bank-expenses/BankExpensesSection';
 import { DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA } from '../data/bank-expenses-data';
 import { SalarySection } from './salary/SalarySection';
 import { DEFAULT_SALARY_SECTION_INPUT_DATA } from '../data/salary-data';
+import { EarningsDisplayData } from '../types/earnings/earnings-display-data';
+import { BusinessResultsSection } from './business-results/BusinessResultsSection';
+import { BusinessResultsData } from '../types/business-results/business-results-data';
+import {
+  currencyToMoneyString,
+  moneyStringToCurrency
+} from '../utils/currency-utils';
 
 export function EarningsDisplay(): React.ReactElement {
-  const [inputData, setInputData] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
+  const [state, setState] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
 
   return (
     <div>
       <EarningsSection
         defaultInputData={DEFAULT_EARNINGS_SECTION_INPUT_DATA}
         onOutputDataChanged={(value) => {
-          setInputData((s) => ({
+          setState((s) => ({
             ...s,
-            earningsSectionOutputData: value
+            earnings: value
           }));
         }}
       />
       <BusinessExpensesSection
         defaultInputData={DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA}
         onOutputDataChanged={(value) => {
-          setInputData((s) => ({
+          setState((s) => ({
             ...s,
-            businessExpensesSectionOutputData: value
+            businessExpenses: value
           }));
         }}
       />
       <SalarySection
         defaultInputData={DEFAULT_SALARY_SECTION_INPUT_DATA}
         onOutputDataChanged={(value) => {
-          setInputData((s) => ({
+          setState((s) => ({
             ...s,
-            salarySectionOutputData: value
+            salary: value
           }));
         }}
       />
       <BankExpensesSection
         defaultInputData={DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA}
-        numOutgoingTransactionsPerYear={
-          inputData.businessExpensesSectionOutputData
-            .numOutgoingTransactionsPerYear +
-          inputData.salarySectionOutputData.yearlyData.numOutgoingTransactions
-        }
         onOutputDataChanged={(value) => {
-          setInputData((s) => ({
+          setState((s) => ({
             ...s,
-            bankExpensesSectionOutputData: value
+            bankExpenses: value
           }));
         }}
+        numOutgoingTransactionsPerYear={
+          state.businessExpenses.numOutgoingTransactionsPerYear +
+          state.salary.yearlyData.numOutgoingTransactions
+        }
       />
+      <BusinessResultsSection data={getBusinessResultsData(state)} />
       <MoneyDisplayInGrid
         label={'Earnings After Business Expenses (without VAT):'}
         value={ZERO_AMOUNT}
@@ -71,4 +78,35 @@ export function EarningsDisplay(): React.ReactElement {
       />
     </div>
   );
+}
+
+function getBusinessResultsData(
+  state: EarningsDisplayData
+): BusinessResultsData {
+  const totalBusinessExpenses = moneyStringToCurrency(
+    state.businessExpenses.totalBusinessExpenses
+  )
+    .add(state.salary.yearlyData.totalSalaryExpenses)
+    .add(state.bankExpenses.totalBankExpenses);
+
+  const businessNetEarnings = moneyStringToCurrency(
+    state.earnings.totalEarnings
+  ).subtract(totalBusinessExpenses);
+
+  const businessExpensesVat = moneyStringToCurrency(
+    state.earnings.totalVat
+  ).subtract(state.businessExpenses.totalBusinessExpensesVat);
+
+  return {
+    totalEarnings: state.earnings.totalEarnings,
+    totalVat: state.earnings.totalVat,
+    genericBusinessExpenses: state.businessExpenses.totalBusinessExpenses,
+    businessExpensesVat: state.businessExpenses.totalBusinessExpensesVat,
+    salaryExpenses: state.salary.yearlyData.totalSalaryExpenses,
+    bankExpenses: state.bankExpenses.totalBankExpenses,
+    totalBusinessExpenses: currencyToMoneyString(totalBusinessExpenses),
+    businessNetEarnings: currencyToMoneyString(businessNetEarnings),
+    businessRemainingVat: currencyToMoneyString(businessExpensesVat),
+    personalSalaryIncome: state.salary.yearlyData.netSalary
+  };
 }
