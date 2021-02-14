@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
 import { MoneyDisplayInGrid } from './generic/MoneyDisplayInGrid';
-import { SalaryBreakdownInput } from './salary/SalaryBreakdownInput';
 import { ZERO_AMOUNT } from '../data/general-data';
 import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
@@ -9,6 +8,8 @@ import { DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA } from '../data/business-e
 import { DEFAULT_EARNINGS_DISPLAY_DATA } from '../data/earnings-display-data';
 import { BankExpensesSection } from './bank-expenses/BankExpensesSection';
 import { DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA } from '../data/bank-expenses-data';
+import { SalarySection } from './salary/SalarySection';
+import { DEFAULT_SALARY_SECTION_INPUT_DATA } from '../data/salary-data';
 
 export function EarningsDisplay(): React.ReactElement {
   const [inputData, setInputData] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
@@ -46,6 +47,15 @@ export function EarningsDisplay(): React.ReactElement {
           }));
         }}
       />
+      <SalarySection
+        defaultInputData={DEFAULT_SALARY_SECTION_INPUT_DATA}
+        onOutputDataChanged={(value) => {
+          setInputData((s) => ({
+            ...s,
+            salarySectionOutputData: value
+          }));
+        }}
+      />
       <MoneyDisplayInGrid
         label={'Earnings After Business Expenses (without VAT):'}
         value={ZERO_AMOUNT}
@@ -58,7 +68,6 @@ export function EarningsDisplay(): React.ReactElement {
         row={10}
         column={1}
       />
-      <SalaryBreakdownInput />
     </div>
   );
 }

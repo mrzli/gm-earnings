@@ -1,10 +1,10 @@
 import React from 'react';
-import { SalaryBreakdownYearlyData } from '../../types/salary/salary-breakdown-yearly-data';
+import { SalaryYearlyData } from '../../types/salary/salary-yearly-data';
 import { GridLayout } from '../generic/GridLayout';
 import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 
 interface SalaryBreakdownYearlyProps {
-  readonly data: SalaryBreakdownYearlyData;
+  readonly data: SalaryYearlyData;
 }
 
 export function SalaryBreakdownYearly({

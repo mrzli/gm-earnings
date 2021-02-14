@@ -1,4 +1,7 @@
-export interface SalaryBreakdownData {
+import { SalaryYearlyData } from './salary-yearly-data';
+
+export interface SalarySectionOutputData {
+  readonly isValid: false;
   readonly retirementPayments1: string;
   readonly retirementPayments2: string;
   readonly taxDeduction: string;
@@ -10,4 +13,5 @@ export interface SalaryBreakdownData {
   readonly gross2Salary: string;
   readonly gross1Salary: string;
   readonly netSalary: string;
+  readonly yearlyData: SalaryYearlyData;
 }

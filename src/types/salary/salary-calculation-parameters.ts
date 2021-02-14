@@ -1,6 +1,6 @@
 import { TaxBracketItem } from './tax-bracket-item';
 
-export interface SalaryDeductionData {
+export interface SalaryCalculationParameters {
   readonly retirementPaymentsPillar1Percent: string;
   readonly retirementPaymentsPillar2Percent: string;
   readonly taxDeduction: string;

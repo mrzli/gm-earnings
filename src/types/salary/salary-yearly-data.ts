@@ -1,4 +1,4 @@
-export interface SalaryBreakdownYearlyData {
+export interface SalaryYearlyData {
   readonly healthInsurance: string;
   readonly retirementPayments: string;
   readonly tax: string;
