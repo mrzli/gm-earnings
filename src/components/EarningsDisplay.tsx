@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
 import { MoneyDisplayInGrid } from './generic/displays/MoneyDisplayInGrid';
-import { ZERO_AMOUNT } from '../data/general-data';
+import { ZERO_AMOUNT } from '../data/generic-data';
 import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
 import { DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA } from '../data/business-expenses-data';
@@ -17,12 +17,23 @@ import {
   currencyToMoneyString,
   moneyStringToCurrency
 } from '../utils/currency-utils';
+import { GeneralSection } from './general/GeneralSection';
+import { DEFAULT_GENERAL_SECTION_INPUT_DATA } from '../data/general-data';
 
 export function EarningsDisplay(): React.ReactElement {
   const [state, setState] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
 
   return (
     <div>
+      <GeneralSection
+        defaultInputData={DEFAULT_GENERAL_SECTION_INPUT_DATA}
+        onOutputDataChanged={(value) => {
+          setState((s) => ({
+            ...s,
+            general: value
+          }));
+        }}
+      />
       <EarningsSection
         defaultInputData={DEFAULT_EARNINGS_SECTION_INPUT_DATA}
         onOutputDataChanged={(value) => {
@@ -49,6 +60,7 @@ export function EarningsDisplay(): React.ReactElement {
             salary: value
           }));
         }}
+        surtaxPercent={state.general.surtaxPercent}
       />
       <BankExpensesSection
         defaultInputData={DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA}

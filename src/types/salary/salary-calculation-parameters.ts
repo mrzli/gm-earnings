@@ -6,5 +6,4 @@ export interface SalaryCalculationParameters {
   readonly retirementPaymentsPillar2Percent: string;
   readonly taxDeduction: string;
   readonly taxBrackets: readonly TaxBracketItem[];
-  readonly surtaxPercent: string;
 }

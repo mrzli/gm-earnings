@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Currency from 'currency.js';
 import { SectionContainer } from '../generic/layout/SectionContainer';
 import { GridLayout } from '../generic/layout/GridLayout';
@@ -6,7 +6,6 @@ import { SalarySectionInputData } from '../../types/salary/salary-section-input-
 import { SalarySectionOutputData } from '../../types/salary/salary-section-output-data';
 import { PercentInput } from '../generic/inputs/PercentInput';
 import { GridItem } from '../generic/layout/GridItem';
-import { useInputOutputData } from '../../utils/hooks';
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
@@ -16,7 +15,7 @@ import {
   MONTHS_PER_YEAR,
   PERCENT_TO_FRACTION_MULTIPLIER,
   ZERO_AMOUNT
-} from '../../data/general-data';
+} from '../../data/generic-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
   isInNumericRange,
@@ -42,17 +41,27 @@ import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
 interface SalarySectionProps {
   readonly defaultInputData: SalarySectionInputData;
   readonly onOutputDataChanged: (data: SalarySectionOutputData) => void;
+  readonly surtaxPercent: string;
 }
 
 export function SalarySection({
   defaultInputData,
-  onOutputDataChanged
+  onOutputDataChanged,
+  surtaxPercent
 }: SalarySectionProps): React.ReactElement {
-  const { inputData, setInputData, outputData } = useInputOutputData(
-    defaultInputData,
-    EMPTY_SALARY_SECTION_OUTPUT_DATA,
-    getOutputData,
-    onOutputDataChanged
+  const [inputData, setInputData] = useState(defaultInputData);
+  const [outputData, setOutputData] = useState(
+    EMPTY_SALARY_SECTION_OUTPUT_DATA
+  );
+
+  useEffect(
+    () => {
+      const newOutputData = getOutputData(inputData, surtaxPercent);
+      setOutputData(newOutputData);
+      onOutputDataChanged(newOutputData);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputData, surtaxPercent]
   );
 
   return (
@@ -124,17 +133,12 @@ export function SalarySection({
             }}
           />
         </GridItem>
-        <GridItem row={3} column={2}>
-          <PercentInput
-            label={'Surtax'}
-            value={inputData.calculationParameters.surtaxPercent}
-            onValueChanged={(value) => {
-              setInputData(
-                changeCalculationParameterField('surtaxPercent', value)
-              );
-            }}
-          />
-        </GridItem>
+        <PercentDisplayInGrid
+          label={'Surtax'}
+          value={surtaxPercent}
+          row={3}
+          column={2}
+        />
         <DividerInGrid row={4} span={6} />
         <GridItem row={5} column={1}>
           <MoneyInput
@@ -280,8 +284,11 @@ export function SalarySection({
   );
 }
 
-function getOutputData(input: SalarySectionInputData): SalarySectionOutputData {
-  if (!isInputValid(input)) {
+function getOutputData(
+  input: SalarySectionInputData,
+  surtaxPercent: string
+): SalarySectionOutputData {
+  if (!isInputValid(input, surtaxPercent)) {
     return EMPTY_SALARY_SECTION_OUTPUT_DATA;
   }
 
@@ -307,7 +314,7 @@ function getOutputData(input: SalarySectionInputData): SalarySectionOutputData {
   );
   const totalTax = calculateTax(taxableIncome, calcParams.taxBrackets);
   const totalSurtax = totalTax
-    .multiply(calcParams.surtaxPercent)
+    .multiply(surtaxPercent)
     .multiply(PERCENT_TO_FRACTION_MULTIPLIER);
   const totalTaxAndSurtax = totalTax.add(totalSurtax);
   const gross2Salary = gross1Salary.add(healthInsurance);
@@ -355,7 +362,8 @@ function getOutputData(input: SalarySectionInputData): SalarySectionOutputData {
 }
 
 function isInputValid(
-  input: SalarySectionInputData
+  input: SalarySectionInputData,
+  surtaxPercent: string
 ): input is NonNullableReadonlyObject<SalarySectionInputData> {
   const calcParams = input.calculationParameters;
 
@@ -365,7 +373,7 @@ function isInputValid(
     isValidPercentString(calcParams.retirementPaymentsPillar2Percent) &&
     areTaxBracketsValid(calcParams.taxBrackets) &&
     isValidMoneyString(calcParams.taxDeduction) &&
-    isValidPercentString(calcParams.surtaxPercent) &&
+    isValidPercentString(surtaxPercent) &&
     isValidMoneyString(input.gross1Salary) &&
     input.numOutgoingTransactionsPerSalary !== undefined &&
     isInNumericRange(input.numOutgoingTransactionsPerSalary, 0, 20)

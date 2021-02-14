@@ -11,6 +11,7 @@ import { SingleSelectInput } from '../generic/inputs/SingleSelectInput';
 import { GridLayout } from '../generic/layout/GridLayout';
 import { TextInput } from '../generic/inputs/TextInput';
 import { GridItem } from '../generic/layout/GridItem';
+import { isValidText } from '../../utils/validation-utils';
 
 export function BusinessExpenseEntry({
   item,
@@ -25,6 +26,7 @@ export function BusinessExpenseEntry({
           onValueChanged={(value) => {
             onItemChanged({ ...item, name: value });
           }}
+          validator={isValidText}
         />
       </GridItem>
       <MoneyInputWithVatInGrid

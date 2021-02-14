@@ -9,7 +9,7 @@ import { EarningsSectionOutputData } from '../../types/earnings/earnings-section
 import {
   PERCENT_TO_FRACTION_MULTIPLIER,
   VAT_PERCENT
-} from '../../data/general-data';
+} from '../../data/generic-data';
 import {
   currencyToMoneyString,
   moneyStringToCurrency,

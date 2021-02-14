@@ -1,16 +1,16 @@
-import { InputAmountWithVat } from '../types/generic/input-amount-with-vat';
+import { ZERO_AMOUNT } from './generic-data';
+import { GeneralSectionInputData } from '../types/general/general-section-input-data';
+import { GeneralSectionOutputData } from '../types/general/general-section-output-data';
 
-export const ZERO_AMOUNT = '0.00';
-export const VAT_PERCENT = '25.00';
-export const PERCENT_TO_FRACTION_MULTIPLIER = '0.01';
-export const DOLLAR_TO_KUNA = '6.25';
-export const EURO_TO_KUNA = '7.57';
+export const DEFAULT_GENERAL_SECTION_INPUT_DATA: GeneralSectionInputData = {
+  exchangeRateEurToHrk: '7.57',
+  exchangeRateUsdToHrk: '6.25',
+  surtaxPercent: '10.00'
+};
 
-export const MONTHS_PER_YEAR = 12;
-export const WEEKS_PER_YEAR = 52;
-export const DAYS_PER_YEAR = 365;
-
-export const EMPTY_INPUT_AMOUNT_WITH_VAT: InputAmountWithVat = {
-  amount: ZERO_AMOUNT,
-  isVat: true
+export const EMPTY_GENERAL_SECTION_OUTPUT_DATA: GeneralSectionOutputData = {
+  isValid: false,
+  exchangeRateEurToHrk: ZERO_AMOUNT,
+  exchangeRateUsdToHrk: ZERO_AMOUNT,
+  surtaxPercent: ZERO_AMOUNT
 };

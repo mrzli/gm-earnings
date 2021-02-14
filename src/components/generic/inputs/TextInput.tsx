@@ -1,23 +1,24 @@
 import React from 'react';
 import { TextField } from '@material-ui/core';
-import { isValidText } from '../../../utils/validation-utils';
 
 interface TextInputProps {
   readonly label: string;
   readonly value: string;
   readonly onValueChanged: (value: string) => void;
+  readonly validator: (value: string) => boolean;
 }
 
 export function TextInput({
   label,
   value,
-  onValueChanged
+  onValueChanged,
+  validator
 }: TextInputProps): React.ReactElement {
   return (
     <TextField
       label={label}
       fullWidth={true}
-      error={!isValidText(value)}
+      error={!validator(value)}
       value={value}
       variant={'outlined'}
       onChange={(event) => {

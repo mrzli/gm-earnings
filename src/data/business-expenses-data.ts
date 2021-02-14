@@ -3,7 +3,7 @@ import {
   DOLLAR_TO_KUNA,
   EMPTY_INPUT_AMOUNT_WITH_VAT,
   ZERO_AMOUNT
-} from './general-data';
+} from './generic-data';
 import { ExpenseInterval } from '../types/generic/expense-interval';
 import { BusinessExpensesSectionInputData } from '../types/business-expenses/business-expenses-section-input-data';
 import { BusinessExpensesSectionOutputData } from '../types/business-expenses/business-expenses-section-output-data';

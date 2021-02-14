@@ -1,5 +1,5 @@
 import Currency from 'currency.js';
-import { ZERO_AMOUNT } from '../data/general-data';
+import { ZERO_AMOUNT } from '../data/generic-data';
 
 // const FORMATTER = new Intl.NumberFormat('en-US', {
 //   style: 'currency',

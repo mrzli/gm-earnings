@@ -1,5 +1,5 @@
 import { TaxBracketItem } from '../types/salary/tax-bracket-item';
-import { ZERO_AMOUNT } from './general-data';
+import { ZERO_AMOUNT } from './generic-data';
 import { SalarySectionInputData } from '../types/salary/salary-section-input-data';
 import { SalarySectionOutputData } from '../types/salary/salary-section-output-data';
 
@@ -20,8 +20,7 @@ export const DEFAULT_SALARY_SECTION_INPUT_DATA: SalarySectionInputData = {
         isInfinite: true,
         taxRatePercent: '30.00'
       }
-    ],
-    surtaxPercent: '10.00'
+    ]
   },
   gross1Salary: '6000.00',
   numOutgoingTransactionsPerSalary: 5 // ZO, MIO 1, MIO 2, tax + surtax (one outgoing transaction), net salary

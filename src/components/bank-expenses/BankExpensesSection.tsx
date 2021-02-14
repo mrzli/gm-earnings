@@ -19,7 +19,7 @@ import { DividerInGrid } from '../generic/layout/DividerInGrid';
 import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
 import { GridItem } from '../generic/layout/GridItem';
 import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/bank-expenses-data';
-import { MONTHS_PER_YEAR } from '../../data/general-data';
+import { MONTHS_PER_YEAR } from '../../data/generic-data';
 
 interface BankExpensesSectionProps {
   readonly defaultInputData: BankExpensesSectionInputData;

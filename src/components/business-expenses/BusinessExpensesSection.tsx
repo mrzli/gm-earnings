@@ -10,7 +10,7 @@ import {
   PERCENT_TO_FRACTION_MULTIPLIER,
   VAT_PERCENT,
   WEEKS_PER_YEAR
-} from '../../data/general-data';
+} from '../../data/generic-data';
 import { GridLayout } from '../generic/layout/GridLayout';
 import { SectionContainer } from '../generic/layout/SectionContainer';
 import { BusinessExpensesSectionInputData } from '../../types/business-expenses/business-expenses-section-input-data';
