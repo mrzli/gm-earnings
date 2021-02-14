@@ -37,9 +37,14 @@ export function IntegerInput({
       onChange={(event) => {
         const updatedValue = event.target.value;
         if (/^0|[1-9][0-9]*$/.test(updatedValue)) {
-          onValueChanged(Number.parseInt(updatedValue));
+          const newValue = Number.parseInt(updatedValue);
+          if (newValue !== value) {
+            onValueChanged(newValue);
+          }
         } else {
-          onValueChanged(undefined);
+          if (value !== undefined) {
+            onValueChanged(undefined);
+          }
         }
       }}
     />

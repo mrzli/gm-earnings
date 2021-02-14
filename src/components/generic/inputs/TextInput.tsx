@@ -22,7 +22,10 @@ export function TextInput({
       value={value}
       variant={'outlined'}
       onChange={(event) => {
-        onValueChanged(event.target.value);
+        const newValue = event.target.value;
+        if (newValue !== value) {
+          onValueChanged(newValue);
+        }
       }}
       InputLabelProps={{
         shrink: true

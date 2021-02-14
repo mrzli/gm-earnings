@@ -18,7 +18,7 @@ export function MoneyDisplayInGrid({
     <AdornedDisplayInGrid
       label={label}
       value={value}
-      adornmentText={'kn'}
+      adornmentText={'HRK'}
       row={row}
       column={column}
     />

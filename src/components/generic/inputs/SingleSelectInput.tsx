@@ -23,7 +23,10 @@ export function SingleSelectInput<TItem extends string>({
       variant={'outlined'}
       value={value}
       onChange={(event) => {
-        onValueChanged(event.target.value as TItem);
+        const newValue = event.target.value;
+        if (newValue !== value) {
+          onValueChanged(newValue as TItem);
+        }
       }}
     >
       {options.map((pair) => {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { InputAdornment, TextField } from '@material-ui/core';
 import { isValidMoneyString } from '../../../utils/validation-utils';
+import { ArrowDropDown } from '@material-ui/icons';
 
 interface MoneyInputProps {
   readonly label: string;
@@ -23,12 +24,26 @@ export function MoneyInput({
       label={label}
       value={value}
       onChange={(event) => {
-        onValueChanged(event.target.value);
+        const newValue = event.target.value;
+        if (newValue !== value) {
+          onValueChanged(newValue);
+        }
       }}
       InputProps={{
-        endAdornment: <InputAdornment position={'end'}>kn</InputAdornment>
+        endAdornment: getInputAdornmentElement()
       }}
       disabled={disabled}
     />
+  );
+}
+
+function getInputAdornmentElement(): React.ReactElement {
+  return (
+    <InputAdornment position={'end'}>
+      <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+        <span>HRK</span>
+        <ArrowDropDown />
+      </div>
+    </InputAdornment>
   );
 }

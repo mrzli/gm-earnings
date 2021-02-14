@@ -21,7 +21,10 @@ export function PercentInput({
       error={!isValidPercentString(value)}
       value={value}
       onChange={(event) => {
-        onValueChanged(event.target.value);
+        const newValue = event.target.value;
+        if (newValue !== value) {
+          onValueChanged(newValue);
+        }
       }}
       InputProps={{
         endAdornment: <InputAdornment position={'end'}>%</InputAdornment>
