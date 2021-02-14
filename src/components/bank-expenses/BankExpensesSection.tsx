@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import { BankExpensesSectionInputData } from '../../types/business-expenses/bank-expenses-section-input-data';
+import { BankExpensesSectionInputData } from '../../types/bank-expenses/bank-expenses-section-input-data';
 import { SectionContainer } from '../generic/SectionContainer';
 import { useInputOutputData } from '../../utils/hooks';
-import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/business-expenses-data';
 import {
   currencyToMoneyString,
   moneyStringToCurrency
@@ -12,7 +11,7 @@ import {
   isInNumericRange,
   isValidMoneyString
 } from '../../utils/validation-utils';
-import { BankExpensesSectionOutputData } from '../../types/business-expenses/bank-expenses-section-output-data';
+import { BankExpensesSectionOutputData } from '../../types/bank-expenses/bank-expenses-section-output-data';
 import { GridLayout } from '../generic/GridLayout';
 import { MoneyInput } from '../generic/MoneyInput';
 import { IntegerInput } from '../generic/IntegerInput';
@@ -20,6 +19,7 @@ import { TextDisplayInGrid } from '../generic/TextDisplayInGrid';
 import { DividerInGrid } from '../generic/DividerInGrid';
 import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 import { GridItem } from '../generic/GridItem';
+import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/bank-expenses-data';
 
 interface BankExpensesSectionProps {
   readonly defaultInputData: BankExpensesSectionInputData;
@@ -92,7 +92,7 @@ export function BankExpensesSection({
           />
         </GridItem>
         <TextDisplayInGrid
-          label={'out. Trans. per Year'}
+          label={'Out. Trans. per Year'}
           value={inputData.numOutgoingTransactionsPerYear.toString()}
           row={1}
           column={5}
@@ -103,6 +103,12 @@ export function BankExpensesSection({
           value={outputData.totalBankExpenses}
           row={3}
           column={1}
+        />
+        <MoneyDisplayInGrid
+          label={'Monthly Bank Expenses'}
+          value={outputData.monthlyBankExpenses}
+          row={3}
+          column={2}
         />
       </GridLayout>
     </SectionContainer>
@@ -121,14 +127,21 @@ function getOutputData(
   ).multiply(input.numIncomingTransactionsPerYear);
   const outgoingTransactionExpenses = moneyStringToCurrency(
     input.outgoingTransactionFee
-  ).multiply(input.numIncomingTransactionsPerYear);
-  const totalBankExpenses = moneyStringToCurrency(input.incomingTransactionFee)
+  ).multiply(input.numOutgoingTransactionsPerYear);
+  const bankFeeExpenses = moneyStringToCurrency(input.bankMonthlyFee).multiply(
+    12
+  );
+
+  const totalBankExpenses = bankFeeExpenses
     .add(incomingTransactionExpenses)
     .add(outgoingTransactionExpenses);
 
+  const monthlyBankExpenses = totalBankExpenses.divide(12);
+
   return {
     isValid: true,
-    totalBankExpenses: currencyToMoneyString(totalBankExpenses)
+    totalBankExpenses: currencyToMoneyString(totalBankExpenses),
+    monthlyBankExpenses: currencyToMoneyString(monthlyBankExpenses)
   };
 }
 

@@ -11,8 +11,6 @@ import {
   currencyToMoneyString,
   moneyStringToCurrency
 } from '../utils/currency-utils';
-import { BankExpensesSectionInputData } from '../types/business-expenses/bank-expenses-section-input-data';
-import { BankExpensesSectionOutputData } from '../types/business-expenses/bank-expenses-section-output-data';
 
 export const DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA: BusinessExpensesSectionInputData = {
   items: [
@@ -73,15 +71,6 @@ export const DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA: BusinessExpensesSecti
       quantity: 1
     },
     {
-      name: 'RBA Bank Account Fixed Fee',
-      amount: {
-        amount: '60.00',
-        isVat: false
-      },
-      interval: ExpenseInterval.Monthly,
-      quantity: 1
-    },
-    {
       name: 'CISEx Membership Fee',
       amount: {
         amount: '500.00',
@@ -106,17 +95,4 @@ export const EMPTY_BUSINESS_EXPENSE_ITEM: BusinessExpenseItem = {
   amount: EMPTY_INPUT_AMOUNT_WITH_VAT,
   interval: ExpenseInterval.Daily,
   quantity: 1
-};
-
-export const DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA: BankExpensesSectionInputData = {
-  bankMonthlyFee: '60.00',
-  incomingTransactionFee: '1.00',
-  numIncomingTransactionsPerYear: 12,
-  outgoingTransactionFee: '2.80',
-  numOutgoingTransactionsPerYear: 0
-};
-
-export const EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA: BankExpensesSectionOutputData = {
-  isValid: false,
-  totalBankExpenses: ZERO_AMOUNT
 };

@@ -25,7 +25,6 @@ export function TextDisplayInGrid({
         InputProps={{
           readOnly: true
         }}
-        disabled={true}
       />
     </GridItem>
   );

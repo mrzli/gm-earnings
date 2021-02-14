@@ -7,6 +7,8 @@ import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSec
 import { EarningsSection } from './earnings/EarningsSection';
 import { DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA } from '../data/business-expenses-data';
 import { DEFAULT_EARNINGS_DISPLAY_DATA } from '../data/earnings-display-data';
+import { BankExpensesSection } from './bank-expenses/BankExpensesSection';
+import { DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA } from '../data/bank-expenses-data';
 
 export function EarningsDisplay(): React.ReactElement {
   const [inputData, setInputData] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
@@ -28,6 +30,19 @@ export function EarningsDisplay(): React.ReactElement {
           setInputData((s) => ({
             ...s,
             businessExpensesSectionOutputData: value
+          }));
+        }}
+      />
+      <BankExpensesSection
+        defaultInputData={DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA}
+        numOutgoingTransactionsPerYear={
+          inputData.businessExpensesSectionOutputData
+            .numOutgoingTransactionsPerYear
+        }
+        onOutputDataChanged={(value) => {
+          setInputData((s) => ({
+            ...s,
+            bankExpensesSectionOutputData: value
           }));
         }}
       />
