@@ -20,6 +20,7 @@ import { DividerInGrid } from '../generic/DividerInGrid';
 import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 import { GridItem } from '../generic/GridItem';
 import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/bank-expenses-data';
+import { MONTHS_PER_YEAR } from '../../data/general-data';
 
 interface BankExpensesSectionProps {
   readonly defaultInputData: BankExpensesSectionInputData;
@@ -129,14 +130,14 @@ function getOutputData(
     input.outgoingTransactionFee
   ).multiply(input.numOutgoingTransactionsPerYear);
   const bankFeeExpenses = moneyStringToCurrency(input.bankMonthlyFee).multiply(
-    12
+    MONTHS_PER_YEAR
   );
 
   const totalBankExpenses = bankFeeExpenses
     .add(incomingTransactionExpenses)
     .add(outgoingTransactionExpenses);
 
-  const monthlyBankExpenses = totalBankExpenses.divide(12);
+  const monthlyBankExpenses = totalBankExpenses.divide(MONTHS_PER_YEAR);
 
   return {
     isValid: true,

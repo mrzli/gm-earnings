@@ -4,7 +4,13 @@ import { InputList } from '../generic/InputList';
 import { BusinessExpenseItem } from '../../types/business-expenses/business-expense-item';
 import { BusinessExpenseEntry } from './BusinessExpenseEntry';
 import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
-import { VAT_PERCENT } from '../../data/general-data';
+import {
+  DAYS_PER_YEAR,
+  MONTHS_PER_YEAR,
+  PERCENT_TO_FRACTION_MULTIPLIER,
+  VAT_PERCENT,
+  WEEKS_PER_YEAR
+} from '../../data/general-data';
 import { GridLayout } from '../generic/GridLayout';
 import { SectionContainer } from '../generic/SectionContainer';
 import { BusinessExpensesSectionInputData } from '../../types/business-expenses/business-expenses-section-input-data';
@@ -114,7 +120,9 @@ function getOutputData(
       ).multiply(yearlyQuantity);
 
       const currentItemVat = item.amount.isVat
-        ? currentItemExpenses.multiply(VAT_PERCENT)
+        ? currentItemExpenses
+            .multiply(VAT_PERCENT)
+            .multiply(PERCENT_TO_FRACTION_MULTIPLIER)
         : ZERO_MONEY;
 
       return {
@@ -141,24 +149,26 @@ function getOutputData(
 function isInputValid(
   input: BusinessExpensesSectionInputData
 ): input is NonNullableReadonlyObject<BusinessExpensesSectionInputData> {
-  return input.items.every((item) => {
-    return (
-      isValidText(item.name) &&
-      isValidMoneyString(item.amount.amount) &&
-      item.quantity !== undefined &&
-      isInNumericRange(item.quantity, 1, 1000)
-    );
-  });
+  return input.items.every(isBusinessExpenseItemValid);
+}
+
+function isBusinessExpenseItemValid(item: BusinessExpenseItem): boolean {
+  return (
+    isValidText(item.name) &&
+    isValidMoneyString(item.amount.amount) &&
+    item.quantity !== undefined &&
+    isInNumericRange(item.quantity, 1, 1000)
+  );
 }
 
 function getYearlyMultiplierForInterval(interval: ExpenseInterval): number {
   switch (interval) {
     case ExpenseInterval.Daily:
-      return 365;
+      return DAYS_PER_YEAR;
     case ExpenseInterval.Weekly:
-      return 52;
+      return WEEKS_PER_YEAR;
     case ExpenseInterval.Monthly:
-      return 12;
+      return MONTHS_PER_YEAR;
     case ExpenseInterval.Yearly:
       return 1;
     default:

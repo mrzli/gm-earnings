@@ -5,22 +5,16 @@ import { PercentInput } from '../generic/PercentInput';
 import { CheckboxInput } from '../generic/CheckboxInput';
 import { ZERO_AMOUNT } from '../../data/general-data';
 import { InputListItemProps } from '../../types/generic/generic-types';
+import { GridLayout } from '../generic/GridLayout';
+import { GridItem } from '../generic/GridItem';
 
-export function TaxBracketInput({
+export function TaxBracketEntry({
   item,
   onItemChanged
 }: InputListItemProps<TaxBracketItem>): React.ReactElement {
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '120px auto 120px',
-        alignItems: 'center',
-        rowGap: 10,
-        columnGap: 10
-      }}
-    >
-      <div style={{ gridColumnStart: 1 }}>
+    <GridLayout columnsTemplate={'200px auto 120px'}>
+      <GridItem row={1} column={1}>
         <MoneyInput
           label={'Amount Range'}
           value={item.amountRange}
@@ -29,8 +23,8 @@ export function TaxBracketInput({
           }}
           disabled={item.isInfinite}
         />
-      </div>
-      <div style={{ gridColumnStart: 2 }}>
+      </GridItem>
+      <GridItem row={1} column={2}>
         <CheckboxInput
           label={'Infinite Range'}
           value={item.isInfinite}
@@ -42,8 +36,8 @@ export function TaxBracketInput({
             });
           }}
         />
-      </div>
-      <div style={{ gridColumnStart: 3 }}>
+      </GridItem>
+      <GridItem row={1} column={3}>
         <PercentInput
           label={'Tax'}
           value={item.taxRatePercent}
@@ -51,7 +45,7 @@ export function TaxBracketInput({
             onItemChanged({ ...item, taxRatePercent: updatedValue });
           }}
         />
-      </div>
-    </div>
+      </GridItem>
+    </GridLayout>
   );
 }

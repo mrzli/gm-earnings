@@ -1,24 +1,24 @@
 import React from 'react';
 import { AdornedDisplayInGrid } from './AdornedDisplayInGrid';
 
-interface MoneyDisplayInGridProps {
+interface PercentDisplayInGridProps {
   readonly label: string;
   readonly value: string;
   readonly row: number;
   readonly column: number;
 }
 
-export function MoneyDisplayInGrid({
+export function PercentDisplayInGrid({
   label,
   value,
   row,
   column
-}: MoneyDisplayInGridProps): React.ReactElement {
+}: PercentDisplayInGridProps): React.ReactElement {
   return (
     <AdornedDisplayInGrid
       label={label}
       value={value}
-      adornmentText={'kn'}
+      adornmentText={'%'}
       row={row}
       column={column}
     />

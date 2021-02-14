@@ -5,14 +5,25 @@ import { SalarySectionOutputData } from '../types/salary/salary-section-output-d
 
 export const DEFAULT_SALARY_SECTION_INPUT_DATA: SalarySectionInputData = {
   calculationParameters: {
-    retirementPaymentsPillar1Percent: ZERO_AMOUNT,
-    retirementPaymentsPillar2Percent: ZERO_AMOUNT,
-    taxDeduction: ZERO_AMOUNT,
-    taxBrackets: [],
-    surtaxPercent: ZERO_AMOUNT,
-    healthInsurancePercent: ZERO_AMOUNT
+    healthInsurancePercent: '16.50',
+    retirementPaymentsPillar1Percent: '15.00',
+    retirementPaymentsPillar2Percent: '5.00',
+    taxDeduction: '4000.00',
+    taxBrackets: [
+      {
+        amountRange: '30000.00',
+        isInfinite: false,
+        taxRatePercent: '20.00'
+      },
+      {
+        amountRange: '0.00',
+        isInfinite: true,
+        taxRatePercent: '30.00'
+      }
+    ],
+    surtaxPercent: '10.00'
   },
-  gross1Salary: ZERO_AMOUNT
+  gross1Salary: '6000.00'
 };
 
 export const EMPTY_TAX_BRACKET_ITEM: TaxBracketItem = {
@@ -23,6 +34,7 @@ export const EMPTY_TAX_BRACKET_ITEM: TaxBracketItem = {
 
 export const EMPTY_SALARY_SECTION_OUTPUT_DATA: SalarySectionOutputData = {
   isValid: false,
+  healthInsurance: ZERO_AMOUNT,
   retirementPayments1: ZERO_AMOUNT,
   retirementPayments2: ZERO_AMOUNT,
   taxDeduction: ZERO_AMOUNT,
@@ -30,7 +42,6 @@ export const EMPTY_SALARY_SECTION_OUTPUT_DATA: SalarySectionOutputData = {
   totalTax: ZERO_AMOUNT,
   totalSurtax: ZERO_AMOUNT,
   totalTaxAndSurtax: ZERO_AMOUNT,
-  healthInsurance: ZERO_AMOUNT,
   gross2Salary: ZERO_AMOUNT,
   gross1Salary: ZERO_AMOUNT,
   netSalary: ZERO_AMOUNT,
@@ -39,6 +50,8 @@ export const EMPTY_SALARY_SECTION_OUTPUT_DATA: SalarySectionOutputData = {
     retirementPayments: ZERO_AMOUNT,
     tax: ZERO_AMOUNT,
     gross2Salary: ZERO_AMOUNT,
-    netSalary: ZERO_AMOUNT
+    netSalary: ZERO_AMOUNT,
+    totalSalaryExpenses: ZERO_AMOUNT,
+    percentExpensesOfGross2: ZERO_AMOUNT
   }
 };

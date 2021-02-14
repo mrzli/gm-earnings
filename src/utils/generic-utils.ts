@@ -20,3 +20,14 @@ export function mapGetOrThrow<TKey, TValue>(
 
   return map.get(key) as TValue;
 }
+
+export function stateValueChange<T, K extends keyof T>(
+  key: K,
+  newValue: T[K]
+): (obj: T) => T {
+  return (obj: T) => ({ ...obj, [key]: newValue });
+}
+
+export function formatAsPercent(fractionalValue: number): string {
+  return (fractionalValue * 100).toFixed(2);
+}

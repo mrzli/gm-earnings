@@ -10,6 +10,7 @@ import {
 import { SingleSelectInput } from '../generic/SingleSelectInput';
 import { GridLayout } from '../generic/GridLayout';
 import { TextInput } from '../generic/TextInput';
+import { GridItem } from '../generic/GridItem';
 
 export function BusinessExpenseEntry({
   item,
@@ -17,7 +18,7 @@ export function BusinessExpenseEntry({
 }: InputListItemProps<BusinessExpenseItem>): React.ReactElement {
   return (
     <GridLayout columnsTemplate={'320px 120px auto 120px 120px'}>
-      <div style={{ gridColumnStart: 1 }}>
+      <GridItem row={1} column={1}>
         <TextInput
           label={'Name'}
           value={item.name}
@@ -25,7 +26,7 @@ export function BusinessExpenseEntry({
             onItemChanged({ ...item, name: value });
           }}
         />
-      </div>
+      </GridItem>
       <MoneyInputWithVatInGrid
         label={'Amount'}
         value={item.amount}
@@ -35,7 +36,7 @@ export function BusinessExpenseEntry({
         row={1}
         column={2}
       />
-      <div style={{ gridColumnStart: 4 }}>
+      <GridItem row={1} column={4}>
         <SingleSelectInput<ExpenseInterval>
           label={'Interval'}
           options={EXPENSE_INTERVAL_VALUE_DISPLAY_PAIRS}
@@ -47,8 +48,8 @@ export function BusinessExpenseEntry({
             });
           }}
         />
-      </div>
-      <div style={{ gridColumnStart: 5 }}>
+      </GridItem>
+      <GridItem row={1} column={5}>
         <IntegerInput
           label={'Quantity'}
           value={item.quantity}
@@ -58,7 +59,7 @@ export function BusinessExpenseEntry({
           minValue={1}
           maxValue={1000}
         />
-      </div>
+      </GridItem>
     </GridLayout>
   );
 }

@@ -6,7 +6,10 @@ import { IntegerInput } from '../generic/IntegerInput';
 import { MoneyInputWithVatInGrid } from '../generic/MoneyInputWithVatInGrid';
 import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 import { EarningsSectionOutputData } from '../../types/earnings/earnings-section-output-data';
-import { VAT_PERCENT } from '../../data/general-data';
+import {
+  PERCENT_TO_FRACTION_MULTIPLIER,
+  VAT_PERCENT
+} from '../../data/general-data';
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
@@ -21,6 +24,7 @@ import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import { useInputOutputData } from '../../utils/hooks';
 import { DividerInGrid } from '../generic/DividerInGrid';
 import { GridItem } from '../generic/GridItem';
+import { stateValueChange } from '../../utils/generic-utils';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
@@ -110,7 +114,9 @@ function getOutputData(
     .multiply(input.workingHours)
     .multiply(input.workingDays);
   const totalVat = input.hourlyRate.isVat
-    ? totalEarnings.multiply(VAT_PERCENT)
+    ? totalEarnings
+        .multiply(VAT_PERCENT)
+        .multiply(PERCENT_TO_FRACTION_MULTIPLIER)
     : ZERO_MONEY;
 
   return {
