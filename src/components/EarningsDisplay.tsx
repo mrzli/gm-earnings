@@ -34,25 +34,26 @@ export function EarningsDisplay(): React.ReactElement {
           }));
         }}
       />
-      <BankExpensesSection
-        defaultInputData={DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA}
-        numOutgoingTransactionsPerYear={
-          inputData.businessExpensesSectionOutputData
-            .numOutgoingTransactionsPerYear
-        }
-        onOutputDataChanged={(value) => {
-          setInputData((s) => ({
-            ...s,
-            bankExpensesSectionOutputData: value
-          }));
-        }}
-      />
       <SalarySection
         defaultInputData={DEFAULT_SALARY_SECTION_INPUT_DATA}
         onOutputDataChanged={(value) => {
           setInputData((s) => ({
             ...s,
             salarySectionOutputData: value
+          }));
+        }}
+      />
+      <BankExpensesSection
+        defaultInputData={DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA}
+        numOutgoingTransactionsPerYear={
+          inputData.businessExpensesSectionOutputData
+            .numOutgoingTransactionsPerYear +
+          inputData.salarySectionOutputData.yearlyData.numOutgoingTransactions
+        }
+        onOutputDataChanged={(value) => {
+          setInputData((s) => ({
+            ...s,
+            bankExpensesSectionOutputData: value
           }));
         }}
       />

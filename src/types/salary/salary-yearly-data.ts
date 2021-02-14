@@ -6,4 +6,5 @@ export interface SalaryYearlyData {
   readonly netSalary: string;
   readonly totalSalaryExpenses: string;
   readonly percentExpensesOfGross2: string;
+  readonly numOutgoingTransactions: number;
 }

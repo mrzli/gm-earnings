@@ -19,6 +19,7 @@ import {
 } from '../../data/general-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
+  isInNumericRange,
   isValidMoneyString,
   isValidPercentString
 } from '../../utils/validation-utils';
@@ -35,6 +36,8 @@ import { DividerInGrid } from '../generic/DividerInGrid';
 import { MoneyDisplayInGrid } from '../generic/MoneyDisplayInGrid';
 import { formatAsPercent } from '../../utils/generic-utils';
 import { PercentDisplayInGrid } from '../generic/PercentDisplayInGrid';
+import { IntegerInput } from '../generic/IntegerInput';
+import { TextDisplayInGrid } from '../generic/TextDisplayInGrid';
 
 interface SalarySectionProps {
   readonly defaultInputData: SalarySectionInputData;
@@ -142,6 +145,20 @@ export function SalarySection({
             }}
           />
         </GridItem>
+        <GridItem row={5} column={2}>
+          <IntegerInput
+            label={'Out. Trans. per Salary'}
+            value={inputData.numOutgoingTransactionsPerSalary}
+            onValueChanged={(value) => {
+              setInputData((s) => ({
+                ...s,
+                numOutgoingTransactionsPerSalary: value
+              }));
+            }}
+            minValue={0}
+            maxValue={20}
+          />
+        </GridItem>
         <DividerInGrid row={6} span={6} />
         <MoneyDisplayInGrid
           label={'Health Insurance p/m'}
@@ -241,7 +258,7 @@ export function SalarySection({
           column={2}
         />
         <MoneyDisplayInGrid
-          label={'Total Salary expenses p/y'}
+          label={'Total Salary Expenses p/y'}
           value={outputData.yearlyData.totalSalaryExpenses}
           row={12}
           column={3}
@@ -251,6 +268,12 @@ export function SalarySection({
           value={outputData.yearlyData.percentExpensesOfGross2}
           row={12}
           column={4}
+        />
+        <TextDisplayInGrid
+          label={'Out. Trans. for Salary p/y'}
+          value={outputData.yearlyData.numOutgoingTransactions.toString()}
+          row={12}
+          column={5}
         />
       </GridLayout>
     </SectionContainer>
@@ -302,6 +325,8 @@ function getOutputData(input: SalarySectionInputData): SalarySectionOutputData {
   );
   const fractionExpensesOfGross2 =
     totalSalaryExpensesYearly.value / gross2SalaryYearly.value;
+  const numOutgoingTransactionsPerYear =
+    input.numOutgoingTransactionsPerSalary * MONTHS_PER_YEAR;
 
   return {
     isValid: true,
@@ -323,7 +348,8 @@ function getOutputData(input: SalarySectionInputData): SalarySectionOutputData {
       gross2Salary: currencyToMoneyString(gross2SalaryYearly),
       netSalary: currencyToMoneyString(netSalaryYearly),
       totalSalaryExpenses: currencyToMoneyString(totalSalaryExpensesYearly),
-      percentExpensesOfGross2: formatAsPercent(fractionExpensesOfGross2)
+      percentExpensesOfGross2: formatAsPercent(fractionExpensesOfGross2),
+      numOutgoingTransactions: numOutgoingTransactionsPerYear
     }
   };
 }
@@ -340,7 +366,9 @@ function isInputValid(
     areTaxBracketsValid(calcParams.taxBrackets) &&
     isValidMoneyString(calcParams.taxDeduction) &&
     isValidPercentString(calcParams.surtaxPercent) &&
-    isValidMoneyString(input.gross1Salary)
+    isValidMoneyString(input.gross1Salary) &&
+    input.numOutgoingTransactionsPerSalary !== undefined &&
+    isInNumericRange(input.numOutgoingTransactionsPerSalary, 0, 20)
   );
 }
 

@@ -23,7 +23,8 @@ export const DEFAULT_SALARY_SECTION_INPUT_DATA: SalarySectionInputData = {
     ],
     surtaxPercent: '10.00'
   },
-  gross1Salary: '6000.00'
+  gross1Salary: '6000.00',
+  numOutgoingTransactionsPerSalary: 5 // ZO, MIO 1, MIO 2, tax + surtax (one outgoing transaction), net salary
 };
 
 export const EMPTY_TAX_BRACKET_ITEM: TaxBracketItem = {
@@ -52,6 +53,7 @@ export const EMPTY_SALARY_SECTION_OUTPUT_DATA: SalarySectionOutputData = {
     gross2Salary: ZERO_AMOUNT,
     netSalary: ZERO_AMOUNT,
     totalSalaryExpenses: ZERO_AMOUNT,
-    percentExpensesOfGross2: ZERO_AMOUNT
+    percentExpensesOfGross2: ZERO_AMOUNT,
+    numOutgoingTransactions: 0
   }
 };
