@@ -24,7 +24,6 @@ import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import { useInputOutputData } from '../../utils/hooks';
 import { DividerInGrid } from '../generic/layout/DividerInGrid';
 import { GridItem } from '../generic/layout/GridItem';
-import { stateValueChange } from '../../utils/generic-utils';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
