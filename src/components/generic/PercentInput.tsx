@@ -17,6 +17,7 @@ export function PercentInput({
     <TextField
       label={label}
       fullWidth={true}
+      variant={'outlined'}
       error={!isValidPercentString(value)}
       value={value}
       onChange={(event) => {

@@ -34,6 +34,7 @@ import {
 } from '../../utils/currency-utils';
 import { DividerInGrid } from '../generic/DividerInGrid';
 import { GridItem } from '../generic/GridItem';
+import { TextDisplayInGrid } from '../generic/TextDisplayInGrid';
 
 interface BusinessExpensesSectionProps {
   readonly defaultInputData: BusinessExpensesSectionInputData;
@@ -58,8 +59,8 @@ export function BusinessExpensesSection({
       header={'Business Expenses'}
       isDataValid={outputData.isValid}
     >
-      <GridLayout columnsTemplate={'200px 200px 200px 1fr'}>
-        <GridItem row={1} column={1} span={4}>
+      <GridLayout columnsTemplate={'repeat(4, 200px) 1fr'}>
+        <GridItem row={1} column={1} span={5}>
           <InputList<BusinessExpenseItem>
             items={inputData.items}
             ItemComponent={BusinessExpenseEntry}
@@ -72,7 +73,7 @@ export function BusinessExpensesSection({
             }}
           />
         </GridItem>
-        <DividerInGrid row={2} span={4} />
+        <DividerInGrid row={2} span={5} />
         <MoneyDisplayInGrid
           label={'Total B. E. (w/o VAT)'}
           value={outputData.totalBusinessExpenses}
@@ -90,6 +91,12 @@ export function BusinessExpensesSection({
           value={outputData.monthlyBusinessExpenses}
           row={3}
           column={3}
+        />
+        <TextDisplayInGrid
+          label={'Out. Trans. p/y'}
+          value={outputData.numOutgoingTransactionsPerYear.toString()}
+          row={3}
+          column={4}
         />
       </GridLayout>
     </SectionContainer>
