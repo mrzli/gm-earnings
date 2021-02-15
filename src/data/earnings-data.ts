@@ -6,7 +6,7 @@ export const DEFAULT_EARNINGS_SECTION_INPUT_DATA: EarningsSectionInputData = {
   workingDays: 230,
   workingHours: 8,
   hourlyRate: {
-    amount: '250.00',
+    amount: '0.00',
     isVat: true
   }
 };
