@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
-import { MoneyDisplayInGrid } from './generic/displays/MoneyDisplayInGrid';
-import { ZERO_AMOUNT } from '../data/generic-data';
 import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
 import { DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA } from '../data/business-expenses-data';
@@ -10,7 +8,7 @@ import { BankExpensesSection } from './bank-expenses/BankExpensesSection';
 import { DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA } from '../data/bank-expenses-data';
 import { SalarySection } from './salary/SalarySection';
 import { DEFAULT_SALARY_SECTION_INPUT_DATA } from '../data/salary-data';
-import { EarningsDisplayData } from '../types/earnings/earnings-display-data';
+import { EarningsDisplayData } from '../types/earnings-display-data';
 import { BusinessResultsSection } from './business-results/BusinessResultsSection';
 import { BusinessResultsData } from '../types/business-results/business-results-data';
 import {
@@ -19,9 +17,13 @@ import {
 } from '../utils/currency-utils';
 import { GeneralSection } from './general/GeneralSection';
 import { DEFAULT_GENERAL_SECTION_INPUT_DATA } from '../data/general-data';
+import { PersonalIncomeSection } from './personal-income/PersonalIncomeSection';
+import { DEFAULT_PERSONAL_INCOME_SECTION_INPUT_DATA } from '../data/personal-income-data';
 
 export function EarningsDisplay(): React.ReactElement {
   const [state, setState] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
+
+  const businessResultsData = getBusinessResultsData(state);
 
   return (
     <div>
@@ -75,18 +77,19 @@ export function EarningsDisplay(): React.ReactElement {
           state.salary.yearlyData.numOutgoingTransactions
         }
       />
-      <BusinessResultsSection data={getBusinessResultsData(state)} />
-      <MoneyDisplayInGrid
-        label={'Earnings After Business Expenses (without VAT):'}
-        value={ZERO_AMOUNT}
-        row={9}
-        column={1}
-      />
-      <MoneyDisplayInGrid
-        label={'VAT After Expenses:'}
-        value={ZERO_AMOUNT}
-        row={10}
-        column={1}
+      <BusinessResultsSection data={businessResultsData} />
+      <PersonalIncomeSection
+        defaultInputData={DEFAULT_PERSONAL_INCOME_SECTION_INPUT_DATA}
+        onOutputDataChanged={(value) => {
+          setState((s) => ({
+            ...s,
+            personalIncome: value
+          }));
+        }}
+        businessTotalEarnings={state.earnings.totalEarnings}
+        businessNetEarnings={businessResultsData.businessNetEarnings}
+        yearlyNetSalary={businessResultsData.personalSalaryIncome}
+        surtaxPercent={state.general.surtaxPercent}
       />
     </div>
   );

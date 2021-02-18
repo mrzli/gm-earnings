@@ -57,23 +57,23 @@ export function BusinessResultsSection({
           row={2}
           column={5}
         />
-        <DividerInGrid row={4} span={6} />
+        <DividerInGrid row={3} span={6} />
         <MoneyDisplayInGrid
           label={'Business Net Earnings'}
           value={data.businessNetEarnings}
-          row={5}
+          row={4}
           column={1}
         />
         <MoneyDisplayInGrid
           label={'Remaining VAT'}
           value={data.businessRemainingVat}
-          row={5}
+          row={4}
           column={2}
         />
         <MoneyDisplayInGrid
           label={'Personal Salary Income p/y'}
           value={data.personalSalaryIncome}
-          row={5}
+          row={4}
           column={3}
         />
       </GridLayout>
