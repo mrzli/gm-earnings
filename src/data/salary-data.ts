@@ -1,33 +1,46 @@
 import { TaxBracketItem } from '../types/salary/tax-bracket-item';
-import { ZERO_AMOUNT } from './generic-data';
+import { EMPTY_AMOUNT_WITH_CURRENCY, ZERO_AMOUNT } from './generic-data';
 import { SalarySectionInputData } from '../types/salary/salary-section-input-data';
 import { SalarySectionOutputData } from '../types/salary/salary-section-output-data';
+import { CurrencySelection } from '../types/generic/currency-selection';
 
 export const DEFAULT_SALARY_SECTION_INPUT_DATA: SalarySectionInputData = {
   calculationParameters: {
     healthInsurancePercent: '16.50',
     retirementPaymentsPillar1Percent: '15.00',
     retirementPaymentsPillar2Percent: '5.00',
-    taxDeduction: '4000.00',
+    taxDeduction: {
+      amount: '4000.00',
+      currency: CurrencySelection.HRK
+    },
     taxBrackets: [
       {
-        amountRange: '30000.00',
+        amountRange: {
+          amount: '30000.00',
+          currency: CurrencySelection.HRK
+        },
         isInfinite: false,
         taxRatePercent: '20.00'
       },
       {
-        amountRange: '0.00',
+        amountRange: {
+          amount: '0.00',
+          currency: CurrencySelection.HRK
+        },
         isInfinite: true,
         taxRatePercent: '30.00'
       }
     ]
   },
-  gross1Salary: '6000.00',
+  gross1Salary: {
+    amount: '6000.00',
+    currency: CurrencySelection.HRK
+  },
   numOutgoingTransactionsPerSalary: 5 // ZO, MIO 1, MIO 2, tax + surtax (one outgoing transaction), net salary
 };
 
 export const EMPTY_TAX_BRACKET_ITEM: TaxBracketItem = {
-  amountRange: ZERO_AMOUNT,
+  amountRange: EMPTY_AMOUNT_WITH_CURRENCY,
   isInfinite: false,
   taxRatePercent: ZERO_AMOUNT
 };

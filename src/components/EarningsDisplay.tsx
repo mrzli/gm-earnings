@@ -44,6 +44,7 @@ export function EarningsDisplay(): React.ReactElement {
             earnings: value
           }));
         }}
+        exchangeRates={state.general.exchangeRates}
       />
       <BusinessExpensesSection
         defaultInputData={DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA}
@@ -53,6 +54,7 @@ export function EarningsDisplay(): React.ReactElement {
             businessExpenses: value
           }));
         }}
+        exchangeRates={state.general.exchangeRates}
       />
       <SalarySection
         defaultInputData={DEFAULT_SALARY_SECTION_INPUT_DATA}
@@ -62,6 +64,7 @@ export function EarningsDisplay(): React.ReactElement {
             salary: value
           }));
         }}
+        exchangeRates={state.general.exchangeRates}
         surtaxPercent={state.general.surtaxPercent}
       />
       <BankExpensesSection
@@ -76,6 +79,7 @@ export function EarningsDisplay(): React.ReactElement {
           state.businessExpenses.numOutgoingTransactionsPerYear +
           state.salary.yearlyData.numOutgoingTransactions
         }
+        exchangeRates={state.general.exchangeRates}
       />
       <BusinessResultsSection data={businessResultsData} />
       <PersonalIncomeSection

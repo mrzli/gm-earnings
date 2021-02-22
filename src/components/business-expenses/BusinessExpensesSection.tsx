@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Currency from 'currency.js';
 import { EntryList } from '../generic/layout/EntryList';
 import { BusinessExpenseItem } from '../../types/business-expenses/business-expense-item';
@@ -19,7 +19,6 @@ import {
   EMPTY_BUSINESS_EXPENSE_ITEM,
   EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA
 } from '../../data/business-expenses-data';
-import { useInputOutputData } from '../../utils/hooks';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
   isInNumericRange,
@@ -30,28 +29,40 @@ import { ExpenseInterval } from '../../types/generic/expense-interval';
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
+  toHrkAmount,
   ZERO_MONEY
 } from '../../utils/currency-utils';
 import { DividerInGrid } from '../generic/layout/DividerInGrid';
 import { GridItem } from '../generic/layout/GridItem';
 import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
+import { ExchangeRates } from '../../types/generic/exchange-rates';
 
 interface BusinessExpensesSectionProps {
   readonly defaultInputData: BusinessExpensesSectionInputData;
   readonly onOutputDataChanged: (
     data: BusinessExpensesSectionOutputData
   ) => void;
+  readonly exchangeRates: ExchangeRates;
 }
 
 export function BusinessExpensesSection({
   defaultInputData,
-  onOutputDataChanged
+  onOutputDataChanged,
+  exchangeRates
 }: BusinessExpensesSectionProps): React.ReactElement {
-  const { inputData, setInputData, outputData } = useInputOutputData(
-    defaultInputData,
-    EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA,
-    getOutputData,
-    onOutputDataChanged
+  const [inputData, setInputData] = useState(defaultInputData);
+  const [outputData, setOutputData] = useState(
+    EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA
+  );
+
+  useEffect(
+    () => {
+      const newOutputData = getOutputData(inputData, exchangeRates);
+      setOutputData(newOutputData);
+      onOutputDataChanged(newOutputData);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputData]
   );
 
   return (
@@ -110,7 +121,8 @@ interface ExpenseCollatedData {
 }
 
 function getOutputData(
-  input: BusinessExpensesSectionInputData
+  input: BusinessExpensesSectionInputData,
+  exchangeRates: ExchangeRates
 ): BusinessExpensesSectionOutputData {
   if (!isInputValid(input)) {
     return EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA;
@@ -122,8 +134,12 @@ function getOutputData(
         (item.quantity as number) *
         getYearlyMultiplierForInterval(item.interval);
 
+      const currentItemExpensesHrk = toHrkAmount(
+        item.amount.amount,
+        exchangeRates
+      );
       const currentItemExpenses = moneyStringToCurrency(
-        item.amount.amount
+        currentItemExpensesHrk
       ).multiply(yearlyQuantity);
 
       const currentItemVat = item.amount.isVat
@@ -162,7 +178,7 @@ function isInputValid(
 function isBusinessExpenseItemValid(item: BusinessExpenseItem): boolean {
   return (
     isValidText(item.name) &&
-    isValidMoneyString(item.amount.amount) &&
+    isValidMoneyString(item.amount.amount.amount) &&
     item.quantity !== undefined &&
     isInNumericRange(item.quantity, 1, 1000)
   );

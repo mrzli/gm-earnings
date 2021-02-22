@@ -9,6 +9,7 @@ import { GridItem } from '../generic/layout/GridItem';
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
+  toHrkAmount,
   ZERO_MONEY
 } from '../../utils/currency-utils';
 import {
@@ -37,16 +38,19 @@ import { formatAsPercent } from '../../utils/generic-utils';
 import { PercentDisplayInGrid } from '../generic/displays/PercentDisplayInGrid';
 import { IntegerInput } from '../generic/inputs/IntegerInput';
 import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
+import { ExchangeRates } from '../../types/generic/exchange-rates';
 
 interface SalarySectionProps {
   readonly defaultInputData: SalarySectionInputData;
   readonly onOutputDataChanged: (data: SalarySectionOutputData) => void;
+  readonly exchangeRates: ExchangeRates;
   readonly surtaxPercent: string;
 }
 
 export function SalarySection({
   defaultInputData,
   onOutputDataChanged,
+  exchangeRates,
   surtaxPercent
 }: SalarySectionProps): React.ReactElement {
   const [inputData, setInputData] = useState(defaultInputData);
@@ -56,7 +60,11 @@ export function SalarySection({
 
   useEffect(
     () => {
-      const newOutputData = getOutputData(inputData, surtaxPercent);
+      const newOutputData = getOutputData(
+        inputData,
+        exchangeRates,
+        surtaxPercent
+      );
       setOutputData(newOutputData);
       onOutputDataChanged(newOutputData);
     },
@@ -286,6 +294,7 @@ export function SalarySection({
 
 function getOutputData(
   input: SalarySectionInputData,
+  exchangeRates: ExchangeRates,
   surtaxPercent: string
 ): SalarySectionOutputData {
   if (!isInputValid(input, surtaxPercent)) {
@@ -293,7 +302,8 @@ function getOutputData(
   }
 
   const calcParams = input.calculationParameters;
-  const gross1Salary = moneyStringToCurrency(input.gross1Salary);
+  const gross1SalaryHrk = toHrkAmount(input.gross1Salary, exchangeRates);
+  const gross1Salary = moneyStringToCurrency(gross1SalaryHrk);
 
   const healthInsurance = gross1Salary
     .multiply(calcParams.healthInsurancePercent)
@@ -308,11 +318,16 @@ function getOutputData(
   const incomeAfterHealthAndRetirementPayments = gross1Salary.subtract(
     allRetirement
   );
-  const taxDeduction = moneyStringToCurrency(calcParams.taxDeduction);
+  const taxDeductionHrk = toHrkAmount(calcParams.taxDeduction, exchangeRates);
+  const taxDeduction = moneyStringToCurrency(taxDeductionHrk);
   const taxableIncome = incomeAfterHealthAndRetirementPayments.subtract(
     taxDeduction
   );
-  const totalTax = calculateTax(taxableIncome, calcParams.taxBrackets);
+  const totalTax = calculateTax(
+    taxableIncome,
+    calcParams.taxBrackets,
+    exchangeRates
+  );
   const totalSurtax = totalTax
     .multiply(surtaxPercent)
     .multiply(PERCENT_TO_FRACTION_MULTIPLIER);
@@ -372,9 +387,9 @@ function isInputValid(
     isValidPercentString(calcParams.retirementPaymentsPillar1Percent) &&
     isValidPercentString(calcParams.retirementPaymentsPillar2Percent) &&
     areTaxBracketsValid(calcParams.taxBrackets) &&
-    isValidMoneyString(calcParams.taxDeduction) &&
+    isValidMoneyString(calcParams.taxDeduction.amount) &&
     isValidPercentString(surtaxPercent) &&
-    isValidMoneyString(input.gross1Salary) &&
+    isValidMoneyString(input.gross1Salary.amount) &&
     input.numOutgoingTransactionsPerSalary !== undefined &&
     isInNumericRange(input.numOutgoingTransactionsPerSalary, 0, 20)
   );
@@ -396,7 +411,7 @@ function areTaxBracketsValid(taxBrackets: readonly TaxBracketItem[]): boolean {
 
 function isNonLastTaxBracketItemValid(item: TaxBracketItem): boolean {
   return (
-    isValidMoneyString(item.amountRange) &&
+    isValidMoneyString(item.amountRange.amount) &&
     !item.isInfinite &&
     isValidPercentString(item.taxRatePercent)
   );
@@ -404,7 +419,7 @@ function isNonLastTaxBracketItemValid(item: TaxBracketItem): boolean {
 
 function isLastTaxBracketItemValid(item: TaxBracketItem): boolean {
   return (
-    item.amountRange === ZERO_AMOUNT &&
+    item.amountRange.amount === ZERO_AMOUNT &&
     item.isInfinite &&
     isValidPercentString(item.taxRatePercent)
   );
@@ -412,7 +427,8 @@ function isLastTaxBracketItemValid(item: TaxBracketItem): boolean {
 
 function calculateTax(
   taxableIncome: Currency,
-  taxBrackets: readonly TaxBracketItem[]
+  taxBrackets: readonly TaxBracketItem[],
+  exchangeRates: ExchangeRates
 ): Currency {
   let accumulatedTax = ZERO_MONEY;
   let remainingTaxableIncome = taxableIncome;
@@ -421,7 +437,8 @@ function calculateTax(
       break;
     }
 
-    const taxBracketAmount = moneyStringToCurrency(item.amountRange);
+    const taxBracketAmountHrk = toHrkAmount(item.amountRange, exchangeRates);
+    const taxBracketAmount = moneyStringToCurrency(taxBracketAmountHrk);
     if (
       remainingTaxableIncome.intValue < taxBracketAmount.intValue ||
       item.isInfinite

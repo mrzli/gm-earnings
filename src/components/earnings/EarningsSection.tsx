@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionContainer } from '../generic/layout/SectionContainer';
 import { EarningsSectionInputData } from '../../types/earnings/earnings-section-input-data';
 import { GridLayout } from '../generic/layout/GridLayout';
@@ -13,6 +13,7 @@ import {
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
+  toHrkAmount,
   ZERO_MONEY
 } from '../../utils/currency-utils';
 import {
@@ -21,24 +22,34 @@ import {
 } from '../../utils/validation-utils';
 import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from '../../data/earnings-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
-import { useInputOutputData } from '../../utils/hooks';
 import { DividerInGrid } from '../generic/layout/DividerInGrid';
 import { GridItem } from '../generic/layout/GridItem';
+import { ExchangeRates } from '../../types/generic/exchange-rates';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
   readonly onOutputDataChanged: (data: EarningsSectionOutputData) => void;
+  readonly exchangeRates: ExchangeRates;
 }
 
 export function EarningsSection({
   defaultInputData,
-  onOutputDataChanged
+  onOutputDataChanged,
+  exchangeRates
 }: EarningsSectionProps): React.ReactElement {
-  const { inputData, setInputData, outputData } = useInputOutputData(
-    defaultInputData,
-    EMPTY_EARNINGS_SECTION_OUTPUT_DATA,
-    getOutputData,
-    onOutputDataChanged
+  const [inputData, setInputData] = useState(defaultInputData);
+  const [outputData, setOutputData] = useState(
+    EMPTY_EARNINGS_SECTION_OUTPUT_DATA
+  );
+
+  useEffect(
+    () => {
+      const newOutputData = getOutputData(inputData, exchangeRates);
+      setOutputData(newOutputData);
+      onOutputDataChanged(newOutputData);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputData]
   );
 
   return (
@@ -103,13 +114,16 @@ export function EarningsSection({
 }
 
 function getOutputData(
-  input: EarningsSectionInputData
+  input: EarningsSectionInputData,
+  exchangeRates: ExchangeRates
 ): EarningsSectionOutputData {
   if (!isInputValid(input)) {
     return EMPTY_EARNINGS_SECTION_OUTPUT_DATA;
   }
 
-  const totalEarnings = moneyStringToCurrency(input.hourlyRate.amount)
+  const hourlyRateHrk = toHrkAmount(input.hourlyRate.amount, exchangeRates);
+
+  const totalEarnings = moneyStringToCurrency(hourlyRateHrk)
     .multiply(input.workingHours)
     .multiply(input.workingDays);
   const totalVat = input.hourlyRate.isVat
@@ -133,6 +147,6 @@ function isInputValid(
     isInNumericRange(input.workingDays, 0, 365) &&
     input.workingHours !== undefined &&
     isInNumericRange(input.workingHours, 0, 24) &&
-    isValidMoneyString(input.hourlyRate.amount)
+    isValidMoneyString(input.hourlyRate.amount.amount)
   );
 }

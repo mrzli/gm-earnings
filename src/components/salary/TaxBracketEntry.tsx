@@ -3,7 +3,7 @@ import { TaxBracketItem } from '../../types/salary/tax-bracket-item';
 import { MoneyInput } from '../generic/inputs/MoneyInput';
 import { PercentInput } from '../generic/inputs/PercentInput';
 import { CheckboxInput } from '../generic/inputs/CheckboxInput';
-import { ZERO_AMOUNT } from '../../data/generic-data';
+import { EMPTY_AMOUNT_WITH_CURRENCY } from '../../data/generic-data';
 import { InputListItemProps } from '../../types/generic/generic-types';
 import { GridLayout } from '../generic/layout/GridLayout';
 import { GridItem } from '../generic/layout/GridItem';
@@ -31,7 +31,9 @@ export function TaxBracketEntry({
           onValueChanged={(updatedValue) => {
             onItemChanged({
               ...item,
-              amountRange: updatedValue ? ZERO_AMOUNT : item.amountRange,
+              amountRange: updatedValue
+                ? EMPTY_AMOUNT_WITH_CURRENCY
+                : item.amountRange,
               isInfinite: updatedValue
             });
           }}

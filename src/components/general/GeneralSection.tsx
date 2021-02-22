@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { SectionContainer } from '../generic/layout/SectionContainer';
 import { GridLayout } from '../generic/layout/GridLayout';
-import { useInputOutputData } from '../../utils/hooks';
 import { EMPTY_GENERAL_SECTION_OUTPUT_DATA } from '../../data/general-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
@@ -23,11 +22,19 @@ export function GeneralSection({
   defaultInputData,
   onOutputDataChanged
 }: GeneralSectionProps): React.ReactElement {
-  const { inputData, setInputData, outputData } = useInputOutputData(
-    defaultInputData,
-    EMPTY_GENERAL_SECTION_OUTPUT_DATA,
-    getOutputData,
-    onOutputDataChanged
+  const [inputData, setInputData] = useState(defaultInputData);
+  const [outputData, setOutputData] = useState(
+    EMPTY_GENERAL_SECTION_OUTPUT_DATA
+  );
+
+  useEffect(
+    () => {
+      const newOutputData = getOutputData(inputData);
+      setOutputData(newOutputData);
+      onOutputDataChanged(newOutputData);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [inputData]
   );
 
   return (
@@ -76,8 +83,10 @@ function getOutputData(
 
   return {
     isValid: true,
-    exchangeRateEurToHrk: input.exchangeRateEurToHrk,
-    exchangeRateUsdToHrk: input.exchangeRateUsdToHrk,
+    exchangeRates: {
+      eurToHrk: input.exchangeRateEurToHrk,
+      usdToHrk: input.exchangeRateUsdToHrk
+    },
     surtaxPercent: input.surtaxPercent
   };
 }

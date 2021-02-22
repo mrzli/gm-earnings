@@ -4,13 +4,15 @@ import { isValidMoneyString } from '../../../utils/validation-utils';
 import { ArrowDropDown } from '@material-ui/icons';
 import {
   CURRENCY_SELECTION_VALUE_DISPLAY_PAIRS,
-  CurrencySelection
+  CurrencySelection,
+  toCurrencySelectionDisplay
 } from '../../../types/generic/currency-selection';
+import { AmountWithCurrency } from '../../../types/generic/amount-with-currency';
 
 interface MoneyInputProps {
   readonly label: string;
-  readonly value: string;
-  readonly onValueChanged: (value: string) => void;
+  readonly value: AmountWithCurrency;
+  readonly onValueChanged: (value: AmountWithCurrency) => void;
   readonly disabled?: boolean;
 }
 
@@ -31,7 +33,9 @@ export function MoneyInput({
   }
 
   function onMenuValueSelected(menuValue: CurrencySelection): void {
-    console.log(menuValue);
+    if (menuValue !== value.currency) {
+      onValueChanged({ ...value, currency: menuValue });
+    }
     onMenuClose();
   }
 
@@ -40,17 +44,17 @@ export function MoneyInput({
       <TextField
         fullWidth={true}
         variant={'outlined'}
-        error={!isValidMoneyString(value)}
+        error={!isValidMoneyString(value.amount)}
         label={label}
-        value={value}
+        value={value.amount}
         onChange={(event) => {
-          const newValue = event.target.value;
-          if (newValue !== value) {
-            onValueChanged(newValue);
+          const amount = event.target.value;
+          if (amount !== value.amount) {
+            onValueChanged({ ...value, amount: amount });
           }
         }}
         InputProps={{
-          endAdornment: getInputAdornmentElement(onMenuOpen)
+          endAdornment: getInputAdornmentElement(value.currency, onMenuOpen)
         }}
         disabled={disabled}
       />
@@ -64,12 +68,13 @@ export function MoneyInput({
 }
 
 function getInputAdornmentElement(
+  currency: CurrencySelection,
   onMenuOpen: (event: React.MouseEvent<HTMLElement>) => void
 ): React.ReactElement {
   return (
     <InputAdornment position={'end'} onClick={onMenuOpen}>
       <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
-        <span>HRK</span>
+        <span>{toCurrencySelectionDisplay(currency)}</span>
         <ArrowDropDown />
       </div>
     </InputAdornment>

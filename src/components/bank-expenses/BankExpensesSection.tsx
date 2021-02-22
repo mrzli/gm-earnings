@@ -3,7 +3,8 @@ import { BankExpensesSectionInputData } from '../../types/bank-expenses/bank-exp
 import { SectionContainer } from '../generic/layout/SectionContainer';
 import {
   currencyToMoneyString,
-  moneyStringToCurrency
+  moneyStringToCurrency,
+  toHrkAmount
 } from '../../utils/currency-utils';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
@@ -20,17 +21,20 @@ import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
 import { GridItem } from '../generic/layout/GridItem';
 import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/bank-expenses-data';
 import { MONTHS_PER_YEAR } from '../../data/generic-data';
+import { ExchangeRates } from '../../types/generic/exchange-rates';
 
 interface BankExpensesSectionProps {
   readonly defaultInputData: BankExpensesSectionInputData;
   readonly onOutputDataChanged: (data: BankExpensesSectionOutputData) => void;
+  readonly exchangeRates: ExchangeRates;
   readonly numOutgoingTransactionsPerYear: number;
 }
 
 export function BankExpensesSection({
   defaultInputData,
-  numOutgoingTransactionsPerYear,
-  onOutputDataChanged
+  onOutputDataChanged,
+  exchangeRates,
+  numOutgoingTransactionsPerYear
 }: BankExpensesSectionProps): React.ReactElement {
   const [inputData, setInputData] = useState(defaultInputData);
   const [outputData, setOutputData] = useState(
@@ -41,6 +45,7 @@ export function BankExpensesSection({
     () => {
       const newOutputData = getOutputData(
         inputData,
+        exchangeRates,
         numOutgoingTransactionsPerYear
       );
       setOutputData(newOutputData);
@@ -120,19 +125,31 @@ export function BankExpensesSection({
 
 function getOutputData(
   input: BankExpensesSectionInputData,
+  exchangeRates: ExchangeRates,
   numOutgoingTransactionsPerYear: number
 ): BankExpensesSectionOutputData {
   if (!isInputValid(input, numOutgoingTransactionsPerYear)) {
     return EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA;
   }
 
+  const incomingTransactionFeeHrk = toHrkAmount(
+    input.incomingTransactionFee,
+    exchangeRates
+  );
   const incomingTransactionExpenses = moneyStringToCurrency(
-    input.incomingTransactionFee
+    incomingTransactionFeeHrk
   ).multiply(input.numIncomingTransactionsPerYear);
+
+  const outgoingTransactionFeeHrk = toHrkAmount(
+    input.outgoingTransactionFee,
+    exchangeRates
+  );
   const outgoingTransactionExpenses = moneyStringToCurrency(
-    input.outgoingTransactionFee
+    outgoingTransactionFeeHrk
   ).multiply(numOutgoingTransactionsPerYear);
-  const bankFeeExpenses = moneyStringToCurrency(input.bankMonthlyFee).multiply(
+
+  const bankMonthlyFeeHrk = toHrkAmount(input.bankMonthlyFee, exchangeRates);
+  const bankFeeExpenses = moneyStringToCurrency(bankMonthlyFeeHrk).multiply(
     MONTHS_PER_YEAR
   );
 
@@ -154,11 +171,11 @@ function isInputValid(
   numOutgoingTransactionsPerYear: number
 ): input is NonNullableReadonlyObject<BankExpensesSectionInputData> {
   return (
-    isValidMoneyString(input.bankMonthlyFee) &&
-    isValidMoneyString(input.incomingTransactionFee) &&
+    isValidMoneyString(input.bankMonthlyFee.amount) &&
+    isValidMoneyString(input.incomingTransactionFee.amount) &&
     input.numIncomingTransactionsPerYear !== undefined &&
     isInNumericRange(input.numIncomingTransactionsPerYear, 0, 1000) &&
-    isValidMoneyString(input.outgoingTransactionFee) &&
+    isValidMoneyString(input.outgoingTransactionFee.amount) &&
     isInNumericRange(numOutgoingTransactionsPerYear, 0, 100000)
   );
 }

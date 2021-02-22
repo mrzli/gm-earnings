@@ -1,6 +1,7 @@
+import { ExchangeRates } from '../generic/exchange-rates';
+
 export interface GeneralSectionOutputData {
   readonly isValid: boolean;
-  readonly exchangeRateEurToHrk: string;
-  readonly exchangeRateUsdToHrk: string;
+  readonly exchangeRates: ExchangeRates;
   readonly surtaxPercent: string;
 }

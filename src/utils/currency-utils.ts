@@ -1,5 +1,8 @@
 import Currency from 'currency.js';
 import { ZERO_AMOUNT } from '../data/generic-data';
+import { AmountWithCurrency } from '../types/generic/amount-with-currency';
+import { ExchangeRates } from '../types/generic/exchange-rates';
+import { CurrencySelection } from '../types/generic/currency-selection';
 
 // const FORMATTER = new Intl.NumberFormat('en-US', {
 //   style: 'currency',
@@ -56,3 +59,30 @@ export function currencyToMoneyString(currency: Currency): string {
 // export function currencyToCents(currency: Currency): number {
 //   return currency.intValue;
 // }
+
+export function toHrkAmount(
+  amountWithCurrency: AmountWithCurrency,
+  exchangeRates: ExchangeRates
+): string {
+  const amount = toHrkAmountInternal(amountWithCurrency, exchangeRates);
+  return currencyToMoneyString(amount);
+}
+
+function toHrkAmountInternal(
+  amountWithCurrency: AmountWithCurrency,
+  exchangeRates: ExchangeRates
+): Currency {
+  const amount = moneyStringToCurrency(amountWithCurrency.amount);
+  switch (amountWithCurrency.currency) {
+    case CurrencySelection.HRK:
+      return amount;
+    case CurrencySelection.EUR:
+      return amount.multiply(exchangeRates.eurToHrk);
+    case CurrencySelection.USD:
+      return amount.multiply(exchangeRates.usdToHrk);
+    default:
+      throw new Error(
+        `Conversions not implemented for currency: '${amountWithCurrency.currency}'`
+      );
+  }
+}

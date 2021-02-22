@@ -1,6 +1,8 @@
+import { AmountWithCurrency } from '../generic/amount-with-currency';
+
 export interface BankExpensesSectionInputData {
-  readonly bankMonthlyFee: string;
-  readonly incomingTransactionFee: string;
+  readonly bankMonthlyFee: AmountWithCurrency;
+  readonly incomingTransactionFee: AmountWithCurrency;
   readonly numIncomingTransactionsPerYear: number | undefined;
-  readonly outgoingTransactionFee: string;
+  readonly outgoingTransactionFee: AmountWithCurrency;
 }
