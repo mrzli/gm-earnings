@@ -9,7 +9,6 @@ import { GridItem } from '../generic/layout/GridItem';
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
-  toHrkAmount,
   ZERO_MONEY
 } from '../../utils/currency-utils';
 import {
@@ -39,6 +38,7 @@ import { PercentDisplayInGrid } from '../generic/displays/PercentDisplayInGrid';
 import { IntegerInput } from '../generic/inputs/IntegerInput';
 import { TextDisplayInGrid } from '../generic/displays/TextDisplayInGrid';
 import { ExchangeRates } from '../../types/generic/exchange-rates';
+import { toHrkAmount } from '../../utils/domain-utils';
 
 interface SalarySectionProps {
   readonly defaultInputData: SalarySectionInputData;

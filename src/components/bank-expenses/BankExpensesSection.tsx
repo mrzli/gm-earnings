@@ -3,8 +3,7 @@ import { BankExpensesSectionInputData } from '../../types/bank-expenses/bank-exp
 import { SectionContainer } from '../generic/layout/SectionContainer';
 import {
   currencyToMoneyString,
-  moneyStringToCurrency,
-  toHrkAmount
+  moneyStringToCurrency
 } from '../../utils/currency-utils';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
@@ -22,6 +21,7 @@ import { GridItem } from '../generic/layout/GridItem';
 import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from '../../data/bank-expenses-data';
 import { MONTHS_PER_YEAR } from '../../data/generic-data';
 import { ExchangeRates } from '../../types/generic/exchange-rates';
+import { toHrkAmount } from '../../utils/domain-utils';
 
 interface BankExpensesSectionProps {
   readonly defaultInputData: BankExpensesSectionInputData;

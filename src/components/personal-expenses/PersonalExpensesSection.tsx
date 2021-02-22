@@ -1,22 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Currency from 'currency.js';
 import { EntryList } from '../generic/layout/EntryList';
-import { BusinessExpenseItem } from '../../types/business-expenses/business-expense-item';
-import { BusinessExpenseEntry } from './BusinessExpenseEntry';
+import { PersonalExpenseEntry } from './PersonalExpenseEntry';
 import { MoneyDisplayInGrid } from '../generic/displays/MoneyDisplayInGrid';
-import {
-  MONTHS_PER_YEAR,
-  PERCENT_TO_FRACTION_MULTIPLIER,
-  VAT_PERCENT
-} from '../../data/generic-data';
+import { MONTHS_PER_YEAR } from '../../data/generic-data';
 import { GridLayout } from '../generic/layout/GridLayout';
 import { SectionContainer } from '../generic/layout/SectionContainer';
-import { BusinessExpensesSectionInputData } from '../../types/business-expenses/business-expenses-section-input-data';
-import { BusinessExpensesSectionOutputData } from '../../types/business-expenses/business-expenses-section-output-data';
-import {
-  EMPTY_BUSINESS_EXPENSE_ITEM,
-  EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA
-} from '../../data/business-expenses-data';
 import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import {
   isInNumericRange,
@@ -36,23 +25,30 @@ import {
   getYearlyMultiplierForInterval,
   toHrkAmount
 } from '../../utils/domain-utils';
+import { PersonalExpenseItem } from '../../types/personal-expenses/personal-expense-item';
+import {
+  EMPTY_PERSONAL_EXPENSE_ITEM,
+  EMPTY_PERSONAL_EXPENSES_SECTION_OUTPUT_DATA
+} from '../../data/personal-expenses-data';
+import { PersonalExpensesSectionInputData } from '../../types/personal-expenses/personal-expenses-section-input-data';
+import { PersonalExpensesSectionOutputData } from '../../types/personal-expenses/personal-expenses-section-output-data';
 
-interface BusinessExpensesSectionProps {
-  readonly defaultInputData: BusinessExpensesSectionInputData;
+interface PersonalExpensesSectionProps {
+  readonly defaultInputData: PersonalExpensesSectionInputData;
   readonly onOutputDataChanged: (
-    data: BusinessExpensesSectionOutputData
+    data: PersonalExpensesSectionOutputData
   ) => void;
   readonly exchangeRates: ExchangeRates;
 }
 
-export function BusinessExpensesSection({
+export function PersonalExpensesSection({
   defaultInputData,
   onOutputDataChanged,
   exchangeRates
-}: BusinessExpensesSectionProps): React.ReactElement {
+}: PersonalExpensesSectionProps): React.ReactElement {
   const [inputData, setInputData] = useState(defaultInputData);
   const [outputData, setOutputData] = useState(
-    EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA
+    EMPTY_PERSONAL_EXPENSES_SECTION_OUTPUT_DATA
   );
 
   useEffect(
@@ -67,15 +63,15 @@ export function BusinessExpensesSection({
 
   return (
     <SectionContainer
-      header={'Business Expenses'}
+      header={'Personal Expenses'}
       isDataValid={outputData.isValid}
     >
-      <GridLayout columnsTemplate={'repeat(4, 200px) 1fr'}>
-        <GridItem row={1} column={1} span={5}>
-          <EntryList<BusinessExpenseItem>
+      <GridLayout columnsTemplate={'repeat(5, 200px) 1fr'}>
+        <GridItem row={1} column={1} span={6}>
+          <EntryList<PersonalExpenseItem>
             items={inputData.items}
-            ItemComponent={BusinessExpenseEntry}
-            emptyItem={EMPTY_BUSINESS_EXPENSE_ITEM}
+            ItemComponent={PersonalExpenseEntry}
+            emptyItem={EMPTY_PERSONAL_EXPENSE_ITEM}
             onValueChanged={(updatedValue) => {
               setInputData((s) => ({
                 ...s,
@@ -84,30 +80,24 @@ export function BusinessExpensesSection({
             }}
           />
         </GridItem>
-        <DividerInGrid row={2} span={5} />
+        <DividerInGrid row={2} span={6} />
         <MoneyDisplayInGrid
-          label={'Total B. E. (w/o VAT)'}
-          value={outputData.totalBusinessExpenses}
+          label={'Total Personal Expenses'}
+          value={outputData.totalPersonalExpenses}
           row={3}
           column={1}
         />
         <MoneyDisplayInGrid
-          label={'Total B. E. VAT'}
-          value={outputData.totalBusinessExpensesVat}
+          label={'Monthly Pers. Expenses'}
+          value={outputData.monthlyPersonalExpenses}
           row={3}
           column={2}
-        />
-        <MoneyDisplayInGrid
-          label={'Monthly B. E. (w/o VAT)'}
-          value={outputData.monthlyBusinessExpenses}
-          row={3}
-          column={3}
         />
         <TextDisplayInGrid
           label={'Out. Trans. p/y'}
           value={outputData.numOutgoingTransactionsPerYear.toString()}
           row={3}
-          column={4}
+          column={3}
         />
       </GridLayout>
     </SectionContainer>
@@ -116,16 +106,15 @@ export function BusinessExpensesSection({
 
 interface ExpenseCollatedData {
   readonly expenses: Currency;
-  readonly vat: Currency;
   readonly numOutgoingTransactionsPerYear: number;
 }
 
 function getOutputData(
-  input: BusinessExpensesSectionInputData,
+  input: PersonalExpensesSectionInputData,
   exchangeRates: ExchangeRates
-): BusinessExpensesSectionOutputData {
+): PersonalExpensesSectionOutputData {
   if (!isInputValid(input)) {
-    return EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA;
+    return EMPTY_PERSONAL_EXPENSES_SECTION_OUTPUT_DATA;
   }
 
   const collatedData = input.items.reduce<ExpenseCollatedData>(
@@ -134,51 +123,40 @@ function getOutputData(
         (item.quantity as number) *
         getYearlyMultiplierForInterval(item.interval);
 
-      const currentItemExpensesHrk = toHrkAmount(
-        item.amount.amount,
-        exchangeRates
-      );
+      const currentItemExpensesHrk = toHrkAmount(item.amount, exchangeRates);
       const currentItemExpenses = moneyStringToCurrency(
         currentItemExpensesHrk
       ).multiply(yearlyQuantity);
 
-      const currentItemVat = item.amount.isVat
-        ? currentItemExpenses
-            .multiply(VAT_PERCENT)
-            .multiply(PERCENT_TO_FRACTION_MULTIPLIER)
-        : ZERO_MONEY;
-
       return {
         expenses: acc.expenses.add(currentItemExpenses),
-        vat: acc.vat.add(currentItemVat),
         numOutgoingTransactionsPerYear:
           acc.numOutgoingTransactionsPerYear + yearlyQuantity
       };
     },
-    { expenses: ZERO_MONEY, vat: ZERO_MONEY, numOutgoingTransactionsPerYear: 0 }
+    { expenses: ZERO_MONEY, numOutgoingTransactionsPerYear: 0 }
   );
 
-  const monthlyBusinessExpenses = collatedData.expenses.divide(MONTHS_PER_YEAR);
+  const monthlyPersonalExpenses = collatedData.expenses.divide(MONTHS_PER_YEAR);
 
   return {
     isValid: true,
-    totalBusinessExpenses: currencyToMoneyString(collatedData.expenses),
-    totalBusinessExpensesVat: currencyToMoneyString(collatedData.vat),
-    monthlyBusinessExpenses: currencyToMoneyString(monthlyBusinessExpenses),
+    totalPersonalExpenses: currencyToMoneyString(collatedData.expenses),
+    monthlyPersonalExpenses: currencyToMoneyString(monthlyPersonalExpenses),
     numOutgoingTransactionsPerYear: collatedData.numOutgoingTransactionsPerYear
   };
 }
 
 function isInputValid(
-  input: BusinessExpensesSectionInputData
-): input is NonNullableReadonlyObject<BusinessExpensesSectionInputData> {
-  return input.items.every(isBusinessExpenseItemValid);
+  input: PersonalExpensesSectionInputData
+): input is NonNullableReadonlyObject<PersonalExpensesSectionInputData> {
+  return input.items.every(isPersonalExpenseItemValid);
 }
 
-function isBusinessExpenseItemValid(item: BusinessExpenseItem): boolean {
+function isPersonalExpenseItemValid(item: PersonalExpenseItem): boolean {
   return (
     isValidText(item.name) &&
-    isValidMoneyString(item.amount.amount.amount) &&
+    isValidMoneyString(item.amount.amount) &&
     item.quantity !== undefined &&
     isInNumericRange(item.quantity, 1, 1000)
   );

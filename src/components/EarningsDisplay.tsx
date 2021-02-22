@@ -19,6 +19,8 @@ import { GeneralSection } from './general/GeneralSection';
 import { DEFAULT_GENERAL_SECTION_INPUT_DATA } from '../data/general-data';
 import { PersonalIncomeSection } from './personal-income/PersonalIncomeSection';
 import { DEFAULT_PERSONAL_INCOME_SECTION_INPUT_DATA } from '../data/personal-income-data';
+import { PersonalExpensesSection } from './personal-expenses/PersonalExpensesSection';
+import { DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA } from '../data/personal-expenses-data';
 
 export function EarningsDisplay(): React.ReactElement {
   const [state, setState] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
@@ -94,6 +96,16 @@ export function EarningsDisplay(): React.ReactElement {
         businessNetEarnings={businessResultsData.businessNetEarnings}
         yearlyNetSalary={businessResultsData.personalSalaryIncome}
         surtaxPercent={state.general.surtaxPercent}
+      />
+      <PersonalExpensesSection
+        defaultInputData={DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA}
+        onOutputDataChanged={(value) => {
+          setState((s) => ({
+            ...s,
+            personalExpenses: value
+          }));
+        }}
+        exchangeRates={state.general.exchangeRates}
       />
     </div>
   );

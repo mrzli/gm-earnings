@@ -4,6 +4,7 @@ import { BankExpensesSectionOutputData } from './bank-expenses/bank-expenses-sec
 import { SalarySectionOutputData } from './salary/salary-section-output-data';
 import { GeneralSectionOutputData } from './general/general-section-output-data';
 import { PersonalIncomeSectionOutputData } from './personal-income/personal-income-section-output-data';
+import { PersonalExpensesSectionOutputData } from './personal-expenses/personal-expenses-section-output-data';
 
 export interface EarningsDisplayData {
   readonly general: GeneralSectionOutputData;
@@ -12,4 +13,5 @@ export interface EarningsDisplayData {
   readonly bankExpenses: BankExpensesSectionOutputData;
   readonly salary: SalarySectionOutputData;
   readonly personalIncome: PersonalIncomeSectionOutputData;
+  readonly personalExpenses: PersonalExpensesSectionOutputData;
 }

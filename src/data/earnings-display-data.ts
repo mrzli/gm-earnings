@@ -5,6 +5,7 @@ import { EMPTY_EARNINGS_SECTION_OUTPUT_DATA } from './earnings-data';
 import { EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA } from './bank-expenses-data';
 import { EMPTY_SALARY_SECTION_OUTPUT_DATA } from './salary-data';
 import { EMPTY_PERSONAL_INCOME_SECTION_OUTPUT_DATA } from './personal-income-data';
+import { EMPTY_PERSONAL_EXPENSES_SECTION_OUTPUT_DATA } from './personal-expenses-data';
 
 export const DEFAULT_EARNINGS_DISPLAY_DATA: EarningsDisplayData = {
   general: EMPTY_GENERAL_SECTION_OUTPUT_DATA,
@@ -12,5 +13,6 @@ export const DEFAULT_EARNINGS_DISPLAY_DATA: EarningsDisplayData = {
   businessExpenses: EMPTY_BUSINESS_EXPENSES_SECTION_OUTPUT_DATA,
   bankExpenses: EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA,
   salary: EMPTY_SALARY_SECTION_OUTPUT_DATA,
-  personalIncome: EMPTY_PERSONAL_INCOME_SECTION_OUTPUT_DATA
+  personalIncome: EMPTY_PERSONAL_INCOME_SECTION_OUTPUT_DATA,
+  personalExpenses: EMPTY_PERSONAL_EXPENSES_SECTION_OUTPUT_DATA
 };

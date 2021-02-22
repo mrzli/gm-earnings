@@ -13,7 +13,6 @@ import {
 import {
   currencyToMoneyString,
   moneyStringToCurrency,
-  toHrkAmount,
   ZERO_MONEY
 } from '../../utils/currency-utils';
 import {
@@ -25,6 +24,7 @@ import { NonNullableReadonlyObject } from '../../types/generic/generic-types';
 import { DividerInGrid } from '../generic/layout/DividerInGrid';
 import { GridItem } from '../generic/layout/GridItem';
 import { ExchangeRates } from '../../types/generic/exchange-rates';
+import { toHrkAmount } from '../../utils/domain-utils';
 
 interface EarningsSectionProps {
   readonly defaultInputData: EarningsSectionInputData;
