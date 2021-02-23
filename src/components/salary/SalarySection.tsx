@@ -58,19 +58,15 @@ export function SalarySection({
     EMPTY_SALARY_SECTION_OUTPUT_DATA
   );
 
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(
-        inputData,
-        exchangeRates,
-        surtaxPercent
-      );
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputData, surtaxPercent]
-  );
+  useEffect(() => {
+    const newOutputData = getOutputData(
+      inputData,
+      exchangeRates,
+      surtaxPercent
+    );
+    setOutputData(newOutputData);
+    onOutputDataChanged(newOutputData);
+  }, [exchangeRates, inputData, onOutputDataChanged, surtaxPercent]);
 
   return (
     <SectionContainer header={'Salary'} isDataValid={outputData.isValid}>

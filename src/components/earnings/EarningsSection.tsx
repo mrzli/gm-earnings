@@ -42,15 +42,11 @@ export function EarningsSection({
     EMPTY_EARNINGS_SECTION_OUTPUT_DATA
   );
 
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(inputData, exchangeRates);
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputData]
-  );
+  useEffect(() => {
+    const newOutputData = getOutputData(inputData, exchangeRates);
+    setOutputData(newOutputData);
+    onOutputDataChanged(newOutputData);
+  }, [exchangeRates, inputData, onOutputDataChanged]);
 
   return (
     <SectionContainer header={'Earnings'} isDataValid={outputData.isValid}>

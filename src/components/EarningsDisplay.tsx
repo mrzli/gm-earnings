@@ -1,4 +1,10 @@
-import React, { useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useMemo,
+  useState
+} from 'react';
 import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
 import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
@@ -21,62 +27,66 @@ import { PersonalIncomeSection } from './personal-income/PersonalIncomeSection';
 import { DEFAULT_PERSONAL_INCOME_SECTION_INPUT_DATA } from '../data/personal-income-data';
 import { PersonalExpensesSection } from './personal-expenses/PersonalExpensesSection';
 import { DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA } from '../data/personal-expenses-data';
+import { Fn1 } from '../types/generic/generic-types';
+
+type EarningsDisplayDataKey = keyof EarningsDisplayData;
+
+type EarningsDisplayDataSetters = {
+  readonly [K in EarningsDisplayDataKey]: Fn1<EarningsDisplayData[K], void>;
+};
+
+function createSetStateField<K extends EarningsDisplayDataKey>(
+  key: K,
+  setState: Dispatch<SetStateAction<EarningsDisplayData>>
+): Fn1<EarningsDisplayData[K], void> {
+  return (value: EarningsDisplayData[K]) => {
+    setState((s) => ({ ...s, [key]: value }));
+  };
+}
 
 export function EarningsDisplay(): React.ReactElement {
   const [state, setState] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
 
   const businessResultsData = getBusinessResultsData(state);
 
+  const setStateFieldFunctions = useMemo<EarningsDisplayDataSetters>(
+    () => ({
+      general: createSetStateField('general', setState),
+      earnings: createSetStateField('earnings', setState),
+      businessExpenses: createSetStateField('businessExpenses', setState),
+      bankExpenses: createSetStateField('bankExpenses', setState),
+      salary: createSetStateField('salary', setState),
+      personalIncome: createSetStateField('personalIncome', setState),
+      personalExpenses: createSetStateField('personalExpenses', setState)
+    }),
+    [setState]
+  );
+
   return (
     <div>
       <GeneralSection
         defaultInputData={DEFAULT_GENERAL_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            general: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['general']}
       />
       <EarningsSection
         defaultInputData={DEFAULT_EARNINGS_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            earnings: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['earnings']}
         exchangeRates={state.general.exchangeRates}
       />
       <BusinessExpensesSection
         defaultInputData={DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            businessExpenses: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['businessExpenses']}
         exchangeRates={state.general.exchangeRates}
       />
       <SalarySection
         defaultInputData={DEFAULT_SALARY_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            salary: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['salary']}
         exchangeRates={state.general.exchangeRates}
         surtaxPercent={state.general.surtaxPercent}
       />
       <BankExpensesSection
         defaultInputData={DEFAULT_BANK_EXPENSES_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            bankExpenses: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['bankExpenses']}
         numOutgoingTransactionsPerYear={
           state.businessExpenses.numOutgoingTransactionsPerYear +
           state.salary.yearlyData.numOutgoingTransactions
@@ -86,12 +96,7 @@ export function EarningsDisplay(): React.ReactElement {
       <BusinessResultsSection data={businessResultsData} />
       <PersonalIncomeSection
         defaultInputData={DEFAULT_PERSONAL_INCOME_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            personalIncome: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['personalIncome']}
         businessTotalEarnings={state.earnings.totalEarnings}
         businessNetEarnings={businessResultsData.businessNetEarnings}
         yearlyNetSalary={businessResultsData.personalSalaryIncome}
@@ -99,12 +104,7 @@ export function EarningsDisplay(): React.ReactElement {
       />
       <PersonalExpensesSection
         defaultInputData={DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA}
-        onOutputDataChanged={(value) => {
-          setState((s) => ({
-            ...s,
-            personalExpenses: value
-          }));
-        }}
+        onOutputDataChanged={setStateFieldFunctions['personalExpenses']}
         exchangeRates={state.general.exchangeRates}
       />
     </div>

@@ -27,15 +27,11 @@ export function GeneralSection({
     EMPTY_GENERAL_SECTION_OUTPUT_DATA
   );
 
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(inputData);
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputData]
-  );
+  useEffect(() => {
+    const newOutputData = getOutputData(inputData);
+    setOutputData(newOutputData);
+    onOutputDataChanged(newOutputData);
+  }, [inputData, setOutputData, onOutputDataChanged]);
 
   return (
     <SectionContainer header={'General'} isDataValid={outputData.isValid}>

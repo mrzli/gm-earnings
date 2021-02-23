@@ -43,21 +43,24 @@ export function PersonalIncomeSection({
     EMPTY_PERSONAL_INCOME_SECTION_OUTPUT_DATA
   );
 
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(
-        inputData,
-        businessTotalEarnings,
-        businessNetEarnings,
-        yearlyNetSalary,
-        surtaxPercent
-      );
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputData, businessNetEarnings, yearlyNetSalary, surtaxPercent]
-  );
+  useEffect(() => {
+    const newOutputData = getOutputData(
+      inputData,
+      businessTotalEarnings,
+      businessNetEarnings,
+      yearlyNetSalary,
+      surtaxPercent
+    );
+    setOutputData(newOutputData);
+    onOutputDataChanged(newOutputData);
+  }, [
+    inputData,
+    businessNetEarnings,
+    yearlyNetSalary,
+    surtaxPercent,
+    businessTotalEarnings,
+    onOutputDataChanged
+  ]);
 
   return (
     <SectionContainer

@@ -28,7 +28,7 @@ export const DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA: PersonalExpensesSecti
     {
       name: 'Utilities (additional per year)',
       amount: {
-        amount: '380.00',
+        amount: '300.00',
         currency: CurrencySelection.HRK
       },
       interval: ExpenseInterval.Yearly,

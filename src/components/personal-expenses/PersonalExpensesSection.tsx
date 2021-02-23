@@ -51,15 +51,11 @@ export function PersonalExpensesSection({
     EMPTY_PERSONAL_EXPENSES_SECTION_OUTPUT_DATA
   );
 
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(inputData, exchangeRates);
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputData]
-  );
+  useEffect(() => {
+    const newOutputData = getOutputData(inputData, exchangeRates);
+    setOutputData(newOutputData);
+    onOutputDataChanged(newOutputData);
+  }, [inputData, setOutputData, onOutputDataChanged, exchangeRates]);
 
   return (
     <SectionContainer

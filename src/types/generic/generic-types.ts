@@ -1,5 +1,7 @@
 export type Tuple<T1, T2> = readonly [T1, T2];
 
+export type Fn1<P1, R> = (param1: P1) => R;
+
 export interface InputListItemProps<TItem> {
   readonly item: TItem;
   readonly onItemChanged: (item: TItem) => void;

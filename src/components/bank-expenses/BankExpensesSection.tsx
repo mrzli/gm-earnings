@@ -41,19 +41,20 @@ export function BankExpensesSection({
     EMPTY_BANK_EXPENSES_SECTION_OUTPUT_DATA
   );
 
-  useEffect(
-    () => {
-      const newOutputData = getOutputData(
-        inputData,
-        exchangeRates,
-        numOutgoingTransactionsPerYear
-      );
-      setOutputData(newOutputData);
-      onOutputDataChanged(newOutputData);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [inputData, numOutgoingTransactionsPerYear]
-  );
+  useEffect(() => {
+    const newOutputData = getOutputData(
+      inputData,
+      exchangeRates,
+      numOutgoingTransactionsPerYear
+    );
+    setOutputData(newOutputData);
+    onOutputDataChanged(newOutputData);
+  }, [
+    inputData,
+    exchangeRates,
+    numOutgoingTransactionsPerYear,
+    onOutputDataChanged
+  ]);
 
   return (
     <SectionContainer header={'Bank Expenses'} isDataValid={outputData.isValid}>
