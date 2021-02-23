@@ -200,9 +200,13 @@ function getOutputData(
   const totalPersonalIncome = personalCapitalIncome.add(yearlyNetSalary);
   const monthlyPersonalIncome = totalPersonalIncome.divide(MONTHS_PER_YEAR);
 
+  const businessTotalEarningsValue = moneyStringToCurrency(
+    businessTotalEarnings
+  ).value;
   const fractionIncomeOfTotalEarnings =
-    totalPersonalIncome.value /
-    moneyStringToCurrency(businessTotalEarnings).value;
+    businessTotalEarningsValue > 0
+      ? totalPersonalIncome.value / businessTotalEarningsValue
+      : 0;
 
   return {
     isValid: true,

@@ -1,10 +1,4 @@
-import React, {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useMemo,
-  useState
-} from 'react';
+import React, { Dispatch, SetStateAction, useMemo, useState } from 'react';
 import { DEFAULT_EARNINGS_SECTION_INPUT_DATA } from '../data/earnings-data';
 import { BusinessExpensesSection } from './business-expenses/BusinessExpensesSection';
 import { EarningsSection } from './earnings/EarningsSection';
@@ -28,6 +22,9 @@ import { DEFAULT_PERSONAL_INCOME_SECTION_INPUT_DATA } from '../data/personal-inc
 import { PersonalExpensesSection } from './personal-expenses/PersonalExpensesSection';
 import { DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA } from '../data/personal-expenses-data';
 import { Fn1 } from '../types/generic/generic-types';
+import { SavingsSection } from './savings/SavingsSection';
+import { SavingsData } from '../types/savings/savings-data';
+import { MONTHS_PER_YEAR } from '../data/generic-data';
 
 type EarningsDisplayDataKey = keyof EarningsDisplayData;
 
@@ -47,8 +44,6 @@ function createSetStateField<K extends EarningsDisplayDataKey>(
 export function EarningsDisplay(): React.ReactElement {
   const [state, setState] = useState(DEFAULT_EARNINGS_DISPLAY_DATA);
 
-  const businessResultsData = getBusinessResultsData(state);
-
   const setStateFieldFunctions = useMemo<EarningsDisplayDataSetters>(
     () => ({
       general: createSetStateField('general', setState),
@@ -61,6 +56,9 @@ export function EarningsDisplay(): React.ReactElement {
     }),
     [setState]
   );
+
+  const businessResultsData = getBusinessResultsData(state);
+  const savingsData = getSavingsData(state);
 
   return (
     <div>
@@ -107,6 +105,7 @@ export function EarningsDisplay(): React.ReactElement {
         onOutputDataChanged={setStateFieldFunctions['personalExpenses']}
         exchangeRates={state.general.exchangeRates}
       />
+      <SavingsSection data={savingsData} />
     </div>
   );
 }
@@ -139,5 +138,18 @@ function getBusinessResultsData(
     businessNetEarnings: currencyToMoneyString(businessNetEarnings),
     businessRemainingVat: currencyToMoneyString(businessExpensesVat),
     personalSalaryIncome: state.salary.yearlyData.netSalary
+  };
+}
+
+function getSavingsData(state: EarningsDisplayData): SavingsData {
+  const totalSavings = moneyStringToCurrency(
+    state.personalIncome.totalPersonalIncome
+  ).subtract(state.personalExpenses.totalPersonalExpenses);
+
+  const monthlySavings = totalSavings.divide(MONTHS_PER_YEAR);
+
+  return {
+    totalSavings: currencyToMoneyString(totalSavings),
+    savingsPerMonth: currencyToMoneyString(monthlySavings)
   };
 }
