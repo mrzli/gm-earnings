@@ -258,6 +258,24 @@ export const DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA: PersonalExpensesSecti
       },
       interval: ExpenseInterval.Weekly,
       quantity: 1
+    },
+    {
+      name: 'Gifts (budget)',
+      amount: {
+        amount: '4000.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Yearly,
+      quantity: 1
+    },
+    {
+      name: 'Miscellaneous',
+      amount: {
+        amount: '500.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Monthly,
+      quantity: 1
     }
   ]
 };
