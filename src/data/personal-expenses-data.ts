@@ -186,6 +186,78 @@ export const DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA: PersonalExpensesSecti
       },
       interval: ExpenseInterval.Weekly,
       quantity: 1
+    },
+    {
+      name: 'Tuna Can',
+      amount: {
+        amount: '16.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 5
+    },
+    {
+      name: 'Protein Pudding',
+      amount: {
+        amount: '7.50',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 2
+    },
+    {
+      name: 'Bread',
+      amount: {
+        amount: '12.50',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 1
+    },
+    {
+      name: 'Cheese',
+      amount: {
+        amount: '32.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 1
+    },
+    {
+      name: 'Bananas',
+      amount: {
+        amount: '10.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 3
+    },
+    {
+      name: 'Apples',
+      amount: {
+        amount: '9.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 2
+    },
+    {
+      name: 'Pickles',
+      amount: {
+        amount: '14.50',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 1
+    },
+    {
+      name: 'Eggs',
+      amount: {
+        amount: '12.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 1
     }
   ]
 };
