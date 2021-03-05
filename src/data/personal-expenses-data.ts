@@ -242,6 +242,15 @@ export const DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA: PersonalExpensesSecti
       quantity: 2
     },
     {
+      name: 'Clementines',
+      amount: {
+        amount: '10.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Weekly,
+      quantity: 2
+    },
+    {
       name: 'Pickles',
       amount: {
         amount: '14.50',
@@ -257,6 +266,15 @@ export const DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA: PersonalExpensesSecti
         currency: CurrencySelection.HRK
       },
       interval: ExpenseInterval.Weekly,
+      quantity: 1
+    },
+    {
+      name: 'Cleaning',
+      amount: {
+        amount: '200.00',
+        currency: CurrencySelection.HRK
+      },
+      interval: ExpenseInterval.Monthly,
       quantity: 1
     },
     {
