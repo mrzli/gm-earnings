@@ -11,7 +11,7 @@ export const DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA: BusinessExpensesSecti
       name: 'Accountant Fee',
       amount: {
         amount: {
-          amount: '400.00',
+          amount: '750.00',
           currency: CurrencySelection.HRK
         },
         isVat: true
@@ -19,18 +19,18 @@ export const DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA: BusinessExpensesSecti
       interval: ExpenseInterval.Monthly,
       quantity: 1
     },
-    {
-      name: 'Accountant Balance Sheet Creation',
-      amount: {
-        amount: {
-          amount: '500.00',
-          currency: CurrencySelection.HRK
-        },
-        isVat: true
-      },
-      interval: ExpenseInterval.Yearly,
-      quantity: 1
-    },
+    // {
+    //   name: 'Accountant Balance Sheet Creation',
+    //   amount: {
+    //     amount: {
+    //       amount: '500.00',
+    //       currency: CurrencySelection.HRK
+    //     },
+    //     isVat: true
+    //   },
+    //   interval: ExpenseInterval.Yearly,
+    //   quantity: 1
+    // },
     {
       name: 'HGK Membership Fee',
       amount: {
@@ -71,12 +71,24 @@ export const DEFAULT_BUSINESS_EXPENSES_SECTION_INPUT_DATA: BusinessExpensesSecti
       name: 'DigitalOcean Hosting',
       amount: {
         amount: {
-          amount: '7.00',
+          amount: '14.20',
           currency: CurrencySelection.USD
         },
         isVat: false
       },
       interval: ExpenseInterval.Monthly,
+      quantity: 1
+    },
+    {
+      name: 'Todoist Pro Yearly Subscription',
+      amount: {
+        amount: {
+          amount: '36.00',
+          currency: CurrencySelection.USD
+        },
+        isVat: false
+      },
+      interval: ExpenseInterval.Yearly,
       quantity: 1
     },
     {

@@ -3,8 +3,8 @@ import { GeneralSectionInputData } from '../types/general/general-section-input-
 import { GeneralSectionOutputData } from '../types/general/general-section-output-data';
 
 export const DEFAULT_GENERAL_SECTION_INPUT_DATA: GeneralSectionInputData = {
-  exchangeRateEurToHrk: '7.57',
-  exchangeRateUsdToHrk: '6.25',
+  exchangeRateEurToHrk: '7.52',
+  exchangeRateUsdToHrk: '6.62',
   surtaxPercent: '10.00'
 };
 

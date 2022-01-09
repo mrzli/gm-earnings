@@ -33,7 +33,7 @@ export const DEFAULT_SALARY_SECTION_INPUT_DATA: SalarySectionInputData = {
     ]
   },
   gross1Salary: {
-    amount: '6000.00',
+    amount: '6200.00',
     currency: CurrencySelection.HRK
   },
   numOutgoingTransactionsPerSalary: 5 // ZO, MIO 1, MIO 2, tax + surtax (one outgoing transaction), net salary

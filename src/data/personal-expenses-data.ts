@@ -64,7 +64,7 @@ export const DEFAULT_PERSONAL_EXPENSES_SECTION_INPUT_DATA: PersonalExpensesSecti
     {
       name: 'Lunch.hr Orders',
       amount: {
-        amount: '39.50',
+        amount: '44.50',
         currency: CurrencySelection.HRK
       },
       interval: ExpenseInterval.Weekly,

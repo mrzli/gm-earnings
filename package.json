@@ -59,7 +59,7 @@
     "url": "https://github.com/mrzli/gm-earnings/issues"
   },
   "engines": {
-    "node": "15.6.0",
-    "yarn": "1.22.10"
+    "node": "16.13.0",
+    "npm": "8.3.0"
   }
 }
